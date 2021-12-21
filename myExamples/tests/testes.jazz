@@ -1,0 +1,169 @@
+/* TODO:
+
+	JASMIN :
+		- Testar passar apontadores;
+		- Declarar listas com preenchimento definido;
+		- Passar parte de um array;
+		- 
+
+
+*/
+
+fn xor(stack u32 x, stack u32 y, stack u32 word) -> stack u32 {
+	word = x ^ y;
+
+	return word;
+}
+
+
+
+fn GETBIT_u32(stack u32 x, inline int bit_idx, stack u8 t) -> stack u8 {
+
+	stack u8[4] aux;
+
+
+	aux[u32 0] = ((x >> (bit_idx)) & 0x0001);
+
+	if(aux[3] == 1){
+		t = 1;
+	}
+	else {
+		t = 0;
+	}
+	
+	return t;	
+}
+
+
+fn SETBIT_u32(inline u32 x, inline int bit_idx, inline u8 bit) -> inline u32 {
+
+	inline u32 a, aux;
+	inline u8 b;
+	b = 1;
+
+	a = 1;
+	a <<= bit_idx;
+
+	if (bit == b){
+		x = x | a;
+	} else{
+		a = a ^ 0xFFFF;
+		x = x & a; 
+	}
+
+	return x;
+}
+
+export
+fn main(){
+	
+	inline int i;
+
+	stack u8[12] x, y;
+
+	stack u8[12] c, r, aux, c_aux;
+
+	stack u8[3] a, b;
+
+	stack u8 t, t1, retrievedBit0, retrievedBit1;
+
+	stack u32 word;
+	stack u32[1] word0, word1;
+
+	for i=0 to 12{
+		x[i] = 0;
+		y[i] = 0;
+		c[i] = 0;
+		r[i] = 0;
+	}
+
+	word = 0;
+
+	for i=0 to 31{
+
+		word0[0] = x[u32 0];
+		word1[0] = c[u32 0];
+		word = xor(word0[0], word1[0], word);
+		t = GETBIT_u32(word,i, t);
+		a[0] = t;
+
+		word = x[u32 1] ^ c[u32 1];
+		t = GETBIT_u32(word,i, t);
+		a[1] = t;
+		
+		word = x[u32 2] ^ c[u32 2];
+		t = GETBIT_u32(word,i, t);
+		a[2] = t;
+		
+
+		
+		word = y[u32 0] ^ c[u32 0];
+		t1 = GETBIT_u32(word,i, t1);
+		b[0] = t1;
+		
+		word = y[u32 1] ^ c[u32 1];
+		t1 = GETBIT_u32(word,i, t1);
+		b[1] = t1;
+
+		word = y[u32 2] ^ c[u32 2];
+		t1 = GETBIT_u32(word,i, t1);
+		b[2] = t1;
+		
+
+
+		//Aparente mente a stack não aceita novas operações!!!  Basta descomentar as linhas 240 a 248 e passa a dar stack overflow!!
+
+
+		
+		word = r[u32 1];
+		t = GETBIT_u32(word, i, t);
+		t = t ^ (a[0] & b[1]) ^ (a[1] & b[0]);
+		
+		word = c[u32 0];
+		retrievedBit0 = GETBIT_u32(word, i, retrievedBit0);
+		word = r[u32 0];
+		retrievedBit1 = GETBIT_u32(word, i, retrievedBit1);
+		
+		t = t ^ (a[0]&b[0]) ^ retrievedBit0  ^ retrievedBit1;
+
+
+		word = c[u32 0];
+		word = SETBIT_u32(word, i, t);
+		c[u32 0] = word;
+		
+
+		
+		word = r[u32 2];
+		t = GETBIT_u32(word, i, t);
+		t = t ^ (a[1] & b[2]) ^ (a[2] & b[1]);
+
+		word = c[u32 1];
+		retrievedBit0 = GETBIT_u32(word, i, retrievedBit0);
+		word = r[u32 1];
+		retrievedBit1 = GETBIT_u32(word, i, retrievedBit1);
+		
+		t ^= (a[1]&b[1]) ^ retrievedBit0  ^ retrievedBit1;
+
+		word = c[u32 1];
+		word = SETBIT_u32(word, i + 1, t);
+		c[u32 1] = word;
+		
+
+		
+		word = r[u32 0];
+		t = GETBIT_u32(word, i, t);
+		t ^= (a[2]&b[0]) ^ (a[0]&b[2]);
+		
+		word = c[u32 2];
+		retrievedBit0 = GETBIT_u32(word, i, retrievedBit0);
+		word = r[u32 2];
+		retrievedBit1 = GETBIT_u32(word, i, retrievedBit1);
+		
+		t ^= (a[2]&b[2]) ^ retrievedBit0  ^ retrievedBit1;
+
+		word = c[u32 2];
+		word = SETBIT_u32(word, i + 1, t);
+		c[u32 2] = word;
+	}
+
+}

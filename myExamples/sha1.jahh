@@ -1,0 +1,11 @@
+#ifndef SHARED_H_
+#define SHARED_H_
+
+#define NUM_ROUNDS = 136
+#define VERBOSE FALSE
+
+#define u32[5] hA = { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476,
+		0xC3D2E1F0};
+
+
+#endif /* SHARED_H_ */
