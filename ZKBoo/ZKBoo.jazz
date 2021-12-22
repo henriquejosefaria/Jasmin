@@ -169,6 +169,47 @@ fn RIGHTSHIFT(stack u8[60] x, inline int i, stack u8[12] z, inline int pos_hHa) 
 
 
 
+fn get_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRounds, inline int i, inline int pos) -> inline u64{
+
+	inline u64 word, aux_word;
+
+	inline int idx;
+
+	// The rs arrays has u32 words -> we'll be using it as a u64 array
+	idx = i - pos;
+
+	idx = idx / 2;
+
+
+	// We grab the first half of the u64 if pos == 0 else we grab the second half
+	
+	if (pos == 0){ 
+
+		word = [rs + player0 * mpcRounds / 2 + idx] & 0xffffffff00000000;
+
+
+		// No need for bitmask because the word will be shifted
+
+		aux_word = [rs + player1 * mpcRounds / 2 + idx];
+		aux_word >>= 32;
+
+	} else {
+
+		//No need for bitmask because the word will be shifted
+
+		word = [rs + player0 * mpcRounds / 2 + idx];
+		word <<= 32;
+
+		aux_word = [rs + player1 * mpcRounds / 2 + idx] & 0x00000000ffffffff;
+		
+	}
+
+	word += aux_word;
+
+	return word;
+}
+
+
 
 fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, inline int i) -> stack u32, stack u32 {
 
@@ -1902,47 +1943,6 @@ fn H3(stack u8[32] y, reg u64 a, inline int s, stack u8[128] es) -> stack u8[128
 	}
 
 	return es;
-}
-
-
-fn get_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRounds, inline int i, inline int pos) -> inline u64{
-
-	inline u64 word, aux_word;
-
-	inline int idx;
-
-	// The rs arrays has u32 words -> we'll be using it as a u64 array
-	idx = i - pos;
-
-	idx = idx / 2;
-
-
-	// We grab the first half of the u64 if pos == 0 else we grab the second half
-	
-	if (pos == 0){ 
-
-		word = [rs + player0 * mpcRounds / 2 + idx] & 0xffffffff00000000;
-
-
-		// No need for bitmask because the word will be shifted
-
-		aux_word = [rs + player1 * mpcRounds / 2 + idx];
-		aux_word >>= 32;
-
-	} else {
-
-		//No need for bitmask because the word will be shifted
-
-		word = [rs + player0 * mpcRounds / 2 + idx];
-		word <<= 32;
-
-		aux_word = [rs + player1 * mpcRounds / 2 + idx] & 0x00000000ffffffff;
-		
-	}
-
-	word += aux_word;
-
-	return word;
 }
 
 /*****************
