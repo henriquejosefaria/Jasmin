@@ -8,7 +8,7 @@ After successfuly compiling the jasminc program, enter the directory Jasmin/comp
 
 git clone https://github.com/henriquejosefaria/Jasmin.git 
 
-Now you can enter Jasmin/ZKBoo/ and run the ZKBoo code using the command make.
+Now you can enter Jasmin/ZKBoo/ with the command "cd Jasmin/ZKBoo/" and run the ZKBoo code using the command "make".
  
 
 
