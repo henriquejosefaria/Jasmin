@@ -1915,8 +1915,6 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 
 	inline int i, j, player0, player1;
 
-	inline u8 aux;
-
 	i = 0;
 	while(i < mpcRounds){
 
@@ -1960,6 +1958,9 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 
 		j = 0;
 		while(j < 4){
+
+			//Passar como cópia de 64 bits
+
 			(u8)[zs + i * 3128 + 3120 + j] = (u8)[rs + player0 * 4 * mpcRounds + i * 4 + j];
 			(u8)[zs + i * 3128 + 3124 + j] = (u8)[rs + player1 * 4 * mpcRounds + i * 4 + j];
 
