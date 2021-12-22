@@ -1957,6 +1957,8 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 
 	inline u64 aux;
 
+	reg u64 temp;
+
 	i = 0;
 	while(i < mpcRounds){
 
@@ -2002,12 +2004,16 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 		//Passar como cópia de 64 bits
 		if(i % 2 == 0){
 			aux = get_word(rs, player0, player1, mpcRounds, i, 0);
-			[zs + i * 391 + 390 + j] = aux;
+			temp = zs + i * 391 + 390 + j;
+			[temp] = aux;
 		}
 		else{
 			aux = get_word(rs, player0, player1, mpcRounds, i, 1);
-			[zs + i * 391 + 390 + j] = aux;
+			temp = zs + i * 391 + 390 + j;
+			[temp] = aux;
 		}
+
+		i += 1;
 
 	}
 
