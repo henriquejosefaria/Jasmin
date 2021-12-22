@@ -1905,6 +1905,46 @@ fn H3(stack u8[32] y, reg u64 a, inline int s, stack u8[128] es) -> stack u8[128
 }
 
 
+fn get_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRounds, inline int i, inline int pos) -> inline u64{
+
+	inline u64 word, aux_word;
+
+	inline int idx;
+
+	// The rs arrays has u32 words -> we'll be using it as a u64 array
+	idx = i - pos;
+
+	idx = idx / 2;
+
+
+	// We grab the first half of the u64 if pos == 0 else we grab the second half
+	
+	if (pos == 0){ 
+
+		word = [rs + player0 * mpcRounds / 2 + idx] & 0xffffffff00000000;
+
+
+		// No need for bitmask because the word will be shifted
+
+		aux_word = [rs + player1 * mpcRounds / 2 + idx];
+		aux_word >>= 32;
+
+	} else {
+
+		//No need for bitmask because the word will be shifted
+
+		word = [rs + player0 * mpcRounds / 2 + idx];
+		word <<= 32;
+
+		aux_word = [rs + player1 * mpcRounds / 2 + idx] & 0x00000000ffffffff;
+		
+	}
+
+	word += aux_word;
+
+	return word;
+}
+
 /*****************
 *                *
 *     Prove      *
@@ -1914,6 +1954,8 @@ fn H3(stack u8[32] y, reg u64 a, inline int s, stack u8[128] es) -> stack u8[128
 fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs, inline int mpcRounds) -> reg u64 {
 
 	inline int i, j, player0, player1;
+
+	inline u64 aux;
 
 	i = 0;
 	while(i < mpcRounds){
@@ -1956,21 +1998,22 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 			j += 1;
 		}
 
-		j = 0;
-		while(j < 4){
 
-			//Passar como cópia de 64 bits
-
-			(u8)[zs + i * 3128 + 3120 + j] = (u8)[rs + player0 * 4 * mpcRounds + i * 4 + j];
-			(u8)[zs + i * 3128 + 3124 + j] = (u8)[rs + player1 * 4 * mpcRounds + i * 4 + j];
-
-			j += 1;
+		//Passar como cópia de 64 bits
+		if(i % 2 == 0){
+			aux = get_word(rs, player0, player1, mpcRounds, i, 0);
+			[zs + i * 391 + 390 + j] = aux;
+		}
+		else{
+			aux = get_word(rs, player0, player1, mpcRounds, i, 1);
+			[zs + i * 391 + 390 + j] = aux;
 		}
 
 	}
 
 	return zs;
 }
+
 
 
 /*********************************************************************
