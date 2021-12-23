@@ -169,9 +169,9 @@ fn RIGHTSHIFT(stack u8[60] x, inline int i, stack u8[12] z, inline int pos_hHa) 
 
 
 
-fn get_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRounds, inline int i, inline int pos) -> inline u64{
+fn set_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRounds, inline int i, inline int pos, reg u64 zs) {
 
-	inline u64 word, aux_word;
+	reg u64 word, aux_word;
 
 	inline int idx;
 
@@ -206,7 +206,8 @@ fn get_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRo
 
 	word += aux_word;
 
-	return word;
+	[zs + i * 391 + 390] = word;
+
 }
 
 
@@ -1951,11 +1952,11 @@ fn H3(stack u8[32] y, reg u64 a, inline int s, stack u8[128] es) -> stack u8[128
 *                *
 *****************/
 
-fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs, inline int mpcRounds) -> reg u64 {
+fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs, inline int mpcRounds) {
 
 	inline int i, j, player0, player1;
 
-	inline u64 aux;
+	reg u64 aux;
 
 	reg u64 temp;
 
@@ -1968,8 +1969,8 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 		/* Copy both players keys */
 		j = 0;
 		while(j < 2){
-			(u8)[zs + i * 391 + j] = [keys_shares + player0 * 2 * mpcRounds + i * 2 + j];
-			(u8)[zs + i * 391 + 2 + j] = [keys_shares + player1 * 2 * mpcRounds + i * 2 + j];
+			[zs + i * 391 + j] = [keys_shares + player0 * 2 * mpcRounds + i * 2 + j];
+			[zs + i * 391 + 2 + j] = [keys_shares + player1 * 2 * mpcRounds + i * 2 + j];
 
 			j += 1;
 		}
@@ -2000,24 +2001,17 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 			j += 1;
 		}
 
-
 		//Passar como cópia de 64 bits
-		if(i % 2 == 0){
-			aux = get_word(rs, player0, player1, mpcRounds, i, 0);
-			temp = zs + i * 391 + 390 + j;
-			[temp] = aux;
+		if((i % 2) == 0){
+			set_word(rs, player0, player1, mpcRounds, i, 0, zs);
 		}
 		else{
-			aux = get_word(rs, player0, player1, mpcRounds, i, 1);
-			temp = zs + i * 391 + 390 + j;
-			[temp] = aux;
+			set_word(rs, player0, player1, mpcRounds, i, 1, zs);
 		}
 
 		i += 1;
-
 	}
 
-	return zs;
 }
 
 
@@ -2098,7 +2092,7 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 	/*   Assemble proofs   */
 	/***********************/
 
-	zs = prove(es, keys_shares, rs, views, zs, mpcRounds);    // CHECKED
+	prove(es, keys_shares, rs, views, zs, mpcRounds);    // CHECKED
 }
 
 
