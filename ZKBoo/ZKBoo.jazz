@@ -169,7 +169,7 @@ fn RIGHTSHIFT(stack u8[60] x, inline int i, stack u8[12] z, inline int pos_hHa) 
 
 
 
-fn set_word(reg u64 rs, inline int player0, inline int player1, inline int mpcRounds, inline int i, inline int pos, reg u64 zs) {
+fn set_word(reg u64 rs, stack int player0, stack int player1, inline int mpcRounds, stack int i, inline int pos, reg u64 zs) {
 
 	reg u64 word, aux_word;
 
@@ -1954,9 +1954,9 @@ fn H3(stack u8[32] y, reg u64 a, inline int s, stack u8[128] es) -> stack u8[128
 
 fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs, inline int mpcRounds) {
 
-	inline int i, j, player0, player1;
+	stack int i, j, player0, player1;
 
-	reg u64 aux;
+	reg u64 temp;
 
 	reg u64 temp;
 
@@ -1975,7 +1975,7 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 			j += 1;
 		}
 		
-		/* Copy player's 1 view */
+		/* Copy player 1 view */
 		j = 0;
 		while(j < 8){
 			[zs + i * 391 + 4 + j] = [views + player0 * 8 * mpcRounds + i * 8 + j];
@@ -1988,7 +1988,7 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 			j += 1;
 		}
 
-		/* Copy player's 2 view */
+		/* Copy player 2 view */
 		j = 0;
 		while( j < 8){
 			[zs + i * 391 + 197 + j] = [views + player1 *8 * mpcRounds + i * 8 + j];
@@ -2001,7 +2001,7 @@ fn prove(stack u8[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u
 			j += 1;
 		}
 
-		//Passar como cópia de 64 bits
+
 		if((i % 2) == 0){
 			set_word(rs, player0, player1, mpcRounds, i, 0, zs);
 		}
