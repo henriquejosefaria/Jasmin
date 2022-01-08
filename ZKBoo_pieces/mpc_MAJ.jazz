@@ -1,0 +1,93 @@
+fn mpc_xor(stack u8[12] x, stack u8[12] y, stack u8[12] z) -> stack u8[12] {
+	
+	z[u32 0] = x[u32 0] ^ y[u32 0];
+	z[u32 1] = x[u32 1] ^ y[u32 1];
+	z[u32 2] = x[u32 2] ^ y[u32 2];
+
+	return z;
+}
+
+
+fn mpc_AND(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, inline int mpcRounds) -> stack u8[12], reg u64, reg u64, stack u64 {
+
+	stack u8[12] r;
+	inline int i;
+
+	i = 0;
+
+	while(i < 3){
+		r[i * 4] = [randomness + i * 16 * mpcRounds + randCount];
+		r[i * 4 + 1] = [randomness + i * 16 * mpcRounds + randCount + 1];
+		r[i * 4 + 2] = [randomness + i * 16 * mpcRounds + randCount + 2];
+		r[i * 4 + 3] = [randomness + i * 16 * mpcRounds + randCount + 3];
+
+		i += 1;
+	}
+
+	randCount += 4;
+
+	// t[0] = (x[0] & y[1]) ^ (x[1] & y[0]) ^ (x[0] & y[0]) ^ r[0] ^ r[1];
+
+	z[0] = (x[0] & y[4]) ^ (x[4] & y[0]) ^ (x[0] & y[0]) ^ r[0] ^ r[4];
+	z[1] = (x[1] & y[5]) ^ (x[5] & y[1]) ^ (x[1] & y[1]) ^ r[1] ^ r[5];
+	z[2] = (x[2] & y[6]) ^ (x[6] & y[2]) ^ (x[2] & y[2]) ^ r[2] ^ r[6];
+	z[3] = (x[3] & y[7]) ^ (x[7] & y[3]) ^ (x[3] & y[3]) ^ r[3] ^ r[7];
+
+
+	// t[1] = (x[1] & y[2]) ^ (x[2] & y[1]) ^ (x[1] & y[1]) ^ r[1] ^ r[2];
+
+	z[4] = (x[4] & y[8])  ^ (x[8] & y[4])  ^ (x[4] & y[4]) ^ r[4] ^ r[8];
+	z[5] = (x[5] & y[9])  ^ (x[9] & y[5])  ^ (x[5] & y[5]) ^ r[5] ^ r[9];
+	z[6] = (x[6] & y[10]) ^ (x[10] & y[6]) ^ (x[6] & y[6]) ^ r[6] ^ r[10];
+	z[7] = (x[7] & y[11]) ^ (x[11] & y[7]) ^ (x[7] & y[7]) ^ r[7] ^ r[11];
+
+
+	// t[2] = (x[2] & y[0]) ^ (x[0] & y[2]) ^ (x[2] & y[2]) ^ r[2] ^ r[0];
+
+	z[8]  = (x[8] & y[0])  ^ (x[0] & y[8])  ^ (x[8] & y[8])   ^ r[8] ^ r[0];
+	z[9]  = (x[9] & y[1])  ^ (x[1] & y[9])  ^ (x[9] & y[9])   ^ r[9] ^ r[1];
+	z[10] = (x[10] & y[2]) ^ (x[2] & y[10]) ^ (x[10] & y[10]) ^ r[10] ^ r[2];
+	z[11] = (x[11] & y[3]) ^ (x[3] & y[11]) ^ (x[11] & y[11]) ^ r[11] ^ r[3];
+
+	i = 0;
+
+	while(i < 3){
+
+		(u32)[views + i * 370 * mpcRounds + countY] =  y[u32 i];
+
+		i += 1;
+	}
+
+	countY += 1;
+
+	return z, randCount, countY, views;
+}
+
+fn mpc_MAJ(stack u8[12] a, stack u8[12] b, stack u8[12] c, stack u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, inline int mpcRounds) -> stack u8[12], reg u64, reg u64, reg u64 {
+	stack u8[12] t0, t1, aux;
+
+
+	t0 = mpc_xor(a, b, t0);
+	t1 = mpc_xor(a, c, t1);
+	z, randCount, countY, views = mpc_AND(t0, t1, z, randomness, randCount, views, countY, mpcRounds);
+	aux = z;
+	z = mpc_xor(aux, a, z);
+
+	return z, randCount, countY, views;
+}
+
+export 
+fn test(reg u64 views){
+
+	stack u8[12] a, b, c, z;
+	reg u64 randomness, randCount, countY;
+	inline int mpcRounds;
+
+	mpcRounds = 128;
+	randomness = 0;
+	randCount = 0;
+	countY = 0;
+
+	z, randCount, countY, views = mpc_MAJ(a, b, c, z, randomness, randCount, views, countY, mpcRounds);
+
+}

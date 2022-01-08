@@ -1,0 +1,16 @@
+fn mpc_xor(stack u8[12] x, stack u8[12] y, stack u8[12] z) -> stack u8[12] {
+	
+	z[u32 0] = x[u32 0] ^ y[u32 0];
+	z[u32 1] = x[u32 1] ^ y[u32 1];
+	z[u32 2] = x[u32 2] ^ y[u32 2];
+
+	return z;
+}
+
+export 
+fn test(){
+
+	stack u8[12] x,y,z;
+
+	z = mpc_xor(x, y, z);
+}

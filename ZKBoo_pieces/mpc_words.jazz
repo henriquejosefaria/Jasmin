@@ -1,0 +1,27 @@
+fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, stack u8 i) -> stack u32, stack u32 {
+
+
+	reg u32 a, b, c;
+	stack u32 word_a, word_b;
+
+	a = x[u32 (int)i];
+	b = y[u32 (int)i];
+	c = z[u32 (int)i];
+
+	word_a = a ^ c;
+	word_b = b ^ c;
+
+	return word_a, word_b;
+}
+
+
+export 
+fn test(){
+
+	stack u8[12] x,y,z;
+	stack u8 i;
+	stack u32 word_a, word_b;
+
+	word_a, word_b = mpc_words(x, y, z, i);
+}
+

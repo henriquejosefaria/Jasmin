@@ -1,0 +1,27 @@
+fn mpc_xor_hHa(stack u8[60] hHa, stack u8[12] y, stack u8[12] z, reg u8 pos_hHa) -> stack u8[12] {
+	
+	reg u8 i;
+
+	i=0;
+
+	while(i < 4){
+		z[(int)i] = hHa[(int)pos_hHa * 4 + (int)i] ^ y[(int)i];
+		z[4 + (int)i] = hHa[20 + (int)pos_hHa * 4 + (int)i] ^ y[4 + (int)i];
+		z[8 + (int)i] = hHa[40 + (int)pos_hHa * 4 + (int)i] ^ y[8 + (int)i];
+
+		i += 1;
+	}
+
+	return z;
+}
+
+
+export 
+fn test(){
+
+	stack u8[12] y,z;
+	stack u8[60] hHa;
+	reg u8 pos_hHa;
+
+	z = mpc_xor_hHa(hHa, y, z, pos_hHa);
+}

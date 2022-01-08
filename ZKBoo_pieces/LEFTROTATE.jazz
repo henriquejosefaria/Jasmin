@@ -1,0 +1,24 @@
+fn LEFTROTATE(stack u8[12] x, stack u8 n, stack u8[12] y) -> stack u8[12] {
+
+	stack u32[1] aux;
+	stack u8 i;
+
+	i = 0;
+
+	aux[0] = x[u32 0]; // copy 4 bytes
+
+	aux[0] = ((aux[0] << n) | (aux[0] >> (32- n)));
+
+	y[u32 0] = aux[0];
+
+	return y;
+}
+
+export 
+fn test(){
+
+	stack u8[12] x, y;
+	stack u8 n;
+
+	y = LEFTROTATE(x, n, y);
+}

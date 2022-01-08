@@ -1,0 +1,32 @@
+fn SETBIT_u32(stack u8[12] x, stack u8 bit_idx, stack u8 bit, stack u8 idx) -> stack u8[12] {
+
+	reg u32 a;
+	reg u8 aux_bit;
+
+	aux_bit = 1;
+
+	bit &= aux_bit;
+
+	a = 1;
+	a <<= bit_idx;
+
+	if (bit == 1){
+		x[u32 (int)idx] = x[u32 (int)idx] | a;
+	} else{
+		a ^= 0xFF;
+		x[u32 (int)idx] &= a; 
+	}
+	
+	return x;
+}
+
+export 
+fn test(){
+
+	stack u8[12] x;
+	stack u8 bit_idx, bit, idx;
+
+
+	x = SETBIT_u32(x, bit_idx, bit, idx);
+
+}

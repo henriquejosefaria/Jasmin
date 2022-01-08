@@ -1,0 +1,26 @@
+fn mpc_xor_k(stack u8[4] k, stack u8[12] y, stack u8[12] z) -> stack u8[12] {
+	
+	reg u8 i;
+
+	i=0;
+
+	while(i < 4){
+		z[(int)i] = k[(int)i] ^ y[(int)i];
+		z[4 + (int)i] = k[(int)i] ^ y[4 + (int)i];
+		z[8 + (int)i] = k[(int)i] ^ y[8 + (int)i];
+
+		i += 1;
+	}
+
+	return z;
+}
+
+
+export 
+fn test(){
+
+	stack u8[12] y,z;
+	stack u8[4] k;
+
+	z = mpc_xor_k(k, y, z);
+}

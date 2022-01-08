@@ -1,0 +1,31 @@
+
+fn GETBIT(stack u8[12] aux, stack u8 bit_idx, stack u8 base_idx) -> stack u8 {
+
+	inline u8 selectedBit;
+	stack u8 byte_idx, total_idx;
+
+	total_idx = bit_idx + base_idx;
+
+	byte_idx = total_idx / 8;
+	total_idx -= (total_idx / 8);
+
+	selectedBit = aux[(int)byte_idx];
+	selectedBit >>= total_idx; 
+	selectedBit &= 0x01;
+
+	return selectedBit;	
+}
+
+
+
+
+export 
+fn test(){
+
+	stack u8[12] aux;
+	stack u8 bit_idx, base_idx;
+	stack u8 res;
+
+	res = GETBIT(aux, bit_idx, base_idx);
+
+}

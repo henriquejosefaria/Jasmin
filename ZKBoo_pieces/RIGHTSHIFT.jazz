@@ -1,0 +1,41 @@
+fn RIGHTSHIFT(stack u8[60] x, stack u8 i, stack u8[12] z, stack u8 pos_hHa) -> stack u8[12] {
+	
+	
+	stack u32[1] aux;
+	reg u32 num;
+	reg u8 i;
+	reg u8 idx;
+
+	i = 0;
+
+	while(i < 3){
+
+		idx = (int)i * 20 + pos_hHa * 4;
+
+		aux[u8 0] = x[ (int)idx];
+		aux[u8 1] = x[ (int)idx + 1];
+		aux[u8 2] = x[ (int)idx + 2];
+		aux[u8 3] = x[ (int)idx + 3];
+
+		num = aux[0];
+		aux[0] = num >> i;
+
+		z[u32 (int)i] = aux[(int)i];
+
+		i += 1;
+	}
+
+	return z;
+}
+
+
+export 
+fn test(){
+
+	stack u8[60] x;
+	stack u8[12] z;
+	stack u8 i, pos_hHa;
+
+	z = RIGHTSHIFT(x, i, z, pos_hHa);
+
+}

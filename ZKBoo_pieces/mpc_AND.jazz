@@ -1,0 +1,75 @@
+fn mpc_AND(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, inline int mpcRounds) -> reg u8[12], reg u64, reg u64, stack u64 {
+
+	stack u8[12] r;
+	reg u64 i, pos_views;
+
+	reg u32[2] aux;
+
+	i = 0;
+
+	while(i < 3){
+		r[(int)i * 4] = [randomness + (int)i * 16 * mpcRounds + randCount];
+		r[(int)i * 4 + 1] = [randomness + (int)i * 16 * mpcRounds + randCount + 1];
+		r[(int)i * 4 + 2] = [randomness + (int)i * 16 * mpcRounds + randCount + 2];
+		r[(int)i * 4 + 3] = [randomness + (int)i * 16 * mpcRounds + randCount + 3];
+
+		i += 1;
+	}
+
+	randCount += 4;
+
+	z[u32 0] = (x[u32 0] & y[u32 1]) ^ (x[u32 1] & y[u32 0]) ^ (x[u32 0] & y[u32 0]) ^ r[u32 0] ^ r[u32 1];
+
+
+	z[u32 1] = (x[u32 1] & y[u32 2]) ^ (x[u32 2] & y[u32 1]) ^ (x[u32 1] & y[u32 1]) ^ r[u32 1] ^ r[u32 2];
+
+
+	z[u32 2] = (x[u32 2] & y[u32 0]) ^ (x[u32 0] & y[u32 2]) ^ (x[u32 2] & y[u32 2]) ^ r[u32 2] ^ r[u32 0];
+
+
+	i = 0;
+
+	while(i < 3){
+
+		aux[u64 0] = 0;
+
+		pos_views = i * mpcRounds;
+		pos_views *= 185;
+		pos_views += countY;
+
+		if(countY % 2 == 0){
+
+			aux[0] = z[u32 (int)i];
+
+			[views + pos_views] = aux[u64 0];
+
+		} else {
+
+			aux[1] = y[u32 (int)i];
+
+			[views + pos_views] = [views + pos_views] ^ aux[u64 0];
+		}
+
+		i += 1;
+	}
+
+	countY += 1;
+
+	return z, randCount, countY, views;
+}
+
+export 
+fn test(reg u64 views){
+
+	reg u8[12] x, y, z;
+	reg u64 randomness, randCount, countY;
+	inline int mpcRounds;
+
+	mpcRounds = 128;
+	randomness = 0;
+	randCount = 0;
+	countY = 0;
+
+	z, randCount, countY, views = mpc_AND(x, y, z, randomness, randCount, views, countY, mpcRounds);
+
+}
