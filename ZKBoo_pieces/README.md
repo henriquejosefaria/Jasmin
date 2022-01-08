@@ -29,8 +29,8 @@
 	-	mpc_ADD_W   (ER. 0)
 	-	mpc_ADD_K   (ER. 1) (Note: Arrays switched from stack to reg) 
 	-	mpc_ADD_hHa (ER. 0)
-	-	mpc_AND		(ER. 1) (Note: Arrays switched from stack to reg) 
-	-	mpc_MAJ		(ER. 0)
+	-	mpc_AND	    (ER. 1) (Note: Arrays switched from stack to reg) 
+	-	mpc_MAJ     (ER. 0)
 
 ## LIST OF WARNINGS
 
