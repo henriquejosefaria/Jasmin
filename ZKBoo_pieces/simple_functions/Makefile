@@ -4,7 +4,7 @@ BASIC_FUNCTIONS =
 
 
 
-all: clear basic_functions  mpc_functions
+all: clear basic_functions  mpc_functions sha256_complex_functions
 	
 
 
@@ -48,3 +48,39 @@ mpc_functions:
 	./../../../jasminc -o compiled_Jasmin/SIG1.s      SIG1.jazz
 	./../../../jasminc -o compiled_Jasmin/CH.s        CH.jazz
 	./../../../jasminc -o compiled_Jasmin/MAJ.s       MAJ.jazz
+
+
+sha256_complex_functions:
+	$(info )
+	$(info ################################################)
+	$(info # -     Testing SHA256 complex functions     - #)
+	$(info ################################################)
+	$(info )
+	./../../../jasminc -o compiled_Jasmin/sha256_transform.s     sha256_transform.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_transform_v2.s  sha256_transform_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_init.s          sha256_init.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update1_v2.s    sha256_update1_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update2_v2.s    sha256_update2_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update3_v2.s    sha256_update3_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update4_v2.s    sha256_update4_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update5_v2.s    sha256_update5_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update6_v2.s    sha256_update6_v2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_final2.s 	     sha256_final2.jazz
+
+
+
+	#./../../../jasminc -o compiled_Jasmin/sha256_update1.s       sha256_update1.jazz
+	#./../../../jasminc -o compiled_Jasmin/sha256_update2.s       sha256_update2.jazz
+	#./../../../jasminc -o compiled_Jasmin/sha256_update3.s       sha256_update3.jazz
+	#./../../../jasminc -o compiled_Jasmin/sha256_update4.s       sha256_update4.jazz
+	#./../../../jasminc -o compiled_Jasmin/sha256_update5.s       sha256_update5.jazz
+	#./../../../jasminc -o compiled_Jasmin/sha256_update6.s       sha256_update6.jazz
+	#./../../../jasminc -o compiled_Jasmin/H.s       H.jazz
+	#./../../../jasminc -o compiled_Jasmin/sha256_final1.s 	     sha256_final1.jazz
+
+
+
+
+
+
+
