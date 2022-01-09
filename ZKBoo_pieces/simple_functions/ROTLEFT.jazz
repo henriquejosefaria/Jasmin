@@ -1,0 +1,14 @@
+fn ROTLEFT(reg u32 a, reg u8 b) -> reg u32{
+
+	a = ((a << b) | (a >> (32 - b)));
+	return a;
+}
+
+export 
+fn test(){
+
+	reg u32 a;
+	reg u8 b;
+	
+	a = ROTLEFT(a, b);
+}

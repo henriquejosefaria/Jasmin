@@ -1,17 +1,13 @@
 fn mpc_xor_w(stack u8[960] w, stack u8[12] y, stack u8[12] z, reg u8 pos_w) -> stack u8[12] {
 	
-	reg u8 i;
+	inline int i;
 
-	i=0;
+	for i=0 to 4{
 
-	while(i < 4){
+		z[i] = w[(int)pos_w * 4 + i] ^ y[ i];
+		z[4 + i] = w[320 + (int)pos_w * 4 + i] ^ y[4 + i];
+		z[8 + i] = w[640 + (int)pos_w * 4 + i] ^ y[8 + i];
 
-
-		z[(int)i] = w[(int)pos_w * 4 + (int)i] ^ y[ (int)i];
-		z[4 + (int)i] = w[320 + (int)pos_w * 4 + (int)i] ^ y[4 + (int)i];
-		z[8 + (int)i] = w[640 + (int)pos_w * 4 + (int)i] ^ y[8 + (int)i];
-
-		i += 1;
 	}
 
 	return z;

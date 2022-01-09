@@ -1,0 +1,19 @@
+fn CH(stack u8[4] x, stack u8[4] y, stack u8[4] z) -> reg u32{
+	
+	inline int i;
+	reg u32 aux;
+
+	aux = (x[u32 0] & y[u32 0]) ^((x[u32 0] ^ 0xFF) & z[u32 0]);
+
+	return aux;
+}
+
+export 
+fn test(){
+
+	stack u8[4] x, y, z;
+	reg u32 res;
+
+	
+	res = CH(x, y, z);
+}

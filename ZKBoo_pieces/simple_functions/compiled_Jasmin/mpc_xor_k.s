@@ -4,11 +4,4 @@
 	.globl	test
 _test:
 test:
-	movb	$0, %al
-	jmp 	Ltest$1
-Ltest$2:
-	incb	%al
-Ltest$1:
-	cmpb	$4, %al
-	jb  	Ltest$2
 	ret 

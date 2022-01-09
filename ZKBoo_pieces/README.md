@@ -14,14 +14,18 @@
 	-	mpc_xor_k
 	-	mpc_xor_hHa
 	-	mpc_xor_three
+	-	ROTLEFT
+	-	ROTRIGHT
+	-	EP0
+	-	EP1
+	-	RIGHTSHIFT
+	-	mpc_xor_w
+	-	mpc_xor_k
+	-	mpc_xor_hHa
+
 
 ## Functions issuing warnings:
 	
-	-	RIGHTSHIFT  (ISS. 0)
-	-	mpc_xor_w   (ISS. 0)
-	-	mpc_xor_k   (ISS. 0)
-	-	mpc_xor_hHa (ISS. 0)
-
 
 ## Non compilable Jasmin files:
 
