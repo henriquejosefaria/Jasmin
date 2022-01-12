@@ -4,14 +4,10 @@ BASIC_FUNCTIONS =
 
 
 
-all: clear basic_functions  mpc_functions sha256_complex_functions
+all: clear basic_functions  sha256_simple_functions sha256_complex_functions hash_funtions zkboo_functions
 	
 
-
-clear:
-	clear
-
-basic_functions:
+basic_functions: 
 	$(info )
 	$(info ##############################################)
 	$(info # - Testing SHA1 simple auxiliar functions - #)
@@ -34,7 +30,7 @@ basic_functions:
 	 
 
 
-mpc_functions:
+sha256_simple_functions: 
 	$(info )
 	$(info ################################################)
 	$(info # - Testing SHA256 simple auxiliar functions - #)
@@ -50,7 +46,7 @@ mpc_functions:
 	./../../../jasminc -o compiled_Jasmin/MAJ.s       MAJ.jazz
 
 
-sha256_complex_functions:
+sha256_complex_functions: 
 	$(info )
 	$(info ################################################)
 	$(info # -     Testing SHA256 complex functions     - #)
@@ -68,19 +64,40 @@ sha256_complex_functions:
 	./../../../jasminc -o compiled_Jasmin/sha256_final2.s 	     sha256_final2.jazz
 
 
-
-	#./../../../jasminc -o compiled_Jasmin/sha256_update1.s       sha256_update1.jazz
-	#./../../../jasminc -o compiled_Jasmin/sha256_update2.s       sha256_update2.jazz
-	#./../../../jasminc -o compiled_Jasmin/sha256_update3.s       sha256_update3.jazz
-	#./../../../jasminc -o compiled_Jasmin/sha256_update4.s       sha256_update4.jazz
-	#./../../../jasminc -o compiled_Jasmin/sha256_update5.s       sha256_update5.jazz
-	#./../../../jasminc -o compiled_Jasmin/sha256_update6.s       sha256_update6.jazz
-	#./../../../jasminc -o compiled_Jasmin/H.s       H.jazz
-	#./../../../jasminc -o compiled_Jasmin/sha256_final1.s 	     sha256_final1.jazz
+hash_funtions: 
+	$(info )
+	$(info ################################################)
+	$(info # -             SHA256 function              - #)
+	$(info ################################################)
+	$(info )
+	./../../../jasminc -o compiled_Jasmin/H3.s                    H3.jazz
 
 
 
+zkboo_functions:	
+		$(info )
+	$(info ################################################)
+	$(info # -             ZKBoo functions              - #)
+	$(info ################################################)
+	$(info )
+	./../../../jasminc -o compiled_Jasmin/prove.s                 prove.jazz
+
+
+problematic_functions: clear
+	./../../../jasminc -o compiled_Jasmin/sha256_update1.s       sha256_update1.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update2.s       sha256_update2.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update3.s       sha256_update3.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update4.s       sha256_update4.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update5.s       sha256_update5.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_update6.s       sha256_update6.jazz
+	./../../../jasminc -o compiled_Jasmin/H.s                    H.jazz
+	./../../../jasminc -o compiled_Jasmin/sha256_final1.s 	     sha256_final1.jazz
 
 
 
+clear:
+	clear
+
+clean:
+	rm -f compiled_Jasmin/*
 

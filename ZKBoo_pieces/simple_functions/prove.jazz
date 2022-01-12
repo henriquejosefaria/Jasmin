@@ -1,0 +1,215 @@
+fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, reg u64 mpcRounds, reg u64 i, reg u64 pos, reg u64 zs) {
+
+	reg u64 word, aux_word;
+	reg u64 idx;
+	reg u64 mem_pos;
+	
+	reg u64 two;
+	two = 2;
+
+	// The rs arrays has u32 words -> we'll be using it as a u64 array
+
+	idx = i / two;
+
+
+	// We grab the first half of the u64 if pos == 0 else we grab the second half
+	
+
+	mem_pos = player0 * mpcRounds;
+	mem_pos = (mem_pos + i);
+	mem_pos = mem_pos >> 1;        // Divide by 2
+
+	if(pos == 0){
+		word = [rs + mem_pos];
+		word &= 0xffffffff00000000;
+	} else {
+		word = [rs + mem_pos];
+		word <<= 32;
+	}
+
+
+
+	mem_pos = player1 * mpcRounds;
+	mem_pos = mem_pos + i;
+	mem_pos = mem_pos >> 1;        // Divide by 2
+
+	if(pos == 0){
+		aux_word = [rs + mem_pos];
+		aux_word >>= 32;
+	} else {
+		aux_word = [rs + mem_pos];
+		aux_word &= 0x00000000ffffffff;
+	}
+
+	word += aux_word;
+
+	mem_pos = i * 391;
+	mem_pos += 390;
+
+	[zs + mem_pos] = word;
+}
+
+fn prove(stack u64[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs, reg u64 mpcRounds) {
+
+	reg u64 i, j, player0, player1;
+	reg u64 temp_zs, temp_keys_shares, x_player_view_offset, y_player_view_offset, temp_views, temp_aux;
+	reg u64 pos0, pos1, round;
+
+	pos0 = 0;
+	pos1 = 1;
+	i = 0;
+
+	while(i < mpcRounds){
+
+		player0 = es[(int)i];
+		player1 = es[(int)i];
+		player1 += 1;
+
+		//player1 = player1 % 3;
+		if(player1 == 3){
+			player1 = 0;
+		}
+
+
+		/* Copy both players keys */
+
+		temp_aux = i * 2;
+
+		j = 0;
+		while(j < 2){
+
+			temp_zs = i * 391;					// i * 391 + 0 + j
+			temp_zs += j;
+
+			temp_keys_shares = player0 * 2;
+			temp_keys_shares *= mpcRounds;
+			temp_keys_shares += temp_aux;
+			temp_keys_shares += j;
+
+			[zs + temp_zs] = [keys_shares + temp_keys_shares];
+
+
+			temp_zs += 2;						// i * 391 + 2 + j
+
+			temp_keys_shares = player1 * 2;
+			temp_keys_shares *= mpcRounds;
+			temp_keys_shares += temp_aux;
+			temp_keys_shares += j;
+
+			[zs + temp_zs] = [keys_shares + temp_keys_shares];
+
+			j += 1;
+		}
+		
+		/* Copy player 1 view */
+
+
+		x_player_view_offset = mpcRounds * 8;
+		x_player_view_offset *= player0;
+
+
+		temp_aux = 185 * 128;
+		temp_aux = temp_aux * player0;
+
+		y_player_view_offset = 3072;	 	// total views_x of the three players
+		y_player_view_offset += temp_aux;	// offset to player0 views_y
+
+		j = 0;
+		while(j < 8){
+
+			temp_zs = i * 391; 						// i * 391 + 4 + j
+			temp_zs += 4;
+			temp_zs += j;
+
+			temp_views = i * 8;					// set current view_x
+			temp_views += x_player_view_offset;
+			temp_views += j;
+
+			[zs + temp_zs] = [views + temp_views];
+			j += 1;
+		}
+
+		j = 0;
+		while(j < 185){
+			temp_zs = i * 391; 						// i * 391 + 12 + j
+			temp_zs += 12;
+			temp_zs += j;
+
+			temp_views = i * 185;
+			temp_views += y_player_view_offset;
+			temp_views += j;
+
+			[zs + temp_zs] = [views + temp_views];
+			j += 1;
+		}
+
+		/* Copy player 2 view */
+
+		x_player_view_offset = mpcRounds * 8;
+		x_player_view_offset *= player1;
+
+
+		temp_aux = 185 * 128;
+		temp_aux = temp_aux * player1;
+
+		y_player_view_offset = 3072;	 	// total views_x of the three players
+		y_player_view_offset += temp_aux;	// offset to player1 views_y
+
+
+		j = 0;
+		while( j < 8){
+			temp_zs = i * 391; 						// i * 391 + 197 + j
+			temp_zs += 197;
+			temp_zs += j;
+
+			temp_views = i * 8;
+			temp_views += x_player_view_offset;
+			temp_views += j;
+
+
+			[zs + temp_zs] = [views + temp_views];
+			j += 1;
+		}
+
+		j = 0;
+		while(j < 185){
+			temp_zs = i * 391; 						// i * 391 + 205 + j
+			temp_zs += 205;
+			temp_zs += j;
+
+			temp_views = i * 185;
+			temp_views += y_player_view_offset;
+			temp_views += j;
+
+
+			[zs + temp_zs] = [views + temp_views];
+			j += 1;
+		}
+
+		round = 0;
+		round += i;
+		round &= pos1; // 1 if i is impar and 0 otherwise
+
+		if(round == 0){
+			set_word(rs, player0, player1, mpcRounds, i, pos0, zs);
+		}
+		else{
+			set_word(rs, player0, player1, mpcRounds, i, pos1, zs);
+		}
+
+		i += 1;
+	}
+}
+
+
+export 
+fn test(reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs){
+
+
+    stack u64[128] es;
+    reg u64 mpcRounds;
+
+    mpcRounds = 0;
+
+    prove(es, keys_shares, rs, views, zs, mpcRounds);
+}

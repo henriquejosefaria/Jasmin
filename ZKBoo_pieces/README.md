@@ -37,17 +37,16 @@
 	-	sha256_update4/sha256_update4_v2     (while/for loops  => has warnings / has no warnings)
 	-	sha256_update5/sha256_update5_v2     (while/for loops  => has warnings / has no warnings)
 	-	sha256_update6/sha256_update6_v2     (while/for loops  => has warnings / has no warnings)
-	
-
-
-
 
 
 
 ## Functions issuing warnings:
 
 	-	sha256_final2 (W. 0)
-	
+	-	H3            (W. 0)
+	-	prove         (W. 0)
+
+
 
 ## Functions issuing errors:
 
@@ -58,10 +57,17 @@
 	-	mpc_AND	    (ER. 1) (Note: Arrays switched from stack to reg) 
 	-	mpc_MAJ     (ER. 0)
 
+
+
 ## Functions issuing warnings and errors:
 
 	-	sha256_final1 (W. 0, ER. 2) (Note => Real error: line 328; If you comment it, the function compiles)
 	-	H 			  (W. 0, ER. 3) (Note => Real error: line 420; If you comment it, the function compiles)
+
+
+
+
+
 
 ## LIST OF WARNINGS
 
