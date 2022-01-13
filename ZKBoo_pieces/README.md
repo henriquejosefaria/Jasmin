@@ -56,8 +56,10 @@
 	-	mpc_ADD_hHa (ER. 0)
 	-	mpc_AND	    (ER. 1) (Note: Arrays switched from stack to reg) 
 	-	mpc_MAJ     (ER. 0)
+	-	mpc_sha1	(ER. *)
 
 
+	-	* => Function compiles as long as the calls to the functions: mpc_AND, mpc_MAJ, mpc_ADD, mpc_ADD_K, mpc_ADD_W, and mpc_ADD_hHa are commented;
 
 ## Functions issuing warnings and errors:
 
