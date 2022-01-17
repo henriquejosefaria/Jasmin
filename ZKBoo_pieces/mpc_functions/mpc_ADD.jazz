@@ -1,8 +1,7 @@
 
-fn GETBIT_u32(stack u32 x, reg u8 bit_idx, stack u8 t) -> stack u8 {
+fn GETBIT_u32(reg u32 x, reg u8 bit_idx, reg u8 t) -> reg u8 {
 
 	stack u8[4] aux;
-	stack u8 res;
 
 	aux[u32 0] = ((x >> (bit_idx)) & 0x01);
 	
@@ -12,10 +11,10 @@ fn GETBIT_u32(stack u32 x, reg u8 bit_idx, stack u8 t) -> stack u8 {
 }
 
 
-fn getBits(stack u8[12] array_r, stack u8[12] array_c, reg u8 i, stack u8 idx0, stack u8 idx1) -> stack u8, stack u8, stack u8 {
+fn getBits(reg u8[12] array_r, reg u8[12] array_c, reg u8 i, reg u8 idx0, reg u8 idx1) -> reg u8,reg u8, reg u8 {
 
-	stack u8 t0, t1, t2;
-	stack u32 word0, word1, word2;
+	reg u8 t0, t1, t2;
+	reg u32 word0, word1, word2;
 
 	t0 = 0;
 	t1 = 0;
@@ -33,20 +32,20 @@ fn getBits(stack u8[12] array_r, stack u8[12] array_c, reg u8 i, stack u8 idx0, 
 	return t0, t1, t2;
 }
 
-fn SETBIT_u32(stack u8[12] x, stack u8 bit_idx, stack u8 bit, stack u8 idx) -> stack u8[12] {
+fn SETBIT_u32(reg u8[12] x, reg u8 bit_idx, reg u8 bit, reg u8 idx) -> reg u8[12] {
 
 	reg u32 a;
-	reg u8 aux_bit;
+	reg u32[1] aux;
+	reg u8 bit_aux;
 
-	aux_bit = 1;
-
-	bit &= aux_bit;
+	bit_aux = 1;
+	bit_aux &= bit;
 
 	a = 1;
-	a <<= bit_idx;
-
-	if (bit == 1){
-		x[u32 (int)idx] = x[u32 (int)idx] | a;
+	a = a << bit_idx;
+	
+	if (bit_aux == 1){
+		x[u32 (int)idx] |= a;
 	} else{
 		a ^= 0xFF;
 		x[u32 (int)idx] &= a; 
@@ -55,11 +54,11 @@ fn SETBIT_u32(stack u8[12] x, stack u8 bit_idx, stack u8 bit, stack u8 idx) -> s
 	return x;
 }
 
-fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u8 i) -> stack u32, stack u32 {
+fn mpc_words(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u8 i) -> reg u32, reg u32 {
 
 
 	reg u32 a, b, c;
-	stack u32 word_a, word_b;
+	reg u32 word_a, word_b;
 
 	a = x[u32 (int)i];
 	b = y[u32 (int)i];
@@ -73,19 +72,23 @@ fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u8 i) -> stack 
 
 
 
-
-fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, inline int mpcRounds) -> stack u8[12], reg u64, reg u64, reg u64 {
+fn mpc_ADD(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> reg u8[12], reg u64, reg u64, reg u64 {
 	
-	stack u8[12] c, r, aux, c_aux;
-	reg u8 i, j;
+	reg u8[12] c, r;
+	reg u64 i, j;
 
-	stack u8[3] a, b;
+	reg u8[3] a, b;
 
-	stack u8 t, t0, t1, t2, idx0, idx1, bit_idx, player;
+	reg u8 t, t0, t1, t2, idx0, idx1, bit_idx, player;
 
-	stack u32 word, word_a, word_b, word0, word1;
+	reg u32 word, word_a, word_b, word0, word1;
 
-	
+	reg u64 pos_views, temp, temp_pos, two, storage_u64;
+
+	reg u32[2] aux;
+
+
+	two = 2;
 	i = 0;
 
 	while(i < 3){
@@ -99,7 +102,7 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 	}
 
 	i = 0;
-
+	
 	while(i < 3){
 		r[(int)i * 4] = [randomness + (int)i * 1472 * mpcRounds + randCount];
 		r[(int)i * 4 + 1] = [randomness + (int)i * 1472 * mpcRounds + randCount + 1];
@@ -108,6 +111,7 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 
 		i += 1;
 	}
+	
 
 	randCount += 4;
 
@@ -117,7 +121,7 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 
 		j = 0;
 		bit_idx = i + 1;
-
+		
 		while(j < 3){
 			word_a, word_b = mpc_words(x, y, c, j);
 			t = GETBIT_u32(word_a,i,t);
@@ -126,7 +130,7 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 			b[(int)j] = t1;
 			j += 1;
 		}
-				
+			
 
 		// Set first word
 
@@ -139,7 +143,7 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 
 
 		player = 0;
-		c = SETBIT_u32(c, bit_idx, t, player);
+		//c = SETBIT_u32(c, bit_idx, t, player);
 		
 
 		// Set second word
@@ -152,7 +156,7 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 		t = ( t0 ^ (a[1] & b[2]) ^ (a[2] & b[1]) ) ^ (a[1]&b[1]) ^ t1  ^ t2;
 
 		player = 1;
-		c = SETBIT_u32(c, bit_idx, t, player);
+		//c = SETBIT_u32(c, bit_idx, t, player);
 		
 
 		// Set third word
@@ -165,13 +169,15 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 		t = ( t0 ^ (a[2]&b[0]) ^ (a[0]&b[2]) ) ^ (a[2]&b[2]) ^ t1  ^ t2;
 
 		player = 2;
-		c = SETBIT_u32(c, bit_idx, t, player);
+		//c = SETBIT_u32(c, bit_idx, t, player);
 
 		i += 1;
 		
 	}
+	
 		
 	i = 0;
+	temp_pos = mpc_idx * 185; // player's current view.y
 
 	while(i < 3){
 
@@ -180,8 +186,37 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 		z[(int)i * 4 + 2] = x[(int)i * 4 + 2] ^ y[(int)i * 4 + 2] ^ c[(int)i * 4 + 2];
 		z[(int)i * 4 + 3] = x[(int)i * 4 + 3] ^ y[(int)i * 4 + 3] ^ c[(int)i * 4 + 3];
 
+		pos_views = i * 185;			// Current player views.y
+		pos_views *= mpcRounds;
+		pos_views += temp_pos;
+		pos_views += 3072;				// view.x of the 3 players times mpcRound 
 
-		(u32)[views + 768 + (int)i * 365 * mpcRounds + countY] = c[u32 (int)i];
+		temp = countY;
+		temp >>= 1;
+
+		pos_views += temp;				// current pointer inside view.y
+
+		temp = countY;
+		temp = temp % two;
+
+
+		if(temp == 0){
+			
+			aux[0] = c[u32 (int)i];
+
+			storage_u64 = aux[u64 0];
+
+		} else {
+			
+			aux[1] = c[u32 (int)i];
+
+			storage_u64 = [views + (int)pos_views];
+
+			storage_u64 ^= aux[u64 0];
+			
+		}
+
+		[views + (int)pos_views] = storage_u64;
 
 		i += 1;
 
@@ -196,15 +231,16 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 export 
 fn test(reg u64 views){
 
-	stack u8[12] x, y, z;
+	reg u8[12] x, y, z;
 	reg u64 randomness, randCount, countY;
-	inline int mpcRounds;
+	reg u64 mpc_idx, mpcRounds;
 
 	mpcRounds = 128;
 	randomness = 0;
 	randCount = 0;
 	countY = 0;
+	mpc_idx = 0;
 
-	z, randCount, countY, views = mpc_ADD(x, y, z, randomness, randCount, views, countY, mpcRounds);
+	z, randCount, countY, views = mpc_ADD(x, y, z, randomness, randCount, views, countY, mpc_idx, mpcRounds);
 
 }

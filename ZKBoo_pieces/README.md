@@ -50,12 +50,12 @@
 
 ## Functions issuing errors:
 
-	-	mpc_ADD     (ER. 0)
+	-	mpc_ADD     (ER. 1)	(Note: Error on line 219) 
 	-	mpc_ADD_W   (ER. 0)
 	-	mpc_ADD_K   (ER. 1) (Note: Arrays switched from stack to reg) 
 	-	mpc_ADD_hHa (ER. 0)
-	-	mpc_AND	    (ER. 1) (Note: Arrays switched from stack to reg) 
-	-	mpc_MAJ     (ER. 0)
+	-	mpc_AND	    (ER. 1) (Note: Error on line 133) 
+	-	mpc_MAJ     (ER. 1) (Note: Error on line 143)
 	-	mpc_sha1	(ER. *)
 
 
