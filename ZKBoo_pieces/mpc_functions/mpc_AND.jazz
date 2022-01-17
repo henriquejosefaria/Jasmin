@@ -1,4 +1,4 @@
-fn mpc_AND(reg u32[3] x, reg u32[3] y, reg u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> reg u32[3], reg u64, reg u64, reg u64 {
+fn mpc_AND(stack u32[3] x, stack u32[3] y, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 
 	stack u32[3] r;
 	reg u64 i, pos_randomness, pos_r, pos_views, temp_pos, temp;
@@ -15,12 +15,12 @@ fn mpc_AND(reg u32[3] x, reg u32[3] y, reg u32[3] z, reg u64 randomness, reg u64
 
 		pos_r = i;
 
-		r[(int)pos_r] = [randomness + (int)pos_randomness];
+		r[(int)pos_r] = (u32)[randomness + (int)pos_randomness];
 
 		i += 1;
 	}
 
-	randCount += 4;
+	randCount += 1;
 
 
 	temp0 = x[0];
@@ -103,7 +103,9 @@ fn mpc_AND(reg u32[3] x, reg u32[3] y, reg u32[3] z, reg u64 randomness, reg u64
 
 		/* Z => u32[3]; */
 
-		(u32)[views + (int)pos_views] = z[(int)i];
+		temp0 = z[(int)i];
+
+		(u32)[views + (int)pos_views] = temp0;
 		
 		i += 1;
 	}
@@ -114,10 +116,10 @@ fn mpc_AND(reg u32[3] x, reg u32[3] y, reg u32[3] z, reg u64 randomness, reg u64
 }
 
 export 
-fn test(reg u64 views){
+fn test(reg u64 views, reg u64 randomness){
 
-	reg u32[3] x, y, z;
-	reg u64 randomness, randCount, countY;
+	stack u32[3] x, y, z;
+	reg u64 randCount, countY;
 	reg u64 mpc_idx, mpcRounds;
 
 	mpcRounds = 128;
@@ -125,6 +127,18 @@ fn test(reg u64 views){
 	randCount = 0;
 	countY = 0;
 	mpc_idx = 0;
+
+	x[0] = 0;
+	x[1] = 0;
+	x[2] = 0;
+
+	y[0] = 0;
+	y[1] = 0;
+	y[2] = 0;
+
+	z[0] = 0;
+	z[1] = 0;
+	z[2] = 0;
 
 	z, randCount, countY, views = mpc_AND(x, y, z, randomness, randCount, views, countY, mpc_idx, mpcRounds);
 
