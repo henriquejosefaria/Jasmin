@@ -1,193 +1,272 @@
+inline
+fn GETBIT_u32(reg u32 x, reg u64 bit_idx, reg u32 t) -> reg u32 {
 
-fn GETBIT(stack u8[12] aux, reg u64 bit_idx, reg u64 base_idx) -> stack u8 {
+	reg u32 x_aux;
 
-	inline u8 selectedBit;
-	stack u8 byte_idx, total_idx;
-
-	total_idx = bit_idx + base_idx;
-
-	byte_idx = total_idx / 8;
-	total_idx -= (total_idx / 8);
-
-	selectedBit = aux[(int)byte_idx];
-	selectedBit = selectedBit >> total_idx; 
-	selectedBit &= 0x01;
-
-	return selectedBit;	
-}
-
-fn GETBIT_u32(stack u32 x, reg u64 bit_idx, stack u8 t) -> stack u8 {
-
-	stack u8[4] aux;
-	stack u8 res;
-
-	aux[u32 0] = ((x >> (bit_idx)) & 0x01);
+	x_aux = x;
+	x_aux = x_aux >> bit_idx;
+	x_aux &= 0x01; 
 	
-	t = aux[3];
-
-	return t;	
+	return x_aux;	
 }
 
-fn getBits(stack u8[12] array_r, stack u8[12] array_c, reg u64 i, reg u64 idx0, reg u64 idx1) -> stack u8, stack u8, stack u8 {
+inline
+fn getBits(stack u32[3] array_r, stack u32[3] array_c, reg u64 i, reg u64 idx0, reg u64 idx1) -> reg u32, reg u32, reg u32 {
 
-	stack u8 t0, t1, t2;
-	stack u32 word0, word1, word2;
+	reg u32 word0, word1, word2;
 
-	t0 = 0;
-	t1 = 0;
-	t2 = 0;
-
-	word0 = array_r[u32 (int)idx0];
-	word1 = array_c[u32 (int)idx1];
-	word2 = array_r[u32 (int)idx1];
+	word0 = array_r[(int)idx0];
+	word1 = array_c[(int)idx1];
+	word2 = array_r[(int)idx1];
 
 
-	t0 = GETBIT_u32(word0, i, t0);
-	t1 = GETBIT_u32(word1, i, t1);
-	t2 = GETBIT_u32(word2, i, t2);
+	word0 = GETBIT_u32(word0, i, word0);
+	word1 = GETBIT_u32(word1, i, word1);
+	word2 = GETBIT_u32(word2, i, word2);
 
-	return t0, t1, t2;
+	return word0, word1, word2;
 }
 
-fn SETBIT_u32(stack u8[12] x, reg u64 bit_idx, stack u8 bit, reg u64 idx) -> stack u8[12] {
+inline
+fn SETBIT_u32(stack u32[3] x, reg u64 bit_idx, reg u32 bit, reg u64 idx) -> reg u32[3] {
 
 	reg u32 a;
-	reg u8 aux_bit;
+	reg u32 bit_aux;
+	reg u64 aux;
 
-	aux_bit = 1;
+	aux = bit_idx;
 
-	bit &= aux_bit;
+	bit_aux = 1;
+	bit_aux &= bit;
 
 	a = 1;
-	a <<= bit_idx;
 
-	if (bit == 1){
-		x[u32 (int)idx] = x[u32 (int)idx] | a;
+	while(aux > 0){
+		a <<= 1;
+		aux -= 1;
+	}
+	
+	if (bit_aux == 1){
+		x[(int)idx] |= a;
 	} else{
-		a ^= 0xFF;
-		x[u32 (int)idx] &= a; 
+		a ^= 0xFFFFFFFF;
+		x[(int)idx] &= a; 
 	}
 	
 	return x;
 }
 
-fn LEFTROTATE(stack u8[12] x, reg u64 n, stack u8[12] y) -> stack u8[12] {
+inline
+fn LEFTROTATE(reg u32 x, reg u64 n) -> reg u32 {
 
 	reg u32 aux0, aux1;
 	reg u64 n1;
 
-	aux0 = x[u32 0]; // copy 4 bytes
-	aux1 = x[u32 0];
+	aux0 = x;
+	aux1 = x;
 
 	aux0 <<= n;
 
 	n1 = 32;
 	n1 -= n;
 
-	n = n1;
+	while(n1 > 0){
 
-	aux1 = aux1 >> n;
+		aux1 = aux1 >> 1;
 
-	aux0 = aux0 | aux1;
+		n1 -= 1;
+	}
 
-	y[u32 0] = aux0;
-
-	return y;
+	aux0 |= aux1;
+	
+	return aux0;
 }
 
-fn RIGHTSHIFT(stack u8[60] x, reg u64 i, stack u8[12] z, reg u64 pos_hHa) -> stack u8[12] {
+inline
+fn RIGHTSHIFT(stack u32[15] x, reg u64 i, stack u32[3] z, reg u64 pos_hHa) -> stack u32[3] {
 	
-	stack u32[1] aux;
-	reg u32 num;
-	reg u8 idx;
-	inline int i;
 
-	for i=0 to 3{
+	reg u32 x_aux;
+	reg u64 j, pos;
+	inline int i_aux;
 
-		idx = i * 20 + pos_hHa * 4;
+	i_aux = i;
 
-		aux[u8 0] = x[ (int)idx];
-		aux[u8 1] = x[ (int)idx + 1];
-		aux[u8 2] = x[ (int)idx + 2];
-		aux[u8 3] = x[ (int)idx + 3];
+	j = 0;
+	while(j < 3){
+		pos = pos_hHa;
+		pos += j;
 
-		num = aux[0];
-		aux[0] = num >> i;
+		x_aux = x[(int)pos];
+		x_aux >>= i_aux;
 
-		z[u32 i] = aux[i];
+		z[(int)i] = x_aux;
 
+		j += 1;
 	}
 
 	return z;
 }
 
-fn mpc_xor(stack u8[12] x, stack u8[12] y, stack u8[12] z) -> stack u8[12] {
-	
-	z[u32 0] = x[u32 0] ^ y[u32 0];
-	z[u32 1] = x[u32 1] ^ y[u32 1];
-	z[u32 2] = x[u32 2] ^ y[u32 2];
+inline
+fn mpc_LEFTROTATE(stack u32[3] x, reg u64 i, stack u32[3] z) -> stack u32[3] {
+
+	reg u32 res;
+
+	res = x[0];
+	res = LEFTROTATE(res,i);
+	z[0] = res;
+
+	res = x[1];
+	res = LEFTROTATE(res,i);
+	z[1] = res;
+
+	res = x[2];
+	res = LEFTROTATE(res,i);
+	z[2] = res;
 
 	return z;
 }
 
-fn mpc_xor_w(stack u8[960] w, stack u8[12] y, stack u8[12] z, reg u64 pos_w) -> stack u8[12] {
+
+inline
+fn mpc_LEFTROTATE_w(stack u32[3] x, reg u64 i, stack u32[240] w, reg u64 pos_w) -> stack u32[240] {
 	
-	reg u8 i;
+	reg u32 storage_u32, x_0;
+	reg u64 n;
 
-	i=0;
+	storage_u32 = x[0];
+	storage_u32 <<= i;
 
-	while(i < 4){
+	n = 32;
+	n -= i;
 
+	x_0 = x[0];
 
-		z[(int)i] = w[(int)pos_w * 4 + (int)i] ^ y[ (int)i];
-		z[4 + (int)i] = w[320 + (int)pos_w * 4 + (int)i] ^ y[4 + (int)i];
-		z[8 + (int)i] = w[640 + (int)pos_w * 4 + (int)i] ^ y[8 + (int)i];
+	while(n > 0){
+		x_0 >>= 1;
 
-		i += 1;
-	}
-
-	return z;
-}
-
-fn mpc_xor_k(stack u8[4] k, stack u8[12] y, stack u8[12] z) -> stack u8[12] {
-	
-	inline int i;
-
-	for i=0 to 4{
-		z[i] = k[i] ^ y[i];
-		z[4 + i] = k[i] ^ y[4 + i];
-		z[8 + i] = k[i] ^ y[8 + i];
-		
-	}
-
-	return z;
-}
-
-fn mpc_xor_hHa(stack u8[60] hHa, stack u8[12] y, stack u8[12] z, reg u64 pos_hHa) -> reg u8[12] {
-	
-	inline int i;
-
-	for i=0 to 4{
-		
-		z[i] = hHa[(int)pos_hHa * 4 + i] ^ y[(int)i];
-		z[4 + i] = hHa[20 + (int)pos_hHa * 4 + i] ^ y[4 + i];
-		z[8 + i] = hHa[40 + (int)pos_hHa * 4 + i] ^ y[8 + i];
-		
+		n -= 1;
 	}
 	
-	return z;
+	storage_u32 |= x_0;
 
+	w[(int)pos_w] = storage_u32;
+
+	return w;
 }
 
-fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 i) -> stack u32, stack u32 {
+inline
+fn mpc_xor(stack u32[3] x, stack u32[3] y, stack u32[3] z) -> stack u32[3] {
+	
+	reg u32 aux;
+
+	aux = x[0];
+	aux ^= y[0];
+	z[0] = aux;
+
+	aux = x[1];
+	aux ^= y[1];
+	z[1] = aux;
+
+	aux = x[2];
+	aux ^= y[2];
+	z[2] = aux;
+
+	return z;
+}
+
+inline
+fn mpc_xor_w(stack u32[240] w, stack u32[3] y, stack u32[3] z, stack u64 pos_w) -> reg u32[3] {
+	
+	reg u64 pos;
+	reg u32[3] z_aux;
+
+	pos = pos_w;
+	z_aux[0] = w[(int)pos];
+	z_aux[0] ^= y[0];
+
+	pos += 80;
+	z_aux[1] = w[(int)pos];
+	z_aux[1] ^= y[1];
+
+	pos += 80;
+	z_aux[2] = w[(int)pos];
+	z_aux[2] ^= y[2];
+
+	z[0] = z_aux[0];
+	z[1] = z_aux[1];
+	z[2] = z_aux[2];
+
+	return z;
+}
+
+inline
+fn mpc_xor_k(stack u32 k, stack u32[3] y, stack u32[3] z) -> stack u32[3] {
+
+	reg u32 y_aux;
+
+	y_aux = y[0];
+	z[0] = k;
+	z[0] ^= y_aux;
+
+	y_aux = y[1];
+	z[1] = k;
+	z[1] ^= y_aux;
+
+	y_aux = y[2];
+	z[2] = k;
+	z[2] ^= y_aux;
+
+	return z;
+}
+
+inline
+fn mpc_xor_hHa(stack u32[15] hHa, stack u32[3] y, stack u32[3] z, reg u64 pos_hHa) -> stack u32[3] {
+
+	reg u64 pos;
+
+	pos = pos_hHa;
+	z[0] = hHa[(int)pos];
+	z[0] ^= y[(int)0];
+
+	pos += 5;
+	z[1] = hHa[(int)pos];
+	z[1] ^= y[(int)1];
+
+	pos += 5;
+	z[2] = hHa[(int)pos];
+	z[2] ^= y[(int)2];
+
+	return z;
+}
+
+inline
+fn mpc_xor_three(stack u32[3] x, stack u32[3] y, stack u32 k,  reg u64 i) -> stack u32[3] {
+	
+	reg u32 aux_x, aux_y;
+
+	aux_x = x[(int)i];
+	aux_y = y[(int)i];
+
+	aux_x ^= aux_y;
+	aux_x ^= k;
+
+	x[(int)i] = aux_x;
+	
+	return x;
+}
+
+inline
+fn mpc_words(stack u32[3] x, stack u32[3] y, stack u32[3] z, reg u64 i) -> reg u32, reg u32 {
 
 
 	reg u32 a, b, c;
-	stack u32 word_a, word_b;
+	reg u32 word_a, word_b;
 
-	a = x[u32 (int)i];
-	b = y[u32 (int)i];
-	c = z[u32 (int)i];
+	a = x[(int)i];
+	b = y[(int)i];
+	c = z[(int)i];
 
 	word_a = a ^ c;
 	word_b = b ^ c;
@@ -195,132 +274,240 @@ fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 i) -> stack
 	return word_a, word_b;
 }
 
-fn mpc_xor_three(stack u8[12] x, stack u8[12] y, stack u8[4] k,  reg u64 i) -> stack u8[12] {
-	
-	reg u32 aux_x, aux_y;
-	stack u32 aux_k; 
+inline
+fn mpc_words_w(stack u32[240] x, stack u32[3] y, stack u32[3] z, stack u64 pos_w, reg u64 j) -> reg u32, reg u32 {
 
-	aux_x = x[u32 (int)i];
-	aux_y = y[u32 (int)i];
-	aux_k = k[u32 (int)i];
 
-	aux_k = aux_x ^ aux_y ^ aux_k;
+	reg u32 a, b, c;
+	reg u32 word_a, word_b;
+	reg u64 pos;
 
-	x[u32 (int)i] = aux_k;
-	
-	return x;
+	pos = j * 80;
+	pos += pos_w;
+
+	a = x[(int)pos];
+	b = y[(int)j];
+	c = z[(int)j];
+
+	word_a = a ^ b;
+	word_b = c ^ b;
+
+	return word_a, word_b;
 }
 
+inline
+fn mpc_words_hHa(stack u32[15] x, stack u32[3] y, stack u32[3] z, reg u64 pos_hHa, reg u64 i) -> reg u32, reg u32 {
 
 
+	reg u32 a, b, c;
+	reg u32 word_a, word_b;
 
-fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpcRounds) -> stack u8[12], reg u64, reg u64, reg u64 {
+	a = x[(int)pos_hHa];
+	b = y[(int)i];
+	c = z[(int)i];
+
+	word_a = a ^ b;
+	word_b = c ^ b;
+
+	return word_a, word_b;
+}
+
+inline
+fn mpc_words_k(stack u32[3] x, stack u32[3] y, stack u32 k, reg u64 j) -> reg u32, reg u32 {
+
+
+	reg u32 a, b, c;
+	reg u32 word_a, word_b;
+
+	a = x[(int)j];
+	b = y[(int)j];
+	c = k;
+
+	word_a = a ^ b;
+	word_b = c ^ b;
+
+	return word_a, word_b;
+}
+
+inline
+fn mpc_ADD(stack u32[3] x, stack u32[3] y, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, stack u64 mpc_idx, stack u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 	
-	stack u8[12] c, r, aux, c_aux;
-	reg u64 i, j, zero, one, two, i_aux, temp_views, temp_aux, pos;
+	stack u32[3] c, r;
 
-	stack u8[3] a, b;
+	stack u32[3] a, b;
 
-	stack u8 t, t0, t1, t2;
+	reg u64 idx0, idx1, bit_idx, player;
 
-	stack u32 word, word_a, word_b, word0, word1;
-	
+	reg u64 i;
+	reg u64 j;
+
+	reg u32 t, t0, t1, t2;
+
+	reg u32 word, word_a, word_b, word0, word1;
+
+	reg u64 pos_rand, pos_views, temp, temp_pos;
+
+	stack u32[3] aux_y;
+
+	c[0] = 0;
+	c[1] = 0;
+	c[2] = 0;
+
+	t = y[0];
+	aux_y[0] = t;
+	t = y[1];
+	aux_y[1] = t;
+	t = y[2];
+	aux_y[2] = t;
+
 	i = 0;
-	zero = 0;
-	one = 1;
-	two = 2;
-
+	
 	while(i < 3){
-		j = 0;
 
-		while(j < 4){
-			c[(int)i*4+(int)j] = 0;
-			j += 1;
-		}
+		pos_rand = i;
+		pos_rand *= 368;
+		pos_rand *= mpcRounds;
+		pos_rand += randCount;
+
+		r[(int)i] = (u32)[randomness + (int)pos_rand];
+
 		i += 1;
 	}
-
-	i = 0;
-
-	while(i < 3){
-		r[(int)i * 4] = [randomness + (int)i * 1472 * mpcRounds + randCount];
-		r[(int)i * 4 + 1] = [randomness + (int)i * 1472 * mpcRounds + randCount + 1];
-		r[(int)i * 4 + 2] = [randomness + (int)i * 1472 * mpcRounds + randCount + 2];
-		r[(int)i * 4 + 3] = [randomness + (int)i * 1472 * mpcRounds + randCount + 3];
-
-		i += 1;
-	}
-
-	randCount += 4;
+	
+	randCount += 1;
 
 	i = 0;
 	
 	while(i < 31){
 
-		i_aux = i + 1;
 		j = 0;
-
+		
 		while(j < 3){
 			word_a, word_b = mpc_words(x, y, c, j);
+
 			t = GETBIT_u32(word_a,i,t);
 			t1 = GETBIT_u32(word_b,i,t1);
+			
 			a[(int)j] = t;
 			b[(int)j] = t1;
 			j += 1;
 		}
-				
+			
 
 		// Set first word
-		
-		t0, t1, t2 = getBits(r, c, i, one, zero);
-		
-		t = ( t0 ^ (a[0] & b[1]) ^ (a[1] & b[0]) ) ^ (a[0]&b[0]) ^ t1  ^ t2;
 
-		c = SETBIT_u32(c, i_aux, t, zero);
+		idx0 = 1;
+		idx1 = 0;
 		
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[0];
+		t &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[0];
+		t ^= t0;
+
+		t0 = a[0];
+		t0 &= b[0];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 0;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
+		
+
 
 		// Set second word
 		
-		t0, t1, t2 = getBits(r, c, i, two, one);
-		
-		t = ( t0 ^ (a[1] & b[2]) ^ (a[2] & b[1]) ) ^ (a[1]&b[1]) ^ t1  ^ t2;
+		idx0 = 2;
+		idx1 = 1;
 
-		c = SETBIT_u32(c, i_aux, t, one);
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
 		
+		t = a[1];
+		t &= b[2];
+		t ^= t0;
+
+		t0 = a[2];
+		t0 &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[1];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 1;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
+		
+
 
 		// Set third word
-		
-		t0, t1, t2 = getBits(r, c, i, zero, two);
-		
-		t = ( t0 ^ (a[2]&b[0]) ^ (a[0]&b[2]) ) ^ (a[2]&b[2]) ^ t1  ^ t2;
 
-		c = SETBIT_u32(c, i_aux, t, two);
+		idx0 = 0;
+		idx1 = 2;
+		
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[2];
+		t &= b[0];
+		t ^= t0;
+
+		t0 = a[0];
+		t0 &= b[2];
+		t ^= t0;
+
+		t0 = a[2];
+		t0 &= b[2];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 2;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
 
 		i += 1;
-		
 	}
+	
 		
 	i = 0;
+	temp_pos = mpc_idx * 370; // player's current view.y
 
 	while(i < 3){
 
-		pos = i * 4;
+		t = aux_y[(int)i];
+		t ^= x[(int)i];
+		t ^= c[(int)i];
 
-		z[(int)pos] = x[(int)pos] ^ y[(int)pos] ^ c[(int)pos];
-		z[(int)pos + 1] = x[(int)pos + 1] ^ y[(int)pos + 1] ^ c[(int)pos + 1];
-		z[(int)pos + 2] = x[(int)pos + 2] ^ y[(int)pos + 2] ^ c[(int)pos + 2];
-		z[(int)pos + 3] = x[(int)pos + 3] ^ y[(int)pos + 3] ^ c[(int)pos + 3];
+		z[(int)i] = t;
 
-		temp_aux = i * 365;
-		temp_aux *= mpcRounds;
+		pos_views = i;
+		pos_views *= 370;			// Current player views.y
+		pos_views *= mpcRounds;
+		pos_views += temp_pos;
+		pos_views += 6144;				// view.x of the 3 players times mpcRound 
 
-		temp_views = 768 + temp_aux;
-		temp_views += countY;
+		pos_views += countY;				// current pointer inside view.y
 
-		(u32)[views + temp_views] = c[u32 (int)i];
+		t = c[(int)i];
+
+		(u32)[views + (int)pos_views] = t;
+
 
 		i += 1;
-
 	}
 	
 	countY += 1;
@@ -328,189 +515,237 @@ fn mpc_ADD(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 	return z, randCount, countY, views;
 }
 
-fn mpc_ADD_W(stack u8[960] w, stack u8[12] y, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 pos_w, reg u64 mpcRounds) -> stack u8[12], reg u64, reg u64, reg u64 {
+inline
+fn mpc_ADD_W(stack u32[240] w, stack u32[3] y, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, stack u64 pos_w, stack u64 mpc_idx, stack u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 	
-	stack u8[12] c, r, aux, aux2;
-	reg u64 i, i_aux, j, j_aux, zero, one, two, temp_aux, temp_views, pos, pos_aux;
+	stack u32[3] c, r, aux, aux2;
 
-	reg u8 retrievedBit0, retrievedBit1;	
+	stack u32[3] a, b;
 
-	reg u8[3] a, b;
+	reg u64 i, j, idx;
 
-	stack u8 t, t0, t1, t2;
-	
-	i = 0;
-	zero = 0;
-	one = 1;
-	two = 2;
+	reg u64 idx0, idx1, bit_idx, player;
 
-	while(i < 3){
-		j = 0;
-		while(j < 4){
-			c[(int)i*4+(int)j] = 0;
-			j += 1;
-		}
-		i += 1;
+	reg u64 temp_pos;
+
+	reg u32 t, t0, t1, t2, word_a, word_b;
+
+	reg u64 pos_views, pos_rand, pos_aux, temp_pos;
+
+	c[0] = 0;
+	c[1] = 0;
+	c[2] = 0;
+
+	idx = 0;
+
+	while(idx < 3){
+
+		pos_rand = idx;
+		pos_rand *= 368;
+		pos_rand *= mpcRounds;
+		pos_rand += randCount;
+
+		r[(int)idx] = (u32)[randomness + (int)pos_rand];
+
+		idx += 1;
 	}
 
-	i = 0;
-
-	while(i < 3){
-		r[(int)i * 4] = [randomness + (int)i * 16 * mpcRounds + randCount];
-		r[(int)i * 4 + 1] = [randomness + (int)i * 16 * mpcRounds + randCount + 1];
-		r[(int)i * 4 + 2] = [randomness + (int)i * 16 * mpcRounds + randCount + 2];
-		r[(int)i * 4 + 3] = [randomness + (int)i * 16 * mpcRounds + randCount + 3];
-
-		i += 1;
-	}
-
-	randCount += 4;
-
-	i = 0;
-
-	while(i < 31){
-
-
-		aux = mpc_xor_w(w, c, aux, pos_w);
-
-		aux2 = mpc_xor(y, c, aux2);
-
-		i_aux = i + 1;
-		j = 0;
-
-		while(j < 3){
-
-			j_aux = j * 32;
-			t = GETBIT(aux,i, j_aux);
-			a[(int)j] = t;
-
-			t = GETBIT(aux2,i, j_aux);
-			b[(int)j] = t;
-
-			j += 1;
-		}
-
-
-		/* Set first word */
-
-		t0, t1, t2 = getBits(r, c, i, one, zero);
-		
-		t = ( t0 ^ (a[0] & b[1]) ^ (a[1] & b[0]) ) ^ (a[0]&b[0]) ^ t1  ^ t2;
-
-		c = SETBIT_u32(c, i_aux, t, zero);
-
-
-		/* Set second word */
-
-		t0, t1, t2 = getBits(r, c, i, two, one);
-		
-		t = ( t0 ^ (a[1] & b[2]) ^ (a[2] & b[1]) ) ^ (a[1]&b[1]) ^ t1  ^ t2;
-
-		c = SETBIT_u32(c, i_aux, t, one);
-		
-
-		/* Set third word */
-
-		t0, t1, t2 = getBits(r, c, i, zero, two);
-		
-		t = ( t0 ^ (a[2]&b[0]) ^ (a[0]&b[2]) ) ^ (a[2]&b[2]) ^ t1  ^ t2;
-
-		c = SETBIT_u32(c, i_aux, t, two);
-		
-		i += 1;
-		
-	}
-
-	i = 0;
-
-	while(i < 3){
-
-		pos = i * 80;
-		pos_aux = pos_w * 4;
-		pos_aux += pos;
-
-		pos = i * 4;
-
-		y[(int)pos] = w[(int)pos_aux] ^ y[(int)pos] ^ c[(int)pos];
-		y[(int)pos + 1] = w[(int)pos_aux + 1] ^ y[(int)pos + 1] ^ c[(int)pos + 1];
-		y[(int)pos + 2] = w[(int)pos_aux + 2] ^ y[(int)pos + 2] ^ c[(int)pos + 2];
-		y[(int)pos + 3] = w[(int)pos_aux + 3] ^ y[(int)pos + 3] ^ c[(int)pos + 3];
-
-		temp_aux = i * 365;
-		temp_aux *= mpcRounds;
-
-		temp_views = 768 + temp_aux;
-		temp_views += countY;
-
-		(u32)[views + temp_views] = c[u32 (int)i];
-
-		i += 1;
-
-	}
-
-	countY += 1;
-
-	return y, randCount, countY, views;
-}
-
-fn mpc_ADD_K(stack u8[12] x, stack u8[4] k, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpcRounds) -> stack u8[12], reg u64, reg u64, reg u64 {
-
-	stack u8[12] c, r, aux, aux2;
-	reg u64 i, i_aux, j, j_aux, zero, one, two, temp_aux, temp_views;
-
-	inline u32 xor_aux;
-
-	reg u8 retrievedBit0, retrievedBit1;
-
-	reg u8[3] a, b;
-
-	stack u8 t, t0, t1, t2;
-
-	i = 0;
-	zero = 0;
-	one = 1;
-	two = 2;
-
-	while(i < 3){
-		j = 0;
-		while(j < 4){
-			c[(int)i*4+(int)j] = 0;
-			j += 1;
-		}
-		i += 1;
-	}
-
-	i = 0;
-
-	while(i < 3){
-		r[(int)i * 4] = [randomness + (int)i * 16 * mpcRounds + randCount];
-		r[(int)i * 4 + 1] = [randomness + (int)i * 16 * mpcRounds + randCount + 1];
-		r[(int)i * 4 + 2] = [randomness + (int)i * 16 * mpcRounds + randCount + 2];
-		r[(int)i * 4 + 3] = [randomness + (int)i * 16 * mpcRounds + randCount + 3];
-
-		i += 1;
-	}
-
-	randCount += 4;
+	randCount += 1;
 
 	i  = 0;
 	
 	while(i < 31){
 
-		aux = mpc_xor(x, c, aux);
-		aux2 = mpc_xor_k(k, c, aux2);
-
-		i_aux = i + 1;
 		j = 0;
 
 		while(j < 3){
 
-			j_aux = j * 32;
+			word_a, word_b = mpc_words_w(w, c, y, pos_w, j);
 
-			t = GETBIT(aux,i, j_aux);
+			t = GETBIT_u32(word_a,i,t);
 			a[(int)j] = t;
 
-			t = GETBIT(aux2,i, j_aux);
+			t = GETBIT_u32(word_b,i,t);
+			b[(int)j] = t;
+
+			j += 1;
+		}
+		
+
+		/* Set first word */
+
+		idx0 = 1;
+		idx1 = 0;
+
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[0];
+		t &= b[1];
+		t &= t0;
+
+		t0 = a[1];
+		t0 &= b[0];
+		t ^= t0;
+
+		t0 = a[0];
+		t0 &= b[0];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 0;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
+
+
+		/* Set second word */
+
+		idx0 = 2;
+		idx1 = 1;
+
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+
+		t = a[1];
+		t &= b[2];
+		t &= t0;
+
+		t0 = a[2];
+		t0 &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[1];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 1;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
+		
+
+		/* Set third word */
+
+		idx0 = 0;
+		idx1 = 2;
+
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		
+		t = a[2];
+		t &= b[0];
+		t &= t0;
+
+		t0 = a[0];
+		t0 &= b[2];
+		t ^= t0;
+
+		t0 = a[2];
+		t0 &= b[2];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 2;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
+		
+		i += 1;	
+	}
+	
+
+	idx = 0;
+	temp_pos = mpc_idx * 370; // player's current view.y
+	
+	while(idx < 3){
+
+		pos_aux = 80 * idx;
+		pos_aux += pos_w;
+
+		z[(int)i] ^= w[(int)pos_aux];
+		z[(int)i] ^= c[(int)idx];
+		
+		pos_views = idx;
+		pos_views *= 370;				// Current player views.y
+		pos_views *= mpcRounds;
+		pos_views += temp_pos;
+		pos_views += 6144;				// view.x of the 3 players times mpcRound 
+
+		pos_views += countY;			// current pointer inside view.y
+
+		t = c[(int)idx];
+
+
+		(u32)[views + pos_views] = t;
+
+		idx += 1;
+
+	}
+	
+	countY += 1;
+
+	return y, randCount, countY, views;
+}
+
+inline
+fn mpc_ADD_K(stack u32[3] x, stack u32 k, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, stack u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
+
+	stack u32[3] c, r, aux, aux2;
+	reg u64 bit_idx, idx0, idx1, player;
+
+	inline u32 xor_aux;
+
+	stack u32[3] a, b;
+	reg u64 i;
+	reg u64 j;
+	reg u32 t, t0, t1, t2, word_a, word_b;
+
+	reg u64 pos_rand, pos_views, idx;
+
+	c[0] = 0;
+	c[1] = 0;
+	c[2] = 0;
+
+	i = 0;
+
+	while(i < 3){
+
+		pos_rand = i;
+		pos_rand *= 4;
+		pos_rand *= mpcRounds;
+		pos_rand += randCount;
+
+		r[(int)i] = (u32)[randomness + (int)pos_rand];
+
+		i += 1;
+	}
+
+	randCount += 1;
+
+	i  =0;
+	
+	while(i < 31){
+
+		bit_idx = i;
+		bit_idx += 1;
+
+		j = 0;
+
+		while(j < 3){
+
+			word_a, word_b = mpc_words_k(x, c, k, j);
+
+			t = GETBIT_u32(word_a,i,t);
+			a[(int)j] = t;
+
+			t = GETBIT_u32(word_b,i,t);
 			b[(int)j] = t;
 
 			j += 1;
@@ -518,51 +753,107 @@ fn mpc_ADD_K(stack u8[12] x, stack u8[4] k, reg u64 randomness, reg u64 randCoun
 
 		/* Set first word */
 
-		t0, t1, t2 = getBits(r, c, i, one, zero);
-		
-		t = ( t0 ^ (a[0] & b[1]) ^ (a[1] & b[0]) ) ^ (a[0]&b[0]) ^ t1  ^ t2;
+		idx0 = 1;
+		idx1 = 0;
 
-		c = SETBIT_u32(c, i_aux, t, zero);
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[0];
+		t &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[0];
+		t ^= t0;
+
+		t0 = a[0];
+		t0 &= b[0];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 0;
+
+		c = SETBIT_u32(c, bit_idx, t, player);
+
 
 
 		/* Set second word */
 
-		t0, t1, t2 = getBits(r, c, i, two, one);
-		
-		t = ( t0 ^ (a[1] & b[2]) ^ (a[2] & b[1]) ) ^ (a[1]&b[1]) ^ t1  ^ t2;
+		idx0 = 2;
+		idx1 = 1;
 
-		c = SETBIT_u32(c, i_aux, t, one);
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
 		
+		t = a[1];
+		t &= b[2];
+		t ^= t0;
+
+		t0 = a[2];
+		t0 &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[1];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 1;
+
+		c = SETBIT_u32(c, bit_idx, t, player);
+		
+
 
 		/* Set third word */
 
-		t0, t1, t2 = getBits(r, c, i, zero, two);
-		
-		t = ( t0 ^ (a[2]&b[0]) ^ (a[0]&b[2]) ) ^ (a[2]&b[2]) ^ t1  ^ t2;
+		idx0 = 0;
+		idx1 = 2;
 
-		c = SETBIT_u32(c, i_aux, t, two);
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[2];
+		t &= b[0];
+		t ^= t0;
+
+		t0 = a[0];
+		t0 &= b[2];
+		t ^= t0;
+
+		t0 = a[2];
+		t0 &= b[2];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 2;
+
+		c = SETBIT_u32(c, bit_idx, t, player);
 
 		i += 1;
 		
 	}
 
-	i = 0;
-
+	idx = 0;
 	
-	
-	while(i < 3){
+	while(idx < 3){
 		
-		x = mpc_xor_three(x,c,k,i);
-
-		temp_aux = i * 365;
-		temp_aux *= mpcRounds;
-
-		temp_views = 768 + temp_aux;
-		temp_views += countY;
+		x = mpc_xor_three(x,c,k,idx);
 		
-		(u32)[views + temp_views] = c[u32 (int)i];
+		pos_views = idx;
+		pos_views *= 365;
+		pos_views *= mpcRounds;
+		pos_views += 768;
+		pos_views += countY;
 
-		i += 1;
+		t = c[(int)idx];
+
+		(u32)[views + pos_views] = t;
+
+		idx += 1;
 
 	}
 
@@ -571,61 +862,60 @@ fn mpc_ADD_K(stack u8[12] x, stack u8[4] k, reg u64 randomness, reg u64 randCoun
 	return x, randCount, countY, views;
 }
 
-fn mpc_ADD_hHa(stack u8[60] x, stack u8[12] y, stack u8[60] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 pos_hHa, reg u64 mpcRounds) -> stack u8[60], reg u64, reg u64, reg u64 {
+inline
+fn mpc_ADD_hHa(stack u32[15] x, stack u32[3] y, stack u32[15] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 pos_hHa, stack u64 mpcRounds) -> stack u32[15], reg u64, reg u64, reg u64 {
 	
-	stack u8[12] c, r, aux, aux2;
-	reg u64 i, i_aux, j, j_aux, zero, one, two, pos, pos_aux, temp_aux, temp_views;
+	stack u32[3] c, r, aux_x;
+	reg u64 i, j;
+	reg u64 bit_idx, idx0, idx1, player;
 
-	reg u8 retrievedBit0, retrievedBit1;
+	stack u32[3] a, b;
 
-	reg u8[3] a, b;
+	reg u32 t, t0, t1, t2, word_a, word_b;
 
-	stack u8 t, t0, t1, t2;
+	reg u64 pos_rand, pos_views, pos, idx;
 	
+	c[0] = 0;
+	c[1] = 0;
+	c[2] = 0;
+
+	t = x[0];
+	aux_x[0] = t;
+	t = x[1];
+	aux_x[1] = t;
+	t = x[2];
+	aux_x[2] = t;
+
+
 	i = 0;
-	zero = 0;
-	one = 1;
-	two = 2;
 
 	while(i < 3){
-		j = 0;
-		while(j < 4){
-			c[(int)i*4+(int)j] = 0;
-			j += 1;
-		}
+		pos_rand = i;
+		pos_rand *= 4;
+		pos_rand *= mpcRounds;
+		pos_rand += randCount;
+
+		r[(int)i] = (u32)[randomness + (int)pos_rand];
+
 		i += 1;
 	}
 
-	i = 0;
-
-	while(i < 3){
-		r[(int)i * 4] = [randomness + (int)i * 16 * mpcRounds + randCount];
-		r[(int)i * 4 + 1] = [randomness + (int)i * 16 * mpcRounds + randCount + 1];
-		r[(int)i * 4 + 2] = [randomness + (int)i * 16 * mpcRounds + randCount + 2];
-		r[(int)i * 4 + 3] = [randomness + (int)i * 16 * mpcRounds + randCount + 3];
-
-		i += 1;
-	}
-
-	randCount += 4;
+	randCount += 1;
 
 	i = 0;
 
 	while(i < 31){
-
-		aux = mpc_xor_hHa(x, c, aux, pos_hHa);
-		aux2 = mpc_xor(y, c, aux2);
 		
-		i_aux = i + 1;
 		j = 0;
 		
 		while(j < 3){
 
-			j_aux = j * 32;
-			t = GETBIT(aux,i, j_aux);
-			a[(int)j] = t;
+			word_a, word_b = mpc_words_hHa(x, c, y, pos_hHa, j);
 
-			t = GETBIT(aux2,i, j_aux);
+			t = GETBIT_u32(word_a,i,t);
+			t1 = GETBIT_u32(word_b,i,t1);
+
+			a[(int)j] = t;
 			b[(int)j] = t;
 
 			j += 1;
@@ -634,119 +924,115 @@ fn mpc_ADD_hHa(stack u8[60] x, stack u8[12] y, stack u8[60] z, reg u64 randomnes
 
 		/* Set first word */
 
-		t0, t1, t2 = getBits(r, c, i, one, zero);
-		
-		t = ( t0 ^ (a[0] & b[1]) ^ (a[1] & b[0]) ) ^ (a[0]&b[0]) ^ t1  ^ t2;
+		idx0 = 1;
+		idx1 = 0;
 
-		c = SETBIT_u32(c, i_aux, t, zero);
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[0];
+		t &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[0];
+		t ^= t0;
+
+		t0 = a[0];
+		t0 &= b[0];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 0;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
 
 
 		/* Set second word */
 
-		t0, t1, t2 = getBits(r, c, i, two, one);
-		
-		t = ( t0 ^ (a[1] & b[2]) ^ (a[2] & b[1]) ) ^ (a[1]&b[1]) ^ t1  ^ t2;
+		idx0 = 2;
+		idx1 = 1;
 
-		c = SETBIT_u32(c, i_aux, t, one);
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
+		
+		t = a[1];
+		t &= b[2];
+		t ^= t0;
+
+		t0 = a[2];
+		t0 &= b[1];
+		t ^= t0;
+
+		t0 = a[1];
+		t0 &= b[1];
+		t ^= t0;
+
+		t ^= t1;
+		t ^= t2;
+
+		player = 1;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
 		
 
 		/* Set third word */
 
-		t0, t1, t2 = getBits(r, c, i, zero, two);
+		idx0 = 0;
+		idx1 = 2;
+
+		t0, t1, t2 = getBits(r, c, i, idx0, idx1);
 		
-		t = ( t0 ^ (a[2]&b[0]) ^ (a[0]&b[2]) ) ^ (a[2]&b[2]) ^ t1  ^ t2;
+		t = a[2];
+		t &= b[0];
+		t ^= t0;
 
-		c = SETBIT_u32(c, i_aux, t, two);
+		t0 = a[0];
+		t0 &= b[2];
+		t ^= t0;
 
-		i += 1;
-	}
+		t0 = a[2];
+		t0 &= b[2];
+		t ^= t0;
 
-	i = 0;
+		t ^= t1;
+		t ^= t2;
 
-	while(i < 3){
-
-		pos_aux = 20 * i;
-		pos = pos_hHa * 4;
-		pos += pos_aux;
-
-		z[(int)pos] = x[(int)pos] ^ y[(int)i * 4] ^ c[(int)i * 4];
-		z[(int)pos + 1] = x[(int)pos + 1] ^ y[(int)i * 4 + 1] ^ c[(int)i * 4 + 1];
-		z[(int)pos + 2] = x[(int)pos + 2] ^ y[(int)i * 4 + 2] ^ c[(int)i * 4 + 2];
-		z[(int)pos + 3] = x[(int)pos + 3] ^ y[(int)i * 4 + 3] ^ c[(int)i * 4 + 3];
-
-		temp_aux = i * 365;
-		temp_aux *= mpcRounds;
-
-		temp_views = 768 + temp_aux;
-		temp_views += countY;
-
-		(u32)[views + (int) temp_views] = c[u32 (int)i];
-
-		i += 1;
-
-	}
-
-	countY += 1;
-
-	return z, randCount, countY, views;
-}
-
-
-fn mpc_AND(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpcRounds) -> stack u8[12], reg u64, reg u64, stack u64 {
-
-	stack u8[12] r;
-	reg u64 i;
-	reg u64 temp_views;
-
-	i = 0;
-
-	while(i < 3){
-		r[(int)i * 4] = [randomness + (int)i * 16 * mpcRounds + randCount];
-		r[(int)i * 4 + 1] = [randomness + (int)i * 16 * mpcRounds + randCount + 1];
-		r[(int)i * 4 + 2] = [randomness + (int)i * 16 * mpcRounds + randCount + 2];
-		r[(int)i * 4 + 3] = [randomness + (int)i * 16 * mpcRounds + randCount + 3];
+		player = 2;
+		bit_idx = i;
+		bit_idx += 1;
+		c = SETBIT_u32(c, bit_idx, t, player);
 
 		i += 1;
 	}
 
-	randCount += 4;
+	idx = 0;
 
-	// t[0] = (x[0] & y[1]) ^ (x[1] & y[0]) ^ (x[0] & y[0]) ^ r[0] ^ r[1];
+	while(idx < 3){
 
-	z[0] = (x[0] & y[4]) ^ (x[4] & y[0]) ^ (x[0] & y[0]) ^ r[0] ^ r[4];
-	z[1] = (x[1] & y[5]) ^ (x[5] & y[1]) ^ (x[1] & y[1]) ^ r[1] ^ r[5];
-	z[2] = (x[2] & y[6]) ^ (x[6] & y[2]) ^ (x[2] & y[2]) ^ r[2] ^ r[6];
-	z[3] = (x[3] & y[7]) ^ (x[7] & y[3]) ^ (x[3] & y[3]) ^ r[3] ^ r[7];
+		pos = 5 * idx;
+		pos += pos_hHa;
 
+		t = aux_x[(int)i];
+		t ^= y[(int)i];
+		t ^= c[(int)i];
 
-	// t[1] = (x[1] & y[2]) ^ (x[2] & y[1]) ^ (x[1] & y[1]) ^ r[1] ^ r[2];
+		z[(int)i] = t;
+		
+		pos_views = idx;
+		pos_views *= 365;
+		pos_views *= mpcRounds;
+		pos_views += 768;
+		pos_views += countY;
 
-	z[4] = (x[4] & y[8])  ^ (x[8] & y[4])  ^ (x[4] & y[4]) ^ r[4] ^ r[8];
-	z[5] = (x[5] & y[9])  ^ (x[9] & y[5])  ^ (x[5] & y[5]) ^ r[5] ^ r[9];
-	z[6] = (x[6] & y[10]) ^ (x[10] & y[6]) ^ (x[6] & y[6]) ^ r[6] ^ r[10];
-	z[7] = (x[7] & y[11]) ^ (x[11] & y[7]) ^ (x[7] & y[7]) ^ r[7] ^ r[11];
+		t = c[(int)idx];
 
+		(u32)[views + pos_views] = t;
 
-	// t[2] = (x[2] & y[0]) ^ (x[0] & y[2]) ^ (x[2] & y[2]) ^ r[2] ^ r[0];
+		idx += 1;
 
-	z[8]  = (x[8] & y[0])  ^ (x[0] & y[8])  ^ (x[8] & y[8])   ^ r[8] ^ r[0];
-	z[9]  = (x[9] & y[1])  ^ (x[1] & y[9])  ^ (x[9] & y[9])   ^ r[9] ^ r[1];
-	z[10] = (x[10] & y[2]) ^ (x[2] & y[10]) ^ (x[10] & y[10]) ^ r[10] ^ r[2];
-	z[11] = (x[11] & y[3]) ^ (x[3] & y[11]) ^ (x[11] & y[11]) ^ r[11] ^ r[3];
-
-	i = 0;
-
-	while(i < 3){
-
-
-		temp_views = i * 370;
-		temp_views *= mpcRounds;
-		temp_views += countY;
-
-
-		(u32)[views + temp_views] =  y[u32 (int)i];
-
-		i += 1;
 	}
 
 	countY += 1;
@@ -754,111 +1040,195 @@ fn mpc_AND(stack u8[12] x, stack u8[12] y, stack u8[12] z, reg u64 randomness, r
 	return z, randCount, countY, views;
 }
 
-fn mpc_MAJ(stack u8[12] a, stack u8[12] b, stack u8[12] c, stack u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpcRounds) -> stack u8[12], reg u64, reg u64, reg u64 {
-	stack u8[12] t0, t1, aux;
+inline
+fn mpc_AND(stack u32[3] x, stack u32[3] y, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, stack u64 mpc_idx, stack u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 
+	stack u32[3] r;
+	reg u64 i, pos_randomness, pos_r, pos_views, temp_pos, temp;
+	reg u32 temp0, temp1, temp2, z_aux;
+	reg u32 aux_y;
+
+
+	i = 0;
+
+	while(i < 3){
+
+		pos_randomness = i * 4;
+		pos_randomness *= mpcRounds;
+		pos_randomness += randCount;
+
+		pos_r = i;
+
+		r[(int)pos_r] = (u32)[randomness + (int)pos_randomness];
+
+		i += 1;
+	}
+
+	randCount += 1;
+
+	aux_y = y[0];
+
+	temp0 = x[0];
+	temp0 &= y[1];
+
+	temp1 = x[1];
+	temp1 &= y[0];
+
+	temp2 = x[0];
+	temp2 &= y[0];
+	
+	temp0 ^= temp1;
+	temp0 ^= temp2;
+
+	temp1 = r[0];
+	temp2 = r[1];
+
+	temp0 ^= temp1;
+	temp0 ^= temp2;
+
+	z[u32 0] = temp0;
+
+
+	temp0 = x[1];
+	temp0 &= y[2];
+
+	temp1 = x[2];
+	temp1 &= y[1];
+
+	temp2 = x[1];
+	temp2 &= y[1];
+	
+	temp0 ^= temp1;
+	temp0 ^= temp2;
+
+	temp1 = r[1];
+	temp2 = r[2];
+
+	temp0 ^= temp1;
+	temp0 ^= temp2;
+
+	z[u32 1] = temp0;
+
+
+	temp0 = x[2];
+	temp0 &= aux_y;
+
+	temp1 = x[0];
+	temp1 &= y[2];
+
+	temp2 = x[2];
+	temp2 &= y[2];
+	
+	temp0 ^= temp1;
+	temp0 ^= temp2;
+
+	temp1 = r[2];
+	temp2 = r[0];
+
+	temp0 ^= temp1;
+	temp0 ^= temp2;
+
+	z[2] = temp0;
+
+
+	i = 0;
+	
+
+	temp_pos = mpc_idx * 370; // player's current view.y
+
+	while(i < 3){
+
+		pos_views = i;
+		pos_views *= mpcRounds;			// which player info do we need (player * mpcRounds * view.y_size)
+		pos_views *= 370;				
+		pos_views += 6144;				// view.x of the 3 players times mpcRounds
+		pos_views += temp_pos;			// player's current view.y 
+
+		pos_views += countY;			// current pointer inside view.y
+
+		/* Z => u32[3]; */
+
+		temp0 = z[(int)i];
+
+		(u32)[views + (int)pos_views] = temp0;
+		
+		i += 1;
+	}
+	
+	countY += 1;
+
+	return z, randCount, countY, views;
+}
+
+inline
+fn mpc_MAJ(stack u32[3] a, stack u32[3] b, stack u32[3] c, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, stack u64 mpc_idx, stack u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
+	
+	stack u32[3] t0, t1;
+
+	t0[0] = 0;
+	t0[1] = 0;
+	t0[2] = 0;
+
+	t1[0] = 0;
+	t1[1] = 0;
+	t1[2] = 0;
 
 	t0 = mpc_xor(a, b, t0);
 	t1 = mpc_xor(a, c, t1);
-	z, randCount, countY, views = mpc_AND(t0, t1, z, randomness, randCount, views, countY, mpcRounds);
-	aux = z;
-	z = mpc_xor(aux, a, z);
+	z, randCount, countY, views = mpc_AND(t0, t1, z, randomness, randCount, views, countY, mpc_idx, mpcRounds);
+	z = mpc_xor(z, a, z);
 
 	return z, randCount, countY, views;
 }
 
+inline
+fn w_to_temp(stack u32[3] temp, stack u32[240] w, reg u64 pos_w) -> stack u32[3]{
 
-fn w_to_temp(stack u8[12] temp, stack u8[960] w, reg u64 pos_w) -> stack u8[12]{
+	reg u32 aux0, aux1;
 
-	reg u8 aux0, aux1;
-
-	aux0 = w[(int)pos_w - 12];
-	aux1 = w[(int)pos_w - 40];
+	aux0 = w[(int)pos_w - 3];
+	aux1 = w[(int)pos_w - 8];
 
 	temp[0] = aux0;
 	temp[0] ^= aux1;
 
 
-	aux0 = w[(int)pos_w - 11];
-	aux1 = w[(int)pos_w - 39];
-
-	temp[1] = aux0;
-	temp[1] ^= aux1;
-
-
-	aux0 = w[(int)pos_w - 10];
-	aux1 = w[(int)pos_w - 38];
-
-	temp[2] = aux0;
-	temp[2] ^= aux1;
-
-
-	aux0 = w[(int)pos_w - 9];
-	aux1 = w[(int)pos_w - 37];
-
-	temp[3] = aux0;
-	temp[3] ^= aux1;
-
-
-	aux0 = w[(int)pos_w - 56];
+	aux0 = w[(int)pos_w - 14];
 
 	temp[0] ^= aux0;
 
 
-	aux0 = w[(int)pos_w - 55];
-
-	temp[1] ^= aux0;
-
-
-	aux0 = w[(int)pos_w - 54];
-
-	temp[2] ^= aux0;
-
-
-	aux0 = w[(int)pos_w - 53];
-
-	temp[3] ^= aux0;
-
-
-	//aux0 = w[(int)pos_w - 64];
+	aux0 = w[(int)pos_w - 16];
 
 	temp[0] ^= aux0;
 
-
-	//aux0 = w[(int)pos_w - 63];
-	temp[1] ^= aux0;
-
-
-	//aux0 = w[(int)pos_w - 62];
-	temp[2] ^= aux0;
-
-
-	//aux0 = w[(int)pos_w - 61];
-	temp[3] ^= aux0;
 
 	return temp;
 }
 
-fn mpc_SHA1(stack u8[96] results, reg u64 inputs, reg u64 numBits, reg u64 randomness, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> stack u8[96], reg u64, reg u64 {
+inline
+fn mpc_SHA1(stack u32[24] results, reg u64 inputs, reg u64 numBits, reg u64 randomness, reg u64 views, reg u64 countY, stack u64 mpc_idx, stack u64 mpcRounds) -> stack u32[24], reg u64, reg u64 {
 
 
 	reg u64 chars;
-	reg u64 i, j, temp_aux, temp_chunks, temp_inputs, temp_views, temp_w, pos, pos_w;
-	reg u64 randCount, right_shift_aux;
-	stack u8[192] chunks; 						// chunks[3][64]
-	stack u8[960] w; 							// W[80][3];
-	reg u64 storage;
+	stack u64 i, j;
+
+	reg u64 temp_aux, temp_chunks, temp_inputs, temp_views, temp_w, pos_w, pos_results, pos_hHa;
+
+	reg u64 randCount;
+	stack u8[192] chunks; 						// u8 chunks[3][64]
+	stack u32[240] w; 							// u32 W[80][3];
+	reg u32 storage_u32, storage_aux;
 	reg u8 storage_u8;
 
-	stack u8[12] temp;		 					// uint32_t temp[3];
-	stack u8[12] t0;  							// uint32_t t0[3];
+	stack u32[3] temp;		 					// uint32_t temp[3]; 
+	stack u32[3] t0,t1,t2;						// uint32_t t0[3];
 
-	stack u8[12] a, b, c, d, e, f, aux;
-	stack u8[4] k;
-	reg u32[1] k_aux;
+	stack u32[3] a, b, c, d, e, f;
+	stack u32 k;
 
 	stack u32[5] hA;
-	stack u8[60] hHa, hHa_aux;
+	stack u32[15] hHa;
 
 	reg u64 n;
 
@@ -867,27 +1237,10 @@ fn mpc_SHA1(stack u8[96] results, reg u64 inputs, reg u64 numBits, reg u64 rando
 	hA[2] = 0x98BADCFE;
 	hA[3] = 0x10325476;
 	hA[4] = 0xC3D2E1F0;
-	
-	j = 0;
-	
-	while(j < 5){
-		hHa[(int)j * 4] = hA[u8 ((int)j*4)];
-		hHa[(int)j * 4 + 1] = hA[u8 ((int)j*4 + 1)];
-		hHa[(int)j * 4 + 2] = hA[u8 ((int)j*4 + 2)];
-		hHa[(int)j * 4 + 3] = hA[u8 ((int)j*4 + 3)];
 
-		hHa[20 + (int)j * 4] = hA[u8 ((int)j*4)];
-		hHa[20 + (int)j * 4 + 1] = hA[u8 ((int)j*4 + 1)];
-		hHa[20 + (int)j * 4 + 2] = hA[u8 ((int)j*4 + 2)];
-		hHa[20 + (int)j * 4 + 3] = hA[u8 ((int)j*4 + 3)];
-
-		hHa[40 + (int)j * 4] = hA[u8 ((int)j*4)];
-		hHa[40 + (int)j * 4 + 1] = hA[u8 ((int)j*4 + 1)];
-		hHa[40 + (int)j * 4 + 2] = hA[u8 ((int)j*4 + 2)];
-		hHa[40 + (int)j * 4 + 3] = hA[u8 ((int)j*4 + 3)];
-
-		j += 1;
-	}
+	temp[0] = 0;
+	temp[1] = 0;
+	temp[2] = 0;
 
 	randCount = 0;
 
@@ -896,65 +1249,116 @@ fn mpc_SHA1(stack u8[96] results, reg u64 inputs, reg u64 numBits, reg u64 rando
 	chars = numBits;
 	chars = chars >> 3;
 
-
 	i = 0;
-	
 	while(i < 3){
-		j = 0;
 
-		temp_chunks = i * 8; // set to chunks[u64 x]
+		temp_aux = i * 16;
+		temp_aux *= mpcRounds;			// 16 is the size u8 of each share
 
+		temp_inputs = 16;
+		temp_inputs *= mpc_idx;		 	// set current player's round share
+		temp_inputs += 6144;			// Set the players' shares beguining 
+		temp_inputs += temp_aux;		// Add the player's shares beguining
 
-		/* Setting the current player's shares */
-		temp_aux = i;
-		temp_aux *= mpcRounds;
-		temp_aux *= 2;    					// 2 is the size u64 of each share
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[0] = storage_u8;
 
-
-		temp_inputs = 2 * mpc_idx; 	// set current player's round share
-		temp_inputs += 768;			// Set the players' shares beguining 
-		temp_inputs += temp_aux;	// Add the player's shares beguining
-
-		chunks[u64 (int)temp_chunks] = [inputs + (int)temp_inputs]; // + 6144 bytes to get the shares
-
-		
-		temp_chunks += 1;
 		temp_inputs += 1;
-		
-		chunks[u64 (int)temp_chunks] = [inputs + (int)temp_inputs];
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[1] = storage_u8;
 
-		
-		temp_chunks = 16;
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[2] = storage_u8;
 
-		chunks[(int)temp_chunks] = 128; // 128 <=> 0x80
-		
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[3] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[4] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[5] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[6] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[7] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[8] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[9] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[10] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[11] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[12] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[13] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[14] = storage_u8;
+
+		temp_inputs += 1;
+		storage_u8 = (u8)[inputs + (int)temp_inputs];
+		chunks[15] = storage_u8;
+
+
+		temp_chunks = i;
+		temp_chunks *= 64;
+		temp_chunks += chars;
+
+		chunks[(int)temp_chunks] = 0x80;
 
 		temp_chunks = i * 64;
 		temp_chunks += 62;
 
 		chunks[(int)temp_chunks] = numBits;
-		chunks[(int)temp_chunks] = chunks[(int)temp_chunks] >> 8;
+		chunks[(int)temp_chunks] >>= 8;
 
 		temp_chunks += 1;
 
 		chunks[(int)temp_chunks] = numBits;
 
-		temp_chunks = i * 8; // Set to chunks[u64 x]
+		temp_chunks = i * 64;
+
 
 		temp_aux = i;
 		temp_aux *= mpcRounds;
-		temp_aux *= 8;					// 8 is the size of each view.x
-		temp_views = 8 * mpc_idx;	 	// Set current player's view.x	
+		temp_aux *= 64;					// 8 is the size of each view.x
+
+		temp_views = 64 * mpc_idx;	 	// Set current player's view.x	
 		temp_views += temp_aux;
 
 		j = 0;
-		while(j < 8){
+		while(j < 64){
 
-			storage = chunks[u64 (int)temp_chunks];
-			[views + (int)temp_views] = storage;
+			storage_u8 = chunks[(int)temp_chunks];
 
-			temp_chunks = temp_chunks + 1;
-			temp_views = temp_views + 1;
+			(u8)[views + (int)temp_views] = storage_u8;
+
+			temp_views += 1;
+			temp_chunks += 1;
 
 			j += 1;
 		}
@@ -963,435 +1367,275 @@ fn mpc_SHA1(stack u8[96] results, reg u64 inputs, reg u64 numBits, reg u64 rando
 		j = 0;
 		while(j < 16){
 
-			temp_aux = j * 4;
+			temp_chunks = i;
+			temp_chunks *= 16;
+			temp_chunks = j;
 
-			temp_w = i * 320;
-			temp_w += temp_aux;
+			storage_u32 = chunks[u32 (int)temp_chunks];
 
-			temp_chunks = i * 64;
-			temp_chunks += temp_aux;
+			temp_w = i;
+			temp_w *= 80;
+			temp_w += j;
 
-			storage_u8 = chunks[(int)temp_chunks];
-			w[(int)temp_w] = storage_u8;
+			w[(int) temp_w] = storage_u32;
 
-			storage_u8 = chunks[(int)temp_chunks + 1];
-			w[(int)temp_w + 1] = storage_u8;
-
-			storage_u8 = chunks[(int)temp_chunks + 2];
-			w[(int)temp_w + 2] = storage_u8;
-
-			storage_u8 = chunks[(int)temp_chunks + 3];
-			w[(int)temp_w + 3] = storage_u8;
-
-			j += 1; 
+			j += 1;
 		}
 
 		i += 1;
 	}
 
 	j = 16;
-	
 	while(j < 80){
 		i = 0;
 		while(i < 3){
-			pos = j * 4;
-			pos_w = i * 320;
-			pos_w += pos;
+			pos_w = i;
+			pos_w *= 80;
+			pos_w += j;
 
 			temp = w_to_temp(temp, w, pos_w);
 
 			n = 1;
-			aux = LEFTROTATE(temp,n,aux);
-		
-			storage_u8 = aux[0];
-			w[(int)pos_w] = storage_u8;
-			storage_u8 = aux[1];
-			w[(int)pos_w + 1] = storage_u8;
-			storage_u8 = aux[2];
-			w[(int)pos_w + 2] = storage_u8;
-			storage_u8 = aux[3];
-			w[(int)pos_w + 3] = storage_u8;
+			w = mpc_LEFTROTATE_w(temp,n,w,pos_w);
 
 			i += 1;
 		}
 		j += 1;
 	}
 
-	i = 0;
-	
-	while(i < 3){
+	// uint32_t a[3] = { hA[0],hA[0],hA[0] };
 
-		// uint32_t a[3] = { hA[0],hA[0],hA[0] };
+	storage_u32 = hA[0];
+	a[0] = storage_u32;
+	a[1] = storage_u32;
+	a[2] = storage_u32;
 
-		storage_u8 = hA[u8 0];
-		a[(int)i * 4] =  storage_u8;
-		storage_u8 = hA[u8 1];
-		a[(int)i * 4 + 1] = storage_u8;
-		storage_u8 = hA[u8 2];
-		a[(int)i * 4 + 2] = storage_u8;
-		storage_u8 = hA[u8 3];
-		a[(int)i * 4 + 3] = storage_u8; 
+	// uint32_t b[3] = { hA[1],hA[1],hA[1] };
 
+	storage_u32 = hA[1];
+	b[0] = storage_u32;
+	b[1] = storage_u32;
+	b[2] = storage_u32;
 
-		// uint32_t b[3] = { hA[1],hA[1],hA[1] };
+	// uint32_t c[3] = { hA[2],hA[2],hA[2] };
 
-		storage_u8 = hA[u8 4];
-		b[(int)i * 4] =  storage_u8;
-		storage_u8 = hA[u8 5];
-		b[(int)i * 4 + 1] = storage_u8;
-		storage_u8 = hA[u8 6];
-		b[(int)i * 4 + 2] = storage_u8;
-		storage_u8 = hA[u8 7];
-		b[(int)i * 4 + 3] = storage_u8;
+	storage_u32 = hA[2];
+	c[0] = storage_u32;
+	c[1] = storage_u32;
+	c[2] = storage_u32;
 
 
-		// uint32_t c[3] = { hA[2],hA[2],hA[2] };
+	// uint32_t d[3] = { hA[3],hA[3],hA[3] };
 
-		storage_u8 = hA[u8 8];
-		c[(int)i * 4] =  storage_u8;
-		storage_u8 = hA[u8 9];
-		c[(int)i * 4 + 1] = storage_u8;
-		storage_u8 = hA[u8 10];
-		c[(int)i * 4 + 2] = storage_u8;
-		storage_u8 = hA[u8 11];
-		c[(int)i * 4 + 3] = storage_u8; 
+	storage_u32 = hA[3];
+	d[0] = storage_u32;
+	d[1] = storage_u32;
+	d[2] = storage_u32;
 
 
-		// uint32_t d[3] = { hA[3],hA[3],hA[3] };
+	// uint32_t e[3] = { hA[4],hA[4],hA[4] };
 
-		storage_u8 = hA[u8 12];
-		d[(int)i * 4] =  storage_u8;
-		storage_u8 = hA[u8 13];
-		d[(int)i * 4 + 1] = storage_u8;
-		storage_u8 = hA[u8 14];
-		d[(int)i * 4 + 2] = storage_u8;
-		storage_u8 = hA[u8 15];
-		d[(int)i * 4 + 3] = storage_u8; 
+	storage_u32 = hA[4];
+	e[0] = storage_u32;
+	e[1] = storage_u32;
+	e[2] = storage_u32;
 
 
-		// uint32_t e[3] = { hA[4],hA[4],hA[4] };
-
-		storage_u8 = hA[u8 16];
-		e[(int)i * 4] =  storage_u8;
-		storage_u8 = hA[u8 17];
-		e[(int)i * 4 + 1] = storage_u8;
-		storage_u8 = hA[u8 18];
-		e[(int)i * 4 + 2] = storage_u8;
-		storage_u8 = hA[u8 19];
-		e[(int)i * 4 + 3] = storage_u8; 
-
-		i += 1;
-	}
-
-	j = 0;
-
-	
+	j = 0;	
 	while(j < 80){
 		
 		if(j <= 19){
 
-			i = 0;
-			
-			while(i < 3){
-				storage_u8 = c[(int)i * 4]; 
-				storage_u8 ^=  d[(int)i * 4];
-				f[(int)i * 4] = storage_u8;
+			f = mpc_xor(c,d,f);
 
-				storage_u8 = c[(int)i * 4 + 1]; 
-				storage_u8 ^=  d[(int)i * 4 + 1];
-				f[(int)i * 4 + 1] = storage_u8;
+			f, randCount, countY, views = mpc_AND(b, f, f, randomness, randCount, views, countY, mpc_idx, mpcRounds);
 
-				storage_u8 = c[(int)i * 4 + 2];
-				storage_u8 ^= d[(int)i * 4 + 2];
-				f[(int)i * 4 + 2] = storage_u8;
+			f = mpc_xor(d,f,f);
 
-				storage_u8 = c[(int)i * 4 + 3]; 
-				storage_u8 ^=  d[(int)i * 4 + 3];
-				f[(int)i * 4 + 3] = storage_u8;
-
-				i += 1;
-			}
-			
-			aux = f;
-			//f, randCount, countY, views = mpc_AND(b, aux, f, randomness, randCount, views, countY, mpcRounds);
-
-			i = 0;
-			
-			while(i < 3){
-
-				storage_u8 = d[(int)i * 4];
-				storage_u8 ^= f[(int)i * 4];
-				f[(int)i * 4] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 1];
-				storage_u8 ^= f[(int)i * 4 + 1];
-				f[(int)i * 4 + 1] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 2];
-				storage_u8 ^= f[(int)i * 4 + 2];
-				f[(int)i * 4 + 2] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 3];
-				storage_u8 ^= f[(int)i * 4 + 3];
-				f[(int)i * 4 + 3] = storage_u8;
-
-				i += 1;
-			}
-
-			k_aux[0] = 0x5A827999;
-			k[0] = k_aux[u8 0];
-			k[1] = k_aux[u8 1];
-			k[2] = k_aux[u8 2];
-			k[3] = k_aux[u8 3];
+			k = 0x5A827999;
 		}
 		if(j <= 39) {
 
-			i = 0;
+			mpc_xor(b,c,f);
 
-			while(i < 3){
+			mpc_xor(d,f,f);
 
-				storage_u8 = b[(int)i * 4];
-				storage_u8 ^= c[(int)i * 4];
-				f[(int)i * 4] = storage_u8;
-
-				storage_u8 = b[(int)i * 4 + 1];
-				storage_u8 ^= c[(int)i * 4 + 1];
-				f[(int)i * 4 + 1] = storage_u8;
-
-				storage_u8 = b[(int)i * 4 + 2];
-				storage_u8 ^= c[(int)i * 4 + 2];
-				f[(int)i * 4 + 2] = storage_u8;
-
-				storage_u8 = b[(int)i * 4 + 3];
-				storage_u8 ^= c[(int)i * 4 + 3];
-				f[(int)i * 4 + 3] = storage_u8;
-
-
-				storage_u8 = d[(int)i * 4];
-				storage_u8 ^= f[(int)i * 4];
-				f[(int)i * 4] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 1];
-				storage_u8 ^= f[(int)i * 4 + 1];
-				f[(int)i * 4 + 1] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 2];
-				storage_u8 ^= f[(int)i * 4 + 2];
-				f[(int)i * 4 + 2] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 3];
-				storage_u8 ^= f[(int)i * 4 + 3];
-				f[(int)i * 4 + 3] = storage_u8;
-
-				i += 1;
-			}
-
-			k_aux[0] = 0x6ED9EBA1;
-			k[0] = k_aux[u8 0];
-			k[1] = k_aux[u8 1];
-			k[2] = k_aux[u8 2];
-			k[3] = k_aux[u8 3];
+			k = 0x6ED9EBA1;
 		}
 		if(j <= 59) {
 
-			//f, randCount, countY, views = mpc_MAJ(b,c,d,f,randomness, randCount, views, countY, mpcRounds);
+			f, randCount, countY, views = mpc_MAJ(b,c,d,f,randomness, randCount, views, countY, mpc_idx, mpcRounds);
 
-			k_aux[0] = 0x8F1BBCDC;
-			k[0] = k_aux[u8 0];
-			k[1] = k_aux[u8 1];
-			k[2] = k_aux[u8 2];
-			k[3] = k_aux[u8 3];
+			k = 0x8F1BBCDC;
 		}
 		else {
-			i = 0;
-			while(i < 3){
+			mpc_xor(b,c,f);
 
-				storage_u8 = b[(int)i * 4];
-				storage_u8 ^= c[(int)i * 4];
-				f[(int)i * 4] = storage_u8;
+			mpc_xor(d,f,f);
 
-				storage_u8 = b[(int)i * 4 + 1];
-				storage_u8 ^= c[(int)i * 4 + 1];
-				f[(int)i * 4 + 1] = storage_u8;
-
-				storage_u8 = b[(int)i * 4 + 2];
-				storage_u8 ^= c[(int)i * 4 + 2];
-				f[(int)i * 4 + 2] = storage_u8;
-
-				storage_u8 = b[(int)i * 4 + 3];
-				storage_u8 ^= c[(int)i * 4 + 3];
-				f[(int)i * 4 + 3] = storage_u8;
-
-
-				storage_u8 = d[(int)i * 4];
-				storage_u8 ^= f[(int)i * 4];
-				f[(int)i * 4] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 1];
-				storage_u8 ^= f[(int)i * 4 + 1];
-				f[(int)i * 4 + 1] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 2];
-				storage_u8 ^= f[(int)i * 4 + 2];
-				f[(int)i * 4 + 2] = storage_u8;
-
-				storage_u8 = d[(int)i * 4 + 3];
-				storage_u8 ^= f[(int)i * 4 + 3];
-				f[(int)i * 4 + 3] = storage_u8;
-
-				i += 1;
-			}
-			k_aux[0] = 0xCA62C1D6;
-			k[0] = k_aux[u8 0];
-			k[1] = k_aux[u8 1];
-			k[2] = k_aux[u8 2];
-			k[3] = k_aux[u8 3];
+			k = 0xCA62C1D6;
 		}
 		
 		n = 5;
-		temp = LEFTROTATE(a,n,temp);
-		aux = temp;
-		//temp, randCount, countY, views = mpc_ADD(f, aux, temp, randomness, randCount, views, countY, mpcRounds);
-		aux = temp;
-		//temp, randCount, countY, views = mpc_ADD(e, aux, temp, randomness, randCount, views, countY, mpcRounds);
-		//temp, randCount, countY, views = mpc_ADD_K(temp, k, randomness, randCount, views, countY, mpcRounds);
-		//temp, randCount, countY, views = mpc_ADD_W(w, temp, randomness, randCount, views, countY, j, mpcRounds);
+
+		temp[0] = 0;
+		temp[1] = 0;
+		temp[2] = 0;
+
+		temp = mpc_LEFTROTATE(a,n,temp);
+
+		temp, randCount, countY, views = mpc_ADD(f, temp, temp, randomness, randCount, views, countY, mpc_idx, mpcRounds);
+		temp, randCount, countY, views = mpc_ADD(e, temp, temp, randomness, randCount, views, countY, mpc_idx, mpcRounds);
+		temp, randCount, countY, views = mpc_ADD_K(temp, k, randomness, randCount, views, countY, mpcRounds);
+		temp, randCount, countY, views = mpc_ADD_W(w, temp, temp, randomness, randCount, views, countY, j, mpc_idx, mpcRounds);
 		
-		i = 0;
-
-		while(i < 3){
-
-			storage_u8 = d[(int)i * 4];
-			e[(int)i * 4] = storage_u8;
-
-			storage_u8 = d[(int)i * 4 + 1];
-			e[(int)i * 4 + 1] = storage_u8;
-
-			storage_u8 = d[(int)i * 4 + 2];
-			e[(int)i * 4 + 2] = storage_u8;
-
-			storage_u8 = d[(int)i * 4 + 3];
-			e[(int)i * 4 + 3] = storage_u8;
 
 
-			storage_u8 = c[(int)i * 4];
-			d[(int)i * 4] = storage_u8;
+		storage_u32 = d[0];
+		e[0] = storage_u32;
 
-			storage_u8 = c[(int)i * 4 + 1];
-			d[(int)i * 4 + 1] = storage_u8;
+		storage_u32 = d[1];
+		e[1] = storage_u32;
 
-			storage_u8 = c[(int)i * 4 + 2];
-			d[(int)i * 4 + 2] = storage_u8;
-
-			storage_u8 = c[(int)i * 4 + 3];
-			d[(int)i * 4 + 3] = storage_u8;
-
-			aux = c;
-			n = 30;
-			c = LEFTROTATE(aux,n,c);
-
-			storage_u8 = a[(int)i * 4];
-			b[(int)i * 4] = storage_u8;
-
-			storage_u8 = a[(int)i * 4 + 1];
-			b[(int)i * 4 + 1] = storage_u8;
-
-			storage_u8 = a[(int)i * 4 + 2];
-			b[(int)i * 4 + 2] = storage_u8;
-
-			storage_u8 = a[(int)i * 4 + 3];
-			b[(int)i * 4 + 3] = storage_u8;
+		storage_u32 = d[2];
+		e[2] = storage_u32;
 
 
-			storage_u8 = temp[(int)i * 4];
-			a[(int)i * 4] = storage_u8;
 
-			storage_u8 = temp[(int)i * 4 + 1];
-			a[(int)i * 4 + 1] = storage_u8;
+		storage_u32 = c[0];
+		d[0] = storage_u32;
 
-			storage_u8 = temp[(int)i * 4 + 2];
-			a[(int)i * 4 + 2] = storage_u8;
+		storage_u32 = c[1];
+		d[1] = storage_u32;
 
-			storage_u8 = temp[(int)i * 4 + 3];
-			a[(int)i * 4 + 3] = storage_u8;
+		storage_u32 = c[2];
+		d[2] = storage_u32;
 
-			i += 1;
-		}
+
+		n = 30;
+		c = mpc_LEFTROTATE(b, n, c);
+
+
+		storage_u32 = a[0];
+		b[0] = storage_u32;
+
+		storage_u32 = a[1];
+		b[1] = storage_u32;
+
+		storage_u32 = a[2];
+		b[2] = storage_u32;
+
+
+
+		storage_u32 = temp[0];
+		a[0] = storage_u32;
+
+		storage_u32 = temp[1];
+		a[1] = storage_u32;
+
+		storage_u32 = temp[2];
+		a[2] = storage_u32;
+		
 
 		j += 1;
 	}
 	
-	/*
-	hHa_aux = hHa;
-	n = 0;
-	hHa, randCount, countY, views = mpc_ADD_hHa(hHa_aux, a, hHa, randomness, randCount, views, countY, n, mpcRounds);
-	hHa_aux = hHa;
-	n = 1;
-	hHa, randCount, countY, views = mpc_ADD_hHa(hHa_aux, b, hHa, randomness, randCount, views, countY, n, mpcRounds);
-	hHa_aux = hHa;
-	n = 2;
-	hHa, randCount, countY, views = mpc_ADD_hHa(hHa_aux, c, hHa, randomness, randCount, views, countY, n, mpcRounds);
-	hHa_aux = hHa;
-	n = 3;
-	hHa, randCount, countY, views = mpc_ADD_hHa(hHa_aux, d, hHa, randomness, randCount, views, countY, n, mpcRounds);
-	hHa_aux = hHa;
-	n = 4;
-	hHa, randCount, countY, views = mpc_ADD_hHa(hHa_aux, e, hHa, randomness, randCount, views, countY, n, mpcRounds);
-	*/
 	i = 0;
+
+	storage_u32 = hA[0];
+	hHa[0] = storage_u32;
+	storage_u32 = hA[0];
+	hHa[1] = storage_u32;
+	storage_u32 = hA[0];
+	hHa[2] = storage_u32;
+
+	storage_u32 = hA[1];
+	hHa[3] = storage_u32;
+	storage_u32 = hA[1];
+	hHa[4] = storage_u32;
+	storage_u32 = hA[1];
+	hHa[5] = storage_u32;
+
+	storage_u32 = hA[2];
+	hHa[6] = storage_u32;
+	storage_u32 = hA[2];
+	hHa[7] = storage_u32;
+	storage_u32 = hA[2];
+	hHa[8] = storage_u32;
+
+	storage_u32 = hA[3];
+	hHa[9] = storage_u32;
+	storage_u32 = hA[3];
+	hHa[10] = storage_u32;
+	storage_u32 = hA[3];
+	hHa[11] = storage_u32;
+
+	storage_u32 = hA[4];
+	hHa[12] = storage_u32;
+	storage_u32 = hA[4];
+	hHa[13] = storage_u32;
+	storage_u32 = hA[4];
+	hHa[14] = storage_u32;
 	
+	n = 0;
+	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, a, hHa, randomness, randCount, views, countY, n, mpcRounds);
+
+	n = 1;
+	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, b, hHa, randomness, randCount, views, countY, n, mpcRounds);
+
+	n = 2;
+	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, c, hHa, randomness, randCount, views, countY, n, mpcRounds);
+
+	n = 3;
+	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, d, hHa, randomness, randCount, views, countY, n, mpcRounds);
+
+	n = 4;
+	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, e, hHa, randomness, randCount, views, countY, n, mpcRounds);
+	
+	i = 0;
 	while(i < 5){
 
-		n =24;
+		n = 24;
 		t0 = RIGHTSHIFT(hHa,n,t0,i);
 
-		j = 0;
-		while(j < 3){
-			results[(int)j * 32 + (int)i * 4] = t0[(int)j * 4];
-			results[(int)j * 32 + (int)i * 4 + 1] = t0[(int)j * 4 + 1];
-			results[(int)j * 32 + (int)i * 4 + 2] = t0[(int)j * 4 + 2];
-			results[(int)j * 32 + (int)i * 4 + 3] = t0[(int)j * 4 + 3];
-
-			j += 1;
-		}
-		
 		n = 16;
-		t0 = RIGHTSHIFT(hHa, n, t0, i);
-		
-		j = 0;
-		while(j < 3){
-			results[(int)j * 32 + ((int)i + 1) * 4] = t0[(int)j * 4];
-			results[(int)j * 32 + ((int)i + 1) * 4 + 1] = t0[(int)j * 4 + 1];
-			results[(int)j * 32 + ((int)i + 1) * 4 + 2] = t0[(int)j * 4 + 2];
-			results[(int)j * 32 + ((int)i + 1) * 4 + 3] = t0[(int)j * 4 + 3];
-
-			j += 1;
-		}
+		t1 = RIGHTSHIFT(hHa,n,t1,i);
 
 		n = 8;
-		t0 = RIGHTSHIFT(hHa, n, t0, i);
-		
+		t2 = RIGHTSHIFT(hHa,n,t2,i);
+
 		j = 0;
 		while(j < 3){
-			results[(int)j * 32 + ((int)i + 2) * 4] = t0[(int)j * 4];
-			results[(int)j * 32 + ((int)i + 2) * 4 + 1] = t0[(int)j * 4 + 1];
-			results[(int)j * 32 + ((int)i + 2) * 4 + 2] = t0[(int)j * 4 + 2];
-			results[(int)j * 32 + ((int)i + 2) * 4 + 3] = t0[(int)j * 4 + 3];
+
+			pos_results = j;
+			pos_results *= 8;
+			pos_results += i;
+
+			pos_hHa = i;
+			pos_hHa *= 3;
+			pos_hHa += j;
+
+			storage_u32 = t0[(int)j];
+			storage_u32 &= 0xFF000000;
+
+			storage_aux = t1[(int)j];
+			storage_aux &= 0x00FF0000;
+			storage_u32 |= storage_aux;
+
+			storage_aux = t2[(int)j];
+			storage_aux &= 0x0000FF00;
+			storage_u32 |= storage_aux;
+
+			storage_aux = hHa[(int)pos_hHa];
+			storage_aux &= 0x000000FF;
+			storage_u32 |= storage_aux;
+
+
+			results[(int)pos_results] = storage_u32;
 
 			j += 1;
 		}
-
-		j = 0;
 		
-		while(j < 3){
-			results[(int)j * 32 + ((int)i + 3) * 4] = hHa[(int)j * 20 + (int)i * 4];
-			results[(int)j * 32 + ((int)i + 3) * 4 + 1] = hHa[(int)j * 20 + (int)i * 4 + 1];
-			results[(int)j * 32 + ((int)i + 3) * 4 + 2] = hHa[(int)j * 20 + (int)i * 4 + 2];
-			results[(int)j * 32 + ((int)i + 3) * 4 + 3] = hHa[(int)j * 20 + (int)i * 4 + 3];
-
-			j += 1;
-		}
-
 		i += 1;
 	}
 	
@@ -1402,9 +1646,9 @@ fn mpc_SHA1(stack u8[96] results, reg u64 inputs, reg u64 numBits, reg u64 rando
 export 
 fn test(reg u64 inputs, reg u64 randomness, reg u64 views){
 
-	stack u8[96] results;
-	reg u64 numBits;
-	reg u64 countY, mpc_idx, mpcRounds;
+	stack u32[24] results;
+	reg u64 numBits, countY;
+	stack u64 mpc_idx, mpcRounds;
 
 	numBits = 0;
 

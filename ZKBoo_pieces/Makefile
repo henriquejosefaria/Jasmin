@@ -74,13 +74,13 @@ mpc_functions:
 	$(info # -             MPC functions                - #)
 	$(info ################################################)
 	$(info )
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD.s                mpc_functions/mpc_ADD.jazz
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD_hHa.s            mpc_functions/mpc_ADD_hHa.jazz
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD_K.s              mpc_functions/mpc_ADD_K.jazz
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD_W.s              mpc_functions/mpc_ADD_W.jazz
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_AND.s                mpc_functions/mpc_AND.jazz
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_MAJ.s                mpc_functions/mpc_MAJ.jazz
-	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_SHA1.s                mpc_functions/mpc_SHA1.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD.s               mpc_functions/mpc_ADD.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD_hHa.s           mpc_functions/mpc_ADD_hHa.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD_K.s             mpc_functions/mpc_ADD_K.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_ADD_W.s             mpc_functions/mpc_ADD_W.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_AND.s               mpc_functions/mpc_AND.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_MAJ.s               mpc_functions/mpc_MAJ.jazz
+	./../../jasminc -o mpc_functions/compiled_Jasmin/mpc_SHA1.s              mpc_functions/mpc_SHA1.jazz
 
 
 zkboo_functions:	

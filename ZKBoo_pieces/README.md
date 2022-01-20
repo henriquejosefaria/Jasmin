@@ -37,7 +37,13 @@
 	-	sha256_update4/sha256_update4_v2     (while/for loops  => has warnings / has no warnings)
 	-	sha256_update5/sha256_update5_v2     (while/for loops  => has warnings / has no warnings)
 	-	sha256_update6/sha256_update6_v2     (while/for loops  => has warnings / has no warnings)
-
+	-	mpc_AND
+	-	mpc_MAJ
+	-	mpc_ADD
+	-	mpc_ADD_W
+	-	mpc_ADD_K
+	-	mpc_ADD_hHa
+	-	mpc_sha1
 
 
 ## Functions issuing warnings:
@@ -50,16 +56,6 @@
 
 ## Functions issuing errors:
 
-	-	mpc_ADD     (ER. 1)	(Note: Error on line 219) 
-	-	mpc_ADD_W   (ER. 0)
-	-	mpc_ADD_K   (ER. 1) (Note: Arrays switched from stack to reg) 
-	-	mpc_ADD_hHa (ER. 0)
-	-	mpc_AND	    (ER. 1) (Note: Error on line 133) 
-	-	mpc_MAJ     (ER. 1) (Note: Error on line 143)
-	-	mpc_sha1	(ER. *)
-
-
-	-	* => Function compiles as long as the calls to the functions: mpc_AND, mpc_MAJ, mpc_ADD, mpc_ADD_K, mpc_ADD_W, and mpc_ADD_hHa are commented;
 
 ## Functions issuing warnings and errors:
 
@@ -81,3 +77,5 @@
 	-	ERROR 1 => Fatal error: exception File "src/array_expand.ml", line 22, characters 16-22: Assertion failed
 	-	ERROR 2 => assembler error compile_arg : not compatible asm_arg
 	-	ERROR 3 => assembler error Invalid pexpr for word
+	- 	ERROR 4 => register allocation: variable bit_idx.1381 must be allocated to conflicting register RCX { bit_idx.1242; bit_idx.1689 }
+

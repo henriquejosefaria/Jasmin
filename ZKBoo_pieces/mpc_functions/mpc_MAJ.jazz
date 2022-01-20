@@ -1,58 +1,63 @@
-fn mpc_xor(reg u8[12] x, reg u8[12] y, reg u8[12] z) -> reg u8[12] {
+inline
+fn mpc_xor(stack u32[3] x, stack u32[3] y, stack u32[3] z) -> stack u32[3] {
 	
-	z[u32 0] = x[u32 0] ^ y[u32 0];
-	z[u32 1] = x[u32 1] ^ y[u32 1];
-	z[u32 2] = x[u32 2] ^ y[u32 2];
+	reg u32[3] aux;
+
+	aux[0] = x[0];
+	aux[0] ^= y[0];
+	aux[1] = x[1];
+	aux[1] ^= y[1];
+	aux[2] = x[2];
+	aux[2] ^= y[2];
+
+	z[0] = aux[0];
+	z[1] = aux[1];
+	z[2] = aux[2];
 
 	return z;
 }
 
 
-fn mpc_AND(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> reg u8[12], reg u64, reg u64, reg u64 {
+inline
+fn mpc_AND(stack u32[3] x, stack u32[3] y, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 
-	stack u8[12] r;
-	reg u64 i, pos_randomness, pos_r, pos_views, temp_pos, temp, storage_u64, two;
+	stack u32[3] r;
+	reg u64 i, pos_randomness, pos_r, pos_views, temp_pos, temp;
 	reg u32 temp0, temp1, temp2, z_aux;
-	reg u32[2] aux;
 
-	two = 2;
 
 	i = 0;
 
 	while(i < 3){
 
-		pos_randomness = i * 16;
+		pos_randomness = i * 4;
 		pos_randomness *= mpcRounds;
 		pos_randomness += randCount;
 
-		pos_r = i * 4;
+		pos_r = i;
 
-		r[(int)pos_r] = [randomness + (int)pos_randomness];
-		r[(int)pos_r + 1] = [randomness + (int)pos_randomness + 1];
-		r[(int)pos_r + 2] = [randomness + (int)pos_randomness + 2];
-		r[(int)pos_r + 3] = [randomness + (int)pos_randomness + 3];
+		r[(int)pos_r] = (u32)[randomness + (int)pos_randomness];
 
 		i += 1;
 	}
 
-	randCount += 4;
+	randCount += 1;
 
 
+	temp0 = x[0];
+	temp0 &= y[1];
 
-	temp0 = x[u32 0];
-	temp0 &= y[u32 1];
+	temp1 = x[1];
+	temp1 &= y[0];
 
-	temp1 = x[u32 1];
-	temp1 &= y[u32 0];
-
-	temp2 = x[u32 0];
-	temp2 &= y[u32 0];
+	temp2 = x[0];
+	temp2 &= y[0];
 	
 	temp0 ^= temp1;
 	temp0 ^= temp2;
 
-	temp1 = r[u32 0];
-	temp2 = r[u32 1];
+	temp1 = r[0];
+	temp2 = r[1];
 
 	temp0 ^= temp1;
 	temp0 ^= temp2;
@@ -60,20 +65,20 @@ fn mpc_AND(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u64 randomness, reg u64
 	z[u32 0] = temp0;
 
 
-	temp0 = x[u32 1];
-	temp0 &= y[u32 2];
+	temp0 = x[1];
+	temp0 &= y[2];
 
-	temp1 = x[u32 2];
-	temp1 &= y[u32 1];
+	temp1 = x[2];
+	temp1 &= y[1];
 
-	temp2 = x[u32 1];
-	temp2 &= y[u32 1];
+	temp2 = x[1];
+	temp2 &= y[1];
 	
 	temp0 ^= temp1;
 	temp0 ^= temp2;
 
-	temp1 = r[u32 1];
-	temp2 = r[u32 2];
+	temp1 = r[1];
+	temp2 = r[2];
 
 	temp0 ^= temp1;
 	temp0 ^= temp2;
@@ -81,69 +86,47 @@ fn mpc_AND(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u64 randomness, reg u64
 	z[u32 1] = temp0;
 
 
-	temp0 = x[u32 2];
-	temp0 &= y[u32 0];
+	temp0 = x[2];
+	temp0 &= y[0];
 
-	temp1 = x[u32 0];
-	temp1 &= y[u32 2];
+	temp1 = x[0];
+	temp1 &= y[2];
 
-	temp2 = x[u32 2];
-	temp2 &= y[u32 2];
+	temp2 = x[2];
+	temp2 &= y[2];
 	
 	temp0 ^= temp1;
 	temp0 ^= temp2;
 
-	temp1 = r[u32 2];
-	temp2 = r[u32 0];
+	temp1 = r[2];
+	temp2 = r[0];
 
 	temp0 ^= temp1;
 	temp0 ^= temp2;
 
-	z[u32 2] = temp0;
+	z[2] = temp0;
 
 
 	i = 0;
 	
 
-	temp_pos = mpc_idx * 185; // player's current view.y
+	temp_pos = mpc_idx * 370; // player's current view.y
 
 	while(i < 3){
 
-		aux[0] = 0;
-		aux[1] = 0;
-		storage_u64 = 0;
-
-		pos_views = i * mpcRounds;		// which player info do we need (player * mpcRounds * view.y_size)
-		pos_views *= 185;				
-		pos_views += 3072;				// view.x of the 3 players times mpcRounds
+		pos_views = i;
+		pos_views *= mpcRounds;			// which player info do we need (player * mpcRounds * view.y_size)
+		pos_views *= 370;				
+		pos_views += 6144;				// view.x of the 3 players times mpcRounds
 		pos_views += temp_pos;			// player's current view.y 
 
-		temp = countY;
-		temp >>= 1;
+		pos_views += countY;			// current pointer inside view.y
 
-		pos_views += temp;				// current pointer inside view.y
+		/* Z => u32[3]; */
 
-		temp = countY;
-		temp = temp % two;
+		temp0 = z[(int)i];
 
-
-		if(temp == 0){
-			
-			aux[0] = z[u32 (int)i];
-
-			storage_u64 = aux[u64 0];
-
-		} else {
-			
-			aux[1] = z[u32 (int)i];
-
-			storage_u64 = [views + (int)pos_views];
-
-			storage_u64 ^= aux[u64 0];
-			
-		}
-
-		[views + (int)pos_views] = storage_u64;
+		(u32)[views + (int)pos_views] = temp0;
 		
 		i += 1;
 	}
@@ -153,16 +136,23 @@ fn mpc_AND(reg u8[12] x, reg u8[12] y, reg u8[12] z, reg u64 randomness, reg u64
 	return z, randCount, countY, views;
 }
 
-fn mpc_MAJ(reg u8[12] a, reg u8[12] b, reg u8[12] c, reg u8[12] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> reg u8[12], reg u64, reg u64, reg u64 {
+inline
+fn mpc_MAJ(stack u32[3] a, stack u32[3] b, stack u32[3] c, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 	
-	reg u8[12] t0, t1, aux;
+	stack u32[3] t0, t1;
 
+	t0[0] = 0;
+	t0[1] = 0;
+	t0[2] = 0;
+
+	t1[0] = 0;
+	t1[1] = 0;
+	t1[2] = 0;
 
 	t0 = mpc_xor(a, b, t0);
 	t1 = mpc_xor(a, c, t1);
 	z, randCount, countY, views = mpc_AND(t0, t1, z, randomness, randCount, views, countY, mpc_idx, mpcRounds);
-	aux = z;
-	z = mpc_xor(aux, a, z);
+	z = mpc_xor(z, a, z);
 
 	return z, randCount, countY, views;
 }
@@ -170,7 +160,7 @@ fn mpc_MAJ(reg u8[12] a, reg u8[12] b, reg u8[12] c, reg u8[12] z, reg u64 rando
 export 
 fn test(reg u64 views){
 
-	reg u8[12] a, b, c, z;
+	stack u32[3] a, b, c, z;
 	reg u64 randomness, randCount, countY;
 	reg u64 mpc_idx, mpcRounds;
 
@@ -180,6 +170,21 @@ fn test(reg u64 views){
 	countY = 0;
 	mpc_idx = 0;
 
-	z, randCount, countY, views = mpc_MAJ(a, b, c, z, randomness, randCount, views, countY, mpc_idx, mpcRounds);
+	a[0] = 0;
+	a[1] = 0;
+	a[2] = 0;
 
+	b[0] = 0;
+	b[1] = 0;
+	b[2] = 0;
+
+	c[0] = 0;
+	c[1] = 0;
+	c[2] = 0;
+
+	z[0] = 0;
+	z[1] = 0;
+	z[2] = 0;
+
+	z, randCount, countY, views = mpc_MAJ(a, b, c, z, randomness, randCount, views, countY, mpc_idx, mpcRounds);
 }

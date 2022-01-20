@@ -1,3 +1,4 @@
+inline
 fn mpc_AND(stack u32[3] x, stack u32[3] y, stack u32[3] z, reg u64 randomness, reg u64 randCount, reg u64 views, reg u64 countY, reg u64 mpc_idx, reg u64 mpcRounds) -> stack u32[3], reg u64, reg u64, reg u64 {
 
 	stack u32[3] r;
