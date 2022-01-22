@@ -5,28 +5,32 @@
 _test:
 test:
 	movq	%rsp, %r11
-	subq	$8, %rsp
-	andq	$-32, %rsp
-	movq	$2, %rcx
-	imulq	$128, %rax, %rax
+	leaq	-16(%rsp), %rsp
+	andq	$-8, %rsp
+	movq	$0, %rax
+	movq	$1, %r8
+	movq	$128, %r9
+	movq	$2, 8(%rsp)
+	imulq	%r9, %rax
 	addq	(%rsp), %rax
 	movq	$0, %rdx
-	divq	%rcx
-	cmpq	$0, %r8
+	divq	8(%rsp)
+	cmpq	$0, %rcx
 	je  	Ltest$3
-	movq	(%rdi,%rax), %r9
-	shlq	$32, %r9
+	movq	(%rdi,%rax), %r10
+	shlq	$32, %r10
 	jmp 	Ltest$4
 Ltest$3:
-	movq	(%rdi,%rax), %r9
+	movq	(%rdi,%rax), %r10
 	movq	$-4294967296, %rax
-	andq	%rax, %r9
+	andq	%rax, %r10
 Ltest$4:
-	imulq	$128, %r10, %rax
-	addq	(%rsp), %rax
+	imulq	%r9, %r8
+	addq	(%rsp), %r8
+	movq	%r8, %rax
 	movq	$0, %rdx
-	divq	%rcx
-	cmpq	$0, %r8
+	divq	8(%rsp)
+	cmpq	$0, %rcx
 	je  	Ltest$1
 	movq	(%rdi,%rax), %rax
 	movq	$4294967295, %rcx
@@ -36,9 +40,9 @@ Ltest$1:
 	movq	(%rdi,%rax), %rax
 	shrq	$32, %rax
 Ltest$2:
-	addq	%rax, %r9
+	addq	%rax, %r10
 	imulq	$391, (%rsp), %rax
 	addq	$390, %rax
-	movq	%r9, (%rsi,%rax)
+	movq	%r10, (%rsi,%rax)
 	movq	%r11, %rsp
 	ret 

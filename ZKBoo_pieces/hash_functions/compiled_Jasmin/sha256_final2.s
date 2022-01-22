@@ -4,103 +4,79 @@
 	.globl	test
 _test:
 test:
-	movq	%rsp, %r10
-	subq	$8, %rsp
-	andq	$-32, %rsp
+	movq	%rsp, %rsi
+	leaq	-8(%rsp), %rsp
+	andq	$-8, %rsp
 	movq	(%rsp), %rax
-	cmpq	$56, (%rsp)
-	jb  	Ltest$11
+	cmpq	$14, (%rsp)
+	jb  	Ltest$8
 	incq	%rax
-	jmp 	Ltest$27
-Ltest$28:
-	incq	%rax
-Ltest$27:
-	cmpq	$64, %rax
-	jb  	Ltest$28
-	movq	$0, %rax
-	jmp 	Ltest$25
-Ltest$26:
-	addq	$4, %rax
-Ltest$25:
-	cmpq	$64, %rax
-	jb  	Ltest$26
-	jmp 	Ltest$23
-Ltest$24:
-	incq	%rcx
-Ltest$23:
-	cmpq	$64, %rcx
-	jb  	Ltest$24
-	movq	$0, %rax
-	jmp 	Ltest$21
-Ltest$22:
-	incq	%rax
+	jmp 	Ltest$20
 Ltest$21:
-	cmpq	$4, %rax
-	jb  	Ltest$22
-	movq	$0, %rax
-	jmp 	Ltest$19
+	incq	%rax
 Ltest$20:
-	incq	%rax
+	cmpq	$16, %rax
+	jb  	Ltest$21
+	movq	$0, %rax
+	jmp 	Ltest$18
 Ltest$19:
-	cmpq	$64, %rax
-	jb  	Ltest$20
-	movq	$0, %rax
-	jmp 	Ltest$17
+	incq	%rax
 Ltest$18:
-	incq	%rax
+	cmpq	$16, %rax
+	jb  	Ltest$19
+	jmp 	Ltest$16
 Ltest$17:
-	cmpq	$4, %rax
-	jb  	Ltest$18
-	movq	$0, %rax
-	jmp 	Ltest$15
-Ltest$16:
 	incq	%rax
+Ltest$16:
+	cmpq	$64, %rax
+	jb  	Ltest$17
+	movq	$0, %rax
+	jmp 	Ltest$14
 Ltest$15:
-	cmpq	$56, %rax
-	jb  	Ltest$16
+	incq	%rax
+Ltest$14:
+	cmpq	$64, %rax
+	jb  	Ltest$15
+	movq	$0, %rax
 	jmp 	Ltest$12
+Ltest$13:
+	incq	%rax
+Ltest$12:
+	cmpq	$14, %rax
+	jb  	Ltest$13
+	jmp 	Ltest$9
+Ltest$8:
+	incq	%rax
+	jmp 	Ltest$10
 Ltest$11:
 	incq	%rax
-	jmp 	Ltest$13
-Ltest$14:
-	incq	%rax
-Ltest$13:
-	cmpq	$56, %rax
-	jb  	Ltest$14
-Ltest$12:
-	movq	$0, %rax
-	jmp 	Ltest$9
 Ltest$10:
-	addq	$4, %rax
+	cmpq	$14, %rax
+	jb  	Ltest$11
 Ltest$9:
-	cmpq	$64, %rax
-	jb  	Ltest$10
-	jmp 	Ltest$7
-Ltest$8:
-	incq	%rdx
+	movq	$0, %rax
+	jmp 	Ltest$6
 Ltest$7:
-	cmpq	$64, %rdx
-	jb  	Ltest$8
-	movq	$0, %rax
-	jmp 	Ltest$5
+	incq	%rax
 Ltest$6:
-	incq	%rax
+	cmpq	$16, %rax
+	jb  	Ltest$7
+	jmp 	Ltest$4
 Ltest$5:
-	cmpq	$4, %rax
-	jb  	Ltest$6
-	movq	$0, %rax
-	jmp 	Ltest$3
+	incq	%rax
 Ltest$4:
-	incq	%rax
-Ltest$3:
 	cmpq	$64, %rax
-	jb  	Ltest$4
+	jb  	Ltest$5
 	movq	$0, %rax
-	jmp 	Ltest$1
-Ltest$2:
+	jmp 	Ltest$2
+Ltest$3:
 	incq	%rax
+Ltest$2:
+	cmpq	$64, %rax
+	jb  	Ltest$3
+	movq	$0, %rax
 Ltest$1:
-	cmpq	$4, %rax
-	jb  	Ltest$2
-	movq	%r10, %rsp
+	cmpq	$8, %rax
+	jb  	Ltest$1
+	movq	%rsi, %rsp
 	ret 

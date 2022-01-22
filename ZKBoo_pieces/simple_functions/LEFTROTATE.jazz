@@ -1,3 +1,4 @@
+inline
 fn LEFTROTATE(stack u8[12] x, stack u8 n, stack u8[12] y) -> stack u8[12] {
 
 	stack u32[1] aux;

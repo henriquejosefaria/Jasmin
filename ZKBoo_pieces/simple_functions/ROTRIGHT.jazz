@@ -1,14 +1,28 @@
-fn ROTRIGHT(reg u32 a, reg u8 b) -> stack u32 {
+inline
+fn ROTRIGHT(reg u32 a, reg u32 n) -> reg u32 {
 
-	a = ((a >> b) | (a << (32 - b)));
-	return a;
+	reg u32 n1, b, c;
+
+	n1 = 32;
+	n1 -= n;
+
+	b = a;
+	b >>= n;
+
+	c = a;
+	while(n1 > 0){
+		c <<= 1;
+		n1 -= 1;
+	}
+
+	b |= c;
+	return b;
 }
 
 export 
 fn test(){
 
-	reg u32 a;
-	reg u8 b;
+	reg u32 a, n;
 	
-	a = ROTRIGHT(a, b);
+	a = ROTRIGHT(a, n);
 }

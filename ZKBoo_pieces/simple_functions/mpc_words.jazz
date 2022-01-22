@@ -1,3 +1,4 @@
+inline
 fn mpc_words(stack u8[12] x, stack u8[12] y, stack u8[12] z, stack u8 i) -> stack u32, stack u32 {
 
 

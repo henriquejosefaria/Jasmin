@@ -1,3 +1,4 @@
+inline
 fn RIGHTSHIFT(stack u8[60] x, stack u8 i, stack u8[12] z, stack u8 pos_hHa) -> stack u8[12] {
 	
 	stack u32[1] aux;

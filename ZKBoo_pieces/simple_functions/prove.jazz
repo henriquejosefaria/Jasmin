@@ -1,3 +1,4 @@
+inline
 fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, reg u64 mpcRounds, reg u64 i, reg u64 pos, reg u64 zs) {
 
 	reg u64 word, aux_word;
@@ -49,6 +50,7 @@ fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, reg u64 mpcRounds, reg
 	[zs + mem_pos] = word;
 }
 
+inline
 fn prove(stack u64[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg u64 zs, reg u64 mpcRounds) {
 
 	reg u64 i, j, player0, player1;

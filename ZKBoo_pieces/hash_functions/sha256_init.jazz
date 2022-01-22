@@ -1,3 +1,4 @@
+inline
 fn sha256_init(stack u8[32] ctx_state, stack u32 ctx_datalen, stack u64 ctx_bitlen) 
 {
     ctx_datalen = 0;

@@ -1,3 +1,4 @@
+inline
 fn GETBIT_u32(stack u32 x, stack u8 bit_idx, stack u8 t) -> stack u8 {
 
 	stack u8[4] aux;

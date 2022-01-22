@@ -1,3 +1,4 @@
+inline
 fn mpc_xor_w(stack u8[960] w, stack u8[12] y, stack u8[12] z, reg u8 pos_w) -> stack u8[12] {
 	
 	inline int i;

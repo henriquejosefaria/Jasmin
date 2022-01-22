@@ -1,3 +1,4 @@
+inline
 fn SETBIT_u32(stack u8[12] x, stack u8 bit_idx, stack u8 bit, stack u8 idx) -> stack u8[12] {
 
 	reg u32 a;

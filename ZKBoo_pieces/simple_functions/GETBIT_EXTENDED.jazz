@@ -1,4 +1,4 @@
-
+inline
 fn GETBIT_EXTENDED(stack u8[32] aux, stack u8 bit_idx) -> stack u8 {
 
 	stack u8 selectedBit;

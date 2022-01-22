@@ -1,3 +1,4 @@
+inline
 fn mpc_xor_hHa(reg u8[60] hHa, reg u8[12] y, reg u8[12] z, reg u8 pos_hHa) -> reg u8[12] {
 	
 	inline int i;

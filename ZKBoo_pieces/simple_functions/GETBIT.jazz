@@ -1,4 +1,4 @@
-
+inline
 fn GETBIT(stack u8[12] aux, stack u8 bit_idx, stack u8 base_idx) -> stack u8 {
 
 	inline u8 selectedBit;

@@ -1,3 +1,4 @@
+inline
 fn CH(stack u8[4] x, stack u8[4] y, stack u8[4] z) -> reg u32{
 	
 	inline int i;

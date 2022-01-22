@@ -1,4 +1,4 @@
-
+inline
 fn GETBIT_u32(stack u32 x, stack u8 bit_idx, stack u8 t) -> stack u8 {
 
 	stack u8[4] aux;
@@ -11,7 +11,7 @@ fn GETBIT_u32(stack u32 x, stack u8 bit_idx, stack u8 t) -> stack u8 {
 	return t;	
 }
 
-
+inline
 fn getBits(stack u8[12] array_r, stack u8[12] array_c, stack u8 i, stack u8 idx0, stack u8 idx1) -> stack u8, stack u8, stack u8 {
 
 	stack u8 t0, t1, t2;

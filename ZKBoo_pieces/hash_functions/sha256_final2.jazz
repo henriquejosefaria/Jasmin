@@ -1,5 +1,23 @@
+inline
+fn GETBIT_EXTENDED(stack u8[32] aux, stack u8 bit_idx) -> reg u8 {
 
+    reg u8 selectedBit;
+    reg u8 byte_idx;
 
+    
+    byte_idx =  bit_idx / 8;
+    bit_idx = bit_idx - byte_idx * 8;
+
+    selectedBit = aux[(int) byte_idx];
+    selectedBit = selectedBit >> bit_idx; 
+    selectedBit &= 0x01;
+
+    selectedBit = 0;
+
+    return  selectedBit;    
+}
+
+inline
 fn ROTRIGHT_ep(reg u32 a, reg u8 b, reg u32 res) -> stack u32 {
 
     a = ((a >> b) | (a << (32 - b)));
@@ -8,12 +26,13 @@ fn ROTRIGHT_ep(reg u32 a, reg u8 b, reg u32 res) -> stack u32 {
     return res;
 }
 
-fn EP0(stack u8[4] x, reg u32 res) -> reg u32{
+inline
+fn EP0(reg u32 x, reg u32 res) -> reg u32{
 
     reg u32 aux, aux0, aux1, aux2;
     reg u8 b;
 
-    aux = x[u32 0];
+    aux = x;
 
     res = 0;
     b = 2;
@@ -28,12 +47,13 @@ fn EP0(stack u8[4] x, reg u32 res) -> reg u32{
     return res;
 }
 
-fn EP1(stack u8[4] x, reg u32 res) -> reg u32{
+inline
+fn EP1(reg u32 x, reg u32 res) -> reg u32{
 
     reg u32 aux, aux0, aux1, aux2;
     reg u8 b;
 
-    aux = x[u32 0];
+    aux = x;
 
     res = 0;
     b = 6;
@@ -49,12 +69,14 @@ fn EP1(stack u8[4] x, reg u32 res) -> reg u32{
     return res;
 } 
 
+inline
 fn ROTRIGHT_sig(reg u32 a, reg u8 b, reg u32 aux) -> stack u32 {
 
     aux = ((a >> b) | (a << (32 - b)));
     return aux;
 }
 
+inline
 fn SIG0(reg u32 x) -> reg u32 {
 
     reg u32 aux0, aux1, aux2;
@@ -74,6 +96,7 @@ fn SIG0(reg u32 x) -> reg u32 {
     return x;
 }
 
+inline
 fn SIG1(reg u32 x) -> reg u32{
     reg u32 aux, aux0, aux1, aux2;
     reg u8 b;
@@ -91,26 +114,44 @@ fn SIG1(reg u32 x) -> reg u32{
     return x;
 }
 
-fn CH(stack u8[4] x, stack u8[4] y, stack u8[4] z) -> reg u32{
+inline
+fn CH(stack u32 x, stack u32 y, stack u32 z) -> reg u32{
     
-    inline int i;
-    reg u32 aux;
+    reg u32 t0, t1;
 
-    aux = (x[u32 0] & y[u32 0]) ^((x[u32 0] ^ 0xFF) & z[u32 0]);
+    t0 = x;
+    t0 &= y;
 
-    return aux;
+    t1 = x;
+    t1 ^= 0xFFFFFFFF;
+    t1 &= z;
+
+    t0 ^= t1;
+
+    return t0;
 }
 
-fn MAJ(stack u8[4] x, stack u8[4] y, stack u8[4] z) -> reg u32{
-    inline int i;
-    stack u32 aux;
+inline
+fn MAJ(stack u32 x, stack u32 y, stack u32 z) -> reg u32{
 
-    aux = (x[u32 i] & y[u32 i]) ^ (x[u32 i] & z[u32 i]) ^ (y[u32 i] & z[u32 i]);
+    stack u32 t0, t1;
 
-    return aux;
+    t0 = x;
+    t0 &= y;
+
+    t1 = x;
+    t1 &= z;
+    t0 ^= t1;
+
+    t1 = y;
+    t1 &= z;
+    t0 ^= t1;
+
+    return t0;
 }
 
 
+inline
 fn initializeK(stack u32[64] k) -> stack u32[64]{
     k[0] = 0x428a2f98;
     k[1] = 0x71374491;
@@ -180,11 +221,12 @@ fn initializeK(stack u32[64] k) -> stack u32[64]{
     return k;
 }
 
-fn sha256_transform(stack u8[32] ctx_state, stack u8[64] ctx_data)
+inline
+fn sha256_transform(stack u32[8] ctx_state, stack u32[16] ctx_data)
 {
-    stack u8[4] a, b, c, d, e, f, g, h, t1, t2;
+    reg u32 a, b, c, d, e, f, g, h, t1, t2, temp;
 
-    stack u8[256] m;
+    stack u32[64] m;
 
     reg u32 sig0, sig1;
 
@@ -195,43 +237,40 @@ fn sha256_transform(stack u8[32] ctx_state, stack u8[64] ctx_data)
     stack u32[64] k;
     k = initializeK(k);
 
-    j=0;
-
-    
-    while(j < 64){
+    j = 0;
+    i = 0;
+    while(i < 16){
 
         m[(int)j] = (ctx_data[(int)j]);
-        m[(int)j + 1] = (ctx_data[(int)j + 1]);
-        m[(int)j + 2] = (ctx_data[(int)j + 2]);
-        m[(int)j + 3] = (ctx_data[(int)j + 3]);
-        j += 4;
+        j += 1;
+        i += 1;
     }
 
-    while( i < 64){
-        sig0 = m[u32 (int)i - 15];
-        sig1 = m[u32 (int)i - 2];
+    while(i < 64){
+        sig0 = m[(int)i - 15];
+        sig1 = m[(int)i - 2];
 
         sig0 = SIG0(sig0);
         sig1 = SIG1(sig1);
         
-        m[(int)i] = sig1 + m[(int)i - 7] + sig0 + m[(int)i - 16];
+        m[(int)i] = sig1;
+        temp = m[(int)i - 7];
+        m[(int)i] += temp;
+        m[(int)i] += sig0;
+        temp = m[(int)i - 16];
+        m[(int)i] += temp;
 
         i += 1;
     } 
 
-    i = 0;
-    while(i < 4){
-        a[(int)i] = ctx_state[(int)i];
-        b[(int)i] = ctx_state[4 + (int)i];
-        c[(int)i] = ctx_state[8 + (int)i];
-        d[(int)i] = ctx_state[12 + (int)i];
-        e[(int)i] = ctx_state[16 + (int)i];
-        f[(int)i] = ctx_state[20 + (int)i];
-        g[(int)i] = ctx_state[24 + (int)i];
-        h[(int)i] = ctx_state[28 + (int)i];
-
-        i += 1;
-    }
+    a = ctx_state[0];
+    b = ctx_state[1];
+    c = ctx_state[2];
+    d = ctx_state[3];
+    e = ctx_state[4];
+    f = ctx_state[5];
+    g = ctx_state[6];
+    h = ctx_state[7];
     
     i = 0;
     while(i < 64){
@@ -239,68 +278,70 @@ fn sha256_transform(stack u8[32] ctx_state, stack u8[64] ctx_data)
         sig0 = EP1(e,sig0);
         sig1 = CH(e,f,g);
 
-        t1[u32 0] = h[u32 0] + sig0 + sig1 + k[(int)i] + m[u32 (int)i];
+        t1 = h;
+        t1 += sig0;
+        t1 += sig1;
+        t1 += k[(int)i];
+        t1 += m[(int)i];
 
         sig0 = EP0(a,sig0);
         sig1 = MAJ(a,b,c);
 
-        t2[u32 0] = sig0 + sig1;
+        t2 = sig0 + sig1;
+
         h = g;
         g = f;
         f = e;
-        e[u32 0] = d[u32 0] + t1[u32 0];
+        e = d;
+        e += t1;
         d = c;
         c = b;
         b = a;
-        a[u32 0] = t1[u32 0] + t2[u32 0];
+        a = t1;
+        a += t2;
 
         i += 1;
     }
 
-    i = 0;
-    while(i < 4){
-        ctx_state[(int)i] += a[(int)i];
-        ctx_state[4 + (int)i] += b[(int)i];
-        ctx_state[8 + (int)i] += c[(int)i];
-        ctx_state[12 + (int)i] += d[(int)i];
-        ctx_state[16 + (int)i] += e[(int)i];
-        ctx_state[20 + (int)i] += f[(int)i];
-        ctx_state[24 + (int)i] += g[(int)i];
-        ctx_state[28 + (int)i] += h[(int)i];
-
-        i += 1;
-    }
+    ctx_state[0] += a;
+    ctx_state[1] += b;
+    ctx_state[2] += c;
+    ctx_state[3] += d;
+    ctx_state[4] += e;
+    ctx_state[5] += f;
+    ctx_state[6] += g;
+    ctx_state[7] += h;
 }
 
-
-fn sha256_final2(stack u8[32] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u8[32] hash) -> stack u8[32]
+inline
+fn sha256_final2(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[8] hash) -> stack u32[8]
 {
-    reg u64 i;
+    reg u64 i, temp;
     inline int j;
     reg u32[2] datalen_aux;
 
     i = ctx_datalen;
 
     // Pad whatever data is left in the buffer.
-    if (ctx_datalen < 56) {
-        ctx_data[(int)i] = 0x80;
+    if (ctx_datalen < 14) {
+        ctx_data[(int)i] = 0x80000000;
         i += 1;
-        while (i < 56){
-            ctx_data[(int)i] = 0x00;
+        while (i < 14){
+            ctx_data[(int)i] = 0x00000000;
             i += 1;
         }
     }
     else {
-        ctx_data[(int)i] = 0x80;
+        ctx_data[(int)i] = 0x80000000;
         i += 1;
-        while (i < 64){
-            ctx_data[(int)i] = 0x00;
+        while (i < 16){
+            ctx_data[(int)i] = 0x00000000;
             i += 1;
         }
         sha256_transform(ctx_state, ctx_data);
         i = 0;
-        while(i < 56){
-        	ctx_data[(int)i] = 0x00;
+        while(i < 14){
+        	ctx_data[(int)i] = 0x00000000;
         	i += 1;
         }
     }
@@ -308,16 +349,26 @@ fn sha256_final2(stack u8[32] ctx_state, stack u8[64] ctx_data, stack u64 ctx_da
     // Append to the padding the total message's length in bits and transform.
 
     ctx_bitlen += ctx_datalen * 8;
-    ctx_data[u64 7] = ctx_bitlen;
+    temp = ctx_bitlen;
+    temp += ctx_bitlen >> 8;
+    temp += ctx_bitlen >> 16;
+    temp += ctx_bitlen >> 24;
+    temp += ctx_bitlen >> 32;
+    temp += ctx_bitlen >> 40;
+    temp += ctx_bitlen >> 48;
+    temp += ctx_bitlen >> 56;
+
+    ctx_data[u64 7] = temp;
     
     sha256_transform(ctx_state, ctx_data);
 
     // Since this implementation uses little endian byte ordering and SHA uses big endian,
     // reverse all the bytes when copying the final state to the output hash.
 
-    for j=0 to 4{
+    i = 0;
+    while(i < 8){
 
-    	hash[u64 j] = ctx_state[u64 j] & 0xffffffffffffffff;
+    	hash[(int)i] = ctx_state[(int)i];
 
     }
 
@@ -327,9 +378,9 @@ fn sha256_final2(stack u8[32] ctx_state, stack u8[64] ctx_data, stack u64 ctx_da
 export 
 fn test(reg u64 a){
 
-    stack u8[32] ctx_state, hash;
+    stack u32[8] ctx_state, hash;
     stack u64 ctx_datalen, ctx_bitlen;
-    stack u8[64] ctx_data;
+    stack u32[16] ctx_data;
 
 
     hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);

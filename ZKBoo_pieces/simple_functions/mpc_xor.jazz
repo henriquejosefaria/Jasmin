@@ -1,3 +1,4 @@
+inline
 fn mpc_xor(stack u8[12] x, stack u8[12] y, stack u8[12] z) -> stack u8[12] {
 	
 	z[u32 0] = x[u32 0] ^ y[u32 0];

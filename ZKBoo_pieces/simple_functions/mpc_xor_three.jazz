@@ -1,3 +1,4 @@
+inline
 fn mpc_xor_three(stack u8[12] x, stack u8[12] y, stack u8[4] k,  reg u8 i) -> stack u8[12] {
 	
 	reg u32 aux_x, aux_y;
