@@ -1,14 +1,17 @@
 inline
-fn GETBIT_EXTENDED(stack u8[32] aux, stack u8 bit_idx) -> reg u8 {
+fn GETBIT_EXTENDED(stack u32[8] aux, stack u32 bit_idx) -> reg u32 {
 
-    reg u8 selectedBit;
-    reg u8 byte_idx;
+    reg u32 selectedBit;
+    reg u32 byte_idx, bit_aux;
 
     
-    byte_idx =  bit_idx / 8;
-    bit_idx = bit_idx - byte_idx * 8;
+    byte_idx =  bit_idx / 32;
+    bit_idx = bit_idx;
 
     selectedBit = aux[(int) byte_idx];
+    byte_idx *= 32;
+    bit_idx -= byte_idx;
+
     selectedBit = selectedBit >> bit_idx; 
     selectedBit &= 0x01;
 

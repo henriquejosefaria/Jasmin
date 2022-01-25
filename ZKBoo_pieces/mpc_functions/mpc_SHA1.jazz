@@ -1248,7 +1248,7 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, reg u64 numBits, reg u64 rand
 
 	chars = numBits;
 	chars = chars >> 3;
-
+	
 	i = 0;
 	while(i < 3){
 
@@ -1384,7 +1384,8 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, reg u64 numBits, reg u64 rand
 
 		i += 1;
 	}
-
+	
+	
 	j = 16;
 	while(j < 80){
 		i = 0;
@@ -1402,9 +1403,9 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, reg u64 numBits, reg u64 rand
 		}
 		j += 1;
 	}
-
+	
 	// uint32_t a[3] = { hA[0],hA[0],hA[0] };
-
+	
 	storage_u32 = hA[0];
 	a[0] = storage_u32;
 	a[1] = storage_u32;
@@ -1645,12 +1646,20 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, reg u64 numBits, reg u64 rand
 
 export 
 fn test(reg u64 inputs, reg u64 randomness, reg u64 views){
-
+	
 	stack u32[24] results;
 	reg u64 numBits, countY;
 	stack u64 mpc_idx, mpcRounds;
+	inline int i;
+
+	for i=0 to 24{
+		results[(int) i] = 0;
+	}
 
 	numBits = 0;
-
+	countY = 0;
+	mpc_idx = 0;
+	mpcRounds = 128;
+	
 	results, views, countY = mpc_SHA1(results, inputs, numBits, randomness, views, countY, mpc_idx, mpcRounds);
 }

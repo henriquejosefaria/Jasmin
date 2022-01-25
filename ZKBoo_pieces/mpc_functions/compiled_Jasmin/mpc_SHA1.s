@@ -10,6 +10,9 @@ test:
 	movq	%rax, 1416(%rsp)
 	movq	%rbp, 1424(%rsp)
 	movq	$0, %rcx
+	movq	$0, %r8
+	movq	$0, (%rsp)
+	movq	$128, 8(%rsp)
 	movl	$1732584193, 180(%rsp)
 	movl	$-271733879, 184(%rsp)
 	movl	$-1732584194, 188(%rsp)
