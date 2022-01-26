@@ -7,6 +7,7 @@ test:
 	movq	%rsp, %r11
 	leaq	-16(%rsp), %rsp
 	andq	$-8, %rsp
+	movq	$0, (%rsp)
 	movq	$0, %rax
 	movq	$1, %r8
 	movq	$128, %r9

@@ -60,6 +60,7 @@ fn test(reg u64 rs, reg u64 zs){
 	stack u64 i;
 	reg u64 pos;
 
+	i = 0;
 	player0 = 0;
 	player1 = 1;
 	mpcRounds = 128;

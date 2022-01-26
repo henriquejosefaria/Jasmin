@@ -212,15 +212,7 @@ inline
 fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, stack u64 mpcRounds, reg u64 i, reg u64 pos, reg u64 zs) {
 
 	reg u64 word, aux_word;
-	reg u64 idx;
 	reg u64 mem_pos;
-	
-	reg u64 two;
-	two = 2;
-
-	// The rs arrays has u32 words -> we'll be using it as a u64 array
-
-	idx = i / two;
 
 
 	// We grab the first half of the u64 if pos == 0 else we grab the second half
@@ -2916,7 +2908,7 @@ fn prove(stack u64[128] es, reg u64 keys_shares, reg u64 rs, reg u64 views, reg 
 *                                                                    *
 *********************************************************************/
 
-
+inline
 fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u64 zs, reg u64 views, reg u64 a){
 
 	
@@ -2939,6 +2931,10 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 	stack u64 mpcRounds, numBytes;
 	reg u64  temp;
 
+
+
+	stack u64 zs_s;
+
 	stack u32[8] finalHash;
 	stack u64[128] es;
 
@@ -2953,6 +2949,8 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 	temp = 16 * 8;
 	numBytes = temp;
 	countY = 0;
+
+	zs_s = zs;
 	
 
 	/************************/
@@ -3000,6 +2998,7 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 	/*   Assemble proofs   */
 	/***********************/
 
+	zs = zs_s;
 	prove(es, keys_shares, rs, views, zs, mpcRounds);
 }
 
@@ -3022,3 +3021,19 @@ export fn zkboo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u64 p
 
 	preparationZKBoo(rs, randomValues, keys_shares, proofs, views, a);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

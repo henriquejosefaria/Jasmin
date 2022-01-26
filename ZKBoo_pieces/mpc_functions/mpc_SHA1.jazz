@@ -1645,7 +1645,7 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, reg u64 numBits, reg u64 rand
 }
 
 export 
-fn test(reg u64 inputs, reg u64 randomness, reg u64 views){
+fn test(reg u64 inputs, reg u64 randomness, reg u64 views) {
 	
 	stack u32[24] results;
 	reg u64 numBits, countY;
@@ -1653,7 +1653,7 @@ fn test(reg u64 inputs, reg u64 randomness, reg u64 views){
 	inline int i;
 
 	for i=0 to 24{
-		results[(int) i] = 0;
+		results[i] = 0;
 	}
 
 	numBits = 0;
@@ -1662,4 +1662,18 @@ fn test(reg u64 inputs, reg u64 randomness, reg u64 views){
 	mpcRounds = 128;
 	
 	results, views, countY = mpc_SHA1(results, inputs, numBits, randomness, views, countY, mpc_idx, mpcRounds);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
