@@ -1,0 +1,75 @@
+
+inline
+fn reconstruct(reg u64 a, stack u32[8] y, stack u64 mpcRounds) -> stack u32[8]{
+
+	reg u64 temp_a;
+	reg u64 i;
+	reg u32 xor;
+
+	i = 0;
+	while(i < 8){
+
+		temp_a = 0;
+
+		xor = (u32)[a + (int)temp_a];
+
+
+		temp_a = 1;
+		temp_a *= 8;
+		temp_a *= mpcRounds;
+
+		xor ^= (u32)[a + (int)temp_a];
+
+
+		temp_a = 2;
+		temp_a *= 8;
+		temp_a *= mpcRounds;
+
+		xor ^= (u32)[a + (int)temp_a];
+
+		y[(int)i] = xor;
+
+		i += 1;
+	}
+
+	return y;	
+}
+
+
+
+
+/***************************************************
+*                                                  *
+* This function receives arrays and values with    *
+* random bytes used by the ZKBoo scheme.           *
+*                                                  *
+*	- Public Key                                   *
+* 	- Keys_Shares( Keys[768], Shares[768] )        *
+*	- Randomness                                   *
+*   - Proofs                                       *
+*	- Views( Views_x[3072], Views_y[71040] )       *
+*	- A( A_yp[12288], A_h[12288] )                 *
+*                                                  *
+***************************************************/
+
+
+/***************************************************
+*                                                  *
+* This function receives arrays and values with    *
+* random bytes used by the ZKBoo scheme.           *
+*                                                  *
+*	- A( A_yp[12288], A_h[12288] )  (u8)           *
+*   - Proofs                                       *
+*                                                  *
+***************************************************/
+
+
+export fn zkboo_decrypt(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u64 proofs, reg u64 views, reg u64 a){
+
+	stack u32[8] y;
+	stack u64 mpcRounds;
+
+	mpcRounds = 128;
+
+	reconstruct(a,y, mpcRounds);
+}

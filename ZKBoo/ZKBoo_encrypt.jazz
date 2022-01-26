@@ -3017,7 +3017,7 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 *                                                  *
 ***************************************************/
 
-export fn zkboo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u64 proofs, reg u64 views, reg u64 a){
+export fn zkboo_encrypt(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u64 proofs, reg u64 views, reg u64 a){
 
 	preparationZKBoo(rs, randomValues, keys_shares, proofs, views, a);
 }
