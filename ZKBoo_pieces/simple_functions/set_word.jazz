@@ -1,24 +1,16 @@
 inline
-fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, reg u64 mpcRounds, stack u64 i, reg u64 pos, reg u64 zs) {
+fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, stack u64 mpcRounds, reg u64 i, reg u64 pos, reg u64 zs) {
 
 	reg u64 word, aux_word;
-	reg u64 idx;
 	reg u64 mem_pos;
-	stack u64 two;
-
-	two = 2;
-
-	// The rs arrays has u32 words -> we'll be using it as a u64 array
-
-	idx = i / 2;
 
 
 	// We grab the first half of the u64 if pos == 0 else we grab the second half
 	
-	mem_pos = player0;
-	mem_pos *= mpcRounds;
-	mem_pos = mem_pos + i;
-	mem_pos = mem_pos / two;
+
+	mem_pos = player0 * mpcRounds;
+	mem_pos = (mem_pos + i);
+	mem_pos = mem_pos >> 1;        // Divide by 2
 
 	if(pos == 0){
 		word = [rs + mem_pos];
@@ -28,10 +20,11 @@ fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, reg u64 mpcRounds, sta
 		word <<= 32;
 	}
 
+
+
 	mem_pos = player1 * mpcRounds;
 	mem_pos = mem_pos + i;
-	mem_pos = mem_pos;
-	mem_pos = mem_pos / two;
+	mem_pos = mem_pos >> 1;        // Divide by 2
 
 	if(pos == 0){
 		aux_word = [rs + mem_pos];
@@ -47,7 +40,6 @@ fn set_word(reg u64 rs, reg u64 player0, reg u64 player1, reg u64 mpcRounds, sta
 	mem_pos += 390;
 
 	[zs + mem_pos] = word;
-
 }
 
 
