@@ -1,4 +1,4 @@
-/****************************
+1/****************************
 *                           *
 *  Sha1 auxiliar functions  *
 *                           *
@@ -296,8 +296,10 @@ fn mpc_words_hHa(stack u32[15] x, stack u32[3] y, stack u32[3] z, reg u64 pos_hH
 
 	reg u32 a, b, c;
 	reg u32 word_a, word_b;
+	reg u64 aux;
 
-	a = x[(int)pos_hHa];
+	aux = pos_hHa + i;
+	a = x[(int)aux];
 	b = y[(int)i];
 	c = z[(int)i];
 
@@ -1146,8 +1148,8 @@ fn mpc_ADD_hHa(stack u32[15] x, stack u32[3] y, stack u32[15] z, reg u64 randomn
 
 	while(idx < 3){
 
-		pos = 5 * idx;
-		pos += pos_hHa;
+		pos = pos_hHa;
+		pos += idx;
 
 		t = aux_x[(int)i];
 		t ^= y[(int)i];
@@ -1663,52 +1665,42 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, stack u64 numBits, reg u64 ra
 
 	storage_u32 = hA[0];
 	hHa[0] = storage_u32;
-	storage_u32 = hA[0];
 	hHa[1] = storage_u32;
-	storage_u32 = hA[0];
 	hHa[2] = storage_u32;
 
 	storage_u32 = hA[1];
 	hHa[3] = storage_u32;
-	storage_u32 = hA[1];
 	hHa[4] = storage_u32;
-	storage_u32 = hA[1];
 	hHa[5] = storage_u32;
 
 	storage_u32 = hA[2];
 	hHa[6] = storage_u32;
-	storage_u32 = hA[2];
 	hHa[7] = storage_u32;
-	storage_u32 = hA[2];
 	hHa[8] = storage_u32;
 
 	storage_u32 = hA[3];
 	hHa[9] = storage_u32;
-	storage_u32 = hA[3];
 	hHa[10] = storage_u32;
-	storage_u32 = hA[3];
 	hHa[11] = storage_u32;
 
 	storage_u32 = hA[4];
 	hHa[12] = storage_u32;
-	storage_u32 = hA[4];
 	hHa[13] = storage_u32;
-	storage_u32 = hA[4];
 	hHa[14] = storage_u32;
 	
 	n = 0;
 	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, a, hHa, randomness, randCount, views, countY, n, mpcRounds);
 
-	n = 1;
+	n = 3;
 	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, b, hHa, randomness, randCount, views, countY, n, mpcRounds);
 
-	n = 2;
+	n = 6;
 	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, c, hHa, randomness, randCount, views, countY, n, mpcRounds);
 
-	n = 3;
+	n = 9;
 	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, d, hHa, randomness, randCount, views, countY, n, mpcRounds);
 
-	n = 4;
+	n = 12;
 	hHa, randCount, countY, views = mpc_ADD_hHa(hHa, e, hHa, randomness, randCount, views, countY, n, mpcRounds);
 	
 	i = 0;
@@ -1848,7 +1840,8 @@ fn commits(stack u64 numBits, reg u64 keys_shares, reg u64 randomness, reg u64 v
 
 		a_temp = mpc_idx;
 		a_temp *= 8;
-		a_temp += j;
+		a_temp += 5;
+		a_temp -= j;
 
 		temp_views = countY;
 		temp_views += 768;
@@ -2293,25 +2286,19 @@ fn sha256_update3(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_
 }
 
 inline
-fn sha256_update4(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[3] data, inline int len) -> stack u64, stack u64
+fn sha256_update4(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32 data, inline int len) -> stack u64, stack u64
 {
     reg u64 i;
 
-    i = 0;
+    ctx_data[(int)ctx_datalen] = data;
+    ctx_datalen += 1;
 
-    while( i < len){
-
-        ctx_data[(int)ctx_datalen] = data[(int)i];
-        ctx_datalen += 1;
-
-        if(ctx_datalen == 16){
-            sha256_transform(ctx_state, ctx_data);
-            ctx_bitlen += 512;
-            ctx_datalen = 0;
-        }
-
-        i += 1;
+    if(ctx_datalen == 16){
+        sha256_transform(ctx_state, ctx_data);
+        ctx_bitlen += 512;
+        ctx_datalen = 0;
     }
+
     return ctx_datalen, ctx_bitlen;
 }
 
@@ -2412,7 +2399,7 @@ fn H(reg u64 keys_shares, reg u64 views, reg u64 rs, reg u64 a, stack u64 mpcRou
 	stack u32[4] keys_aux;
 	stack u32[16] viewsX_aux;
 	stack u32[370] viewsY_aux;
-	stack u32[3] rs_aux;
+	stack u32 rs_aux;
 
 	reg u8 data;
 	reg u8 len;
@@ -2463,18 +2450,13 @@ fn H(reg u64 keys_shares, reg u64 views, reg u64 rs, reg u64 a, stack u64 mpcRou
             temp *= 3;
             temp*= mpcRounds;
 
-            z = 0;
-            while(z < 3){
 
-                rs_addrs = i;
-                rs_addrs *= 3;
-                rs_addrs += temp;
-                rs_addrs += z;
+            rs_addrs = i;
+            rs_addrs *= 3;
+            rs_addrs += temp;
 
-				rs_aux[(int)z] = [rs + (int)rs_addrs];
+			rs_aux = [rs + (int)rs_addrs];
 
-				z += 1;
-			}
 
             temp = j;
             temp *= 370;
@@ -2496,7 +2478,7 @@ fn H(reg u64 keys_shares, reg u64 views, reg u64 rs, reg u64 a, stack u64 mpcRou
 			ctx_datalen, ctx_bitlen = sha256_update1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, keys_aux, 4);
 			ctx_datalen, ctx_bitlen = sha256_update2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, viewsX_aux, 16);
 			ctx_datalen, ctx_bitlen = sha256_update3(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, viewsY_aux, 370);
-			ctx_datalen, ctx_bitlen = sha256_update4(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, rs_aux, 3);
+			ctx_datalen, ctx_bitlen = sha256_update4(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, rs_aux, 1);
 			sha256_final1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a, i, j, mpcRounds);
 
 			j += 1;
@@ -2978,11 +2960,15 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 
 		a_aux = [a + (int)temp];
 
-		temp += 1024;
+		temp = 1;
+		temp *= 8;
+		temp *= mpcRounds;
 
 		a_aux ^= [a + (int)temp];
 
-		temp += 1024;
+		temp = 2;
+		temp *= 8;
+		temp *= mpcRounds;
 
 		a_aux ^= [a + (int)temp];
 

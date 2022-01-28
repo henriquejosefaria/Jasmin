@@ -421,8 +421,6 @@ int verify(a a, int e, z z) {
 		//printf("W[%d]: %02X\n", j, w[j][0]^w[j][1]^w[j][2]);
 	}
 
-
-
 	uint32_t va[2] = { hA[0],hA[0] };
 	uint32_t vb[2] = { hA[1],hA[1] };
 	uint32_t vc[2] = { hA[2],hA[2] };

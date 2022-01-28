@@ -82,7 +82,7 @@ int main(void) {
 	deltaV = clock() - beginV;
 	int inMilliV = deltaV * 1000 / CLOCKS_PER_SEC;
 	printf("Verifying: %ju\n", (uintmax_t)inMilliV);
-	
+
 	
 	delta = clock() - begin;
 	int inMilli = delta * 1000 / CLOCKS_PER_SEC;
