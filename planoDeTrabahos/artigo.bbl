@@ -1,0 +1,250 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.0 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{JASM}{article}{}
+      \name{author}{10}{}{%
+        {{hash=44aeaa610b555bdc8af8462d08ab5c2f}{%
+           family={Almeida},
+           familyi={A\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=782e19c4a38b7c1557783841b9f022cf}{%
+           family={Barbosa},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=113b9951a9fab54d128f493e55dbd546}{%
+           family={Barthe},
+           familyi={B\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=fb403b7679a9089113bbc7bb9012c8d7}{%
+           family={Blot},
+           familyi={B\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=42af38e0dc6a74cb6cc42625c2189f59}{%
+           family={Grégoire},
+           familyi={G\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=d3e80ed13984b1cf8887721be121b858}{%
+           family={Laporte},
+           familyi={L\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=55984e6727d294428c216ffc8308e866}{%
+           family={Oliveira},
+           familyi={O\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=ae0e689d67f30ce216165cb1b6a4aa03}{%
+           family={Pacheco},
+           familyi={P\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=98a378d42d963eedcf7a182d38ead989}{%
+           family={Schmidt},
+           familyi={S\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=7ecc6eff13ffb1c982ca98cb3780e150}{%
+           family={Strub},
+           familyi={S\bibinitperiod},
+           given={P.-Y.},
+           giveni={P\bibinithyphendelim Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{f0a080b5a5f855dcb1cf2300f988373d}
+      \strng{fullhash}{b85d8ec50925442b81489b08527dbd62}
+      \strng{bibnamehash}{f0a080b5a5f855dcb1cf2300f988373d}
+      \strng{authorbibnamehash}{f0a080b5a5f855dcb1cf2300f988373d}
+      \strng{authornamehash}{f0a080b5a5f855dcb1cf2300f988373d}
+      \strng{authorfullhash}{b85d8ec50925442b81489b08527dbd62}
+      \field{sortinit}{A}
+      \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ACM CCS}
+      \field{title}{Jasmin: High-Assurance and High-Speed Cryptography.}
+      \field{year}{2017}
+      \field{dateera}{ce}
+    \endentry
+    \entry{SoK}{article}{}
+      \name{author}{7}{}{%
+        {{hash=782e19c4a38b7c1557783841b9f022cf}{%
+           family={Barbosa},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=113b9951a9fab54d128f493e55dbd546}{%
+           family={Barthe},
+           familyi={B\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=cf53328faa02072864c963266224912c}{%
+           family={Bhargavan},
+           familyi={B\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=d7664c687fdd2268c3944bd6f0c316f5}{%
+           family={Blanchet},
+           familyi={B\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=463969a160215e303414da6bc18946b7}{%
+           family={Cremers},
+           familyi={C\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=99e88808bfe48ecd5fcf07c6ca07636b}{%
+           family={Liao},
+           familyi={L\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=66ebd9f16e520070e7f4e16051926206}{%
+           family={Parno},
+           familyi={P\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{1f576baa51fc4c8fa2588224c76bc2b0}
+      \strng{fullhash}{fcb54debc9cf4c1322862440f4370334}
+      \strng{bibnamehash}{1f576baa51fc4c8fa2588224c76bc2b0}
+      \strng{authorbibnamehash}{1f576baa51fc4c8fa2588224c76bc2b0}
+      \strng{authornamehash}{1f576baa51fc4c8fa2588224c76bc2b0}
+      \strng{authorfullhash}{fcb54debc9cf4c1322862440f4370334}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{SoK: Computer-Aided Cryptography.}
+      \field{year}{2021}
+      \field{dateera}{ce}
+    \endentry
+    \entry{KECR}{article}{}
+      \name{author}{3}{}{%
+        {{hash=c4f98d3bbd25111395d555d46cebdb98}{%
+           family={Bellare},
+           familyi={B\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=1eb0f375c4121b7cc5507b7e6a867d3d}{%
+           family={Pointcheval},
+           familyi={P\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=ca9a490f9027d0ef554f0eafb9c40ae7}{%
+           family={Rogaway},
+           familyi={R\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{16f698126db65b2f97b19ae473ca8431}
+      \strng{fullhash}{16f698126db65b2f97b19ae473ca8431}
+      \strng{bibnamehash}{16f698126db65b2f97b19ae473ca8431}
+      \strng{authorbibnamehash}{16f698126db65b2f97b19ae473ca8431}
+      \strng{authornamehash}{16f698126db65b2f97b19ae473ca8431}
+      \strng{authorfullhash}{16f698126db65b2f97b19ae473ca8431}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IACR EUROCRYPT}
+      \field{title}{Authenticated Key Exchange Secure against Dictionary Attacks.}
+      \field{year}{2000}
+      \field{dateera}{ce}
+    \endentry
+    \entry{HACS}{article}{}
+      \name{author}{3}{}{%
+        {{hash=cf53328faa02072864c963266224912c}{%
+           family={Bhargavan},
+           familyi={B\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=baf99e39d0a151362822ef1ba47ef682}{%
+           family={Kiefer},
+           familyi={K\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=7ecc6eff13ffb1c982ca98cb3780e150}{%
+           family={Strub},
+           familyi={S\bibinitperiod},
+           given={P.-Y.},
+           giveni={P\bibinithyphendelim Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{96e9d64638be8e187446aac0e10c9aff}
+      \strng{fullhash}{96e9d64638be8e187446aac0e10c9aff}
+      \strng{bibnamehash}{96e9d64638be8e187446aac0e10c9aff}
+      \strng{authorbibnamehash}{96e9d64638be8e187446aac0e10c9aff}
+      \strng{authornamehash}{96e9d64638be8e187446aac0e10c9aff}
+      \strng{authorfullhash}{96e9d64638be8e187446aac0e10c9aff}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SSR}
+      \field{title}{HACSpec: Towards Verifiable Crypto Standards.}
+      \field{year}{2018}
+      \field{dateera}{ce}
+    \endentry
+    \entry{UC}{article}{}
+      \name{author}{1}{}{%
+        {{hash=cf809913bd06e535c20dc271bb132fb7}{%
+           family={Canetti},
+           familyi={C\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{cf809913bd06e535c20dc271bb132fb7}
+      \strng{fullhash}{cf809913bd06e535c20dc271bb132fb7}
+      \strng{bibnamehash}{cf809913bd06e535c20dc271bb132fb7}
+      \strng{authorbibnamehash}{cf809913bd06e535c20dc271bb132fb7}
+      \strng{authornamehash}{cf809913bd06e535c20dc271bb132fb7}
+      \strng{authorfullhash}{cf809913bd06e535c20dc271bb132fb7}
+      \field{sortinit}{C}
+      \field{sortinithash}{963e9d84a3da2344e8833203de5aed05}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{J. ACM}
+      \field{title}{Universally Composable Security.}
+      \field{year}{2020}
+      \field{dateera}{ce}
+    \endentry
+    \entry{CRYS}{misc}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{963e9d84a3da2344e8833203de5aed05}
+      \field{labeltitlesource}{title}
+      \field{title}{CRYSTALS: Cryptographic Suite for Algebraic Lattices.}
+      \field{year}{2021}
+      \field{dateera}{ce}
+    \endentry
+    \entry{SIKE}{misc}{}
+      \field{sortinit}{S}
+      \field{sortinithash}{322b1d5276f2f6c1bccdcd15920dbee6}
+      \field{labeltitlesource}{title}
+      \field{title}{SIKE: Supersingular Isogeny Key Encapsulation.}
+      \field{year}{2021}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

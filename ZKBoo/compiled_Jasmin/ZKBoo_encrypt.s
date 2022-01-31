@@ -1650,33 +1650,23 @@ Lzkboo_encrypt$413:
 	jb  	Lzkboo_encrypt$414
 	movl	1232(%rsp), %r11d
 	movl	%r11d, 1284(%rsp)
-	movl	1232(%rsp), %r11d
 	movl	%r11d, 1288(%rsp)
-	movl	1232(%rsp), %r11d
 	movl	%r11d, 1292(%rsp)
 	movl	1236(%rsp), %r11d
 	movl	%r11d, 1296(%rsp)
-	movl	1236(%rsp), %r11d
 	movl	%r11d, 1300(%rsp)
-	movl	1236(%rsp), %r11d
 	movl	%r11d, 1304(%rsp)
 	movl	1240(%rsp), %r11d
 	movl	%r11d, 1308(%rsp)
-	movl	1240(%rsp), %r11d
 	movl	%r11d, 1312(%rsp)
-	movl	1240(%rsp), %r11d
 	movl	%r11d, 1316(%rsp)
 	movl	1244(%rsp), %r11d
 	movl	%r11d, 1320(%rsp)
-	movl	1244(%rsp), %r11d
 	movl	%r11d, 1324(%rsp)
-	movl	1244(%rsp), %r11d
 	movl	%r11d, 1328(%rsp)
 	movl	1248(%rsp), %r11d
 	movl	%r11d, 1332(%rsp)
-	movl	1248(%rsp), %r11d
 	movl	%r11d, 1336(%rsp)
-	movl	1248(%rsp), %r11d
 	movl	%r11d, 1340(%rsp)
 	movq	$0, %r11
 	movl	$0, 1088(%rsp)
@@ -1708,7 +1698,9 @@ Lzkboo_encrypt$374:
 	movq	$0, %rbx
 	jmp 	Lzkboo_encrypt$405
 Lzkboo_encrypt$406:
-	movl	1284(%rsp,%r11,4), %r12d
+	movq	%r11, %r12
+	addq	%rbx, %r12
+	movl	1284(%rsp,%r12,4), %r12d
 	movl	1088(%rsp,%rbx,4), %r13d
 	xorl	%r13d, %r12d
 	movl	%ebp, %r13d
@@ -1948,7 +1940,7 @@ Lzkboo_encrypt$371:
 	cmpq	$3, %r11
 	jb  	Lzkboo_encrypt$372
 	incq	%rax
-	movq	$1, %r11
+	movq	$3, %r11
 	movl	$0, 1088(%rsp)
 	movl	$0, 1092(%rsp)
 	movl	$0, 1096(%rsp)
@@ -1978,7 +1970,9 @@ Lzkboo_encrypt$332:
 	movq	$0, %rbx
 	jmp 	Lzkboo_encrypt$363
 Lzkboo_encrypt$364:
-	movl	1284(%rsp,%r11,4), %r12d
+	movq	%r11, %r12
+	addq	%rbx, %r12
+	movl	1284(%rsp,%r12,4), %r12d
 	movl	1088(%rsp,%rbx,4), %r13d
 	xorl	%r13d, %r12d
 	movl	%ebp, %r13d
@@ -2218,7 +2212,7 @@ Lzkboo_encrypt$329:
 	cmpq	$3, %r11
 	jb  	Lzkboo_encrypt$330
 	incq	%rax
-	movq	$2, %r11
+	movq	$6, %r11
 	movl	$0, 1088(%rsp)
 	movl	$0, 1092(%rsp)
 	movl	$0, 1096(%rsp)
@@ -2248,7 +2242,9 @@ Lzkboo_encrypt$290:
 	movq	$0, %rbx
 	jmp 	Lzkboo_encrypt$321
 Lzkboo_encrypt$322:
-	movl	1284(%rsp,%r11,4), %r12d
+	movq	%r11, %r12
+	addq	%rbx, %r12
+	movl	1284(%rsp,%r12,4), %r12d
 	movl	1088(%rsp,%rbx,4), %r13d
 	xorl	%r13d, %r12d
 	movl	%ebp, %r13d
@@ -2488,7 +2484,7 @@ Lzkboo_encrypt$287:
 	cmpq	$3, %r11
 	jb  	Lzkboo_encrypt$288
 	incq	%rax
-	movq	$3, %r11
+	movq	$9, %r11
 	movl	$0, 1088(%rsp)
 	movl	$0, 1092(%rsp)
 	movl	$0, 1096(%rsp)
@@ -2518,7 +2514,9 @@ Lzkboo_encrypt$248:
 	movq	$0, %rbx
 	jmp 	Lzkboo_encrypt$279
 Lzkboo_encrypt$280:
-	movl	1284(%rsp,%r11,4), %r12d
+	movq	%r11, %r12
+	addq	%rbx, %r12
+	movl	1284(%rsp,%r12,4), %r12d
 	movl	1088(%rsp,%rbx,4), %r13d
 	xorl	%r13d, %r12d
 	movl	%ebp, %r13d
@@ -2758,7 +2756,7 @@ Lzkboo_encrypt$245:
 	cmpq	$3, %r11
 	jb  	Lzkboo_encrypt$246
 	incq	%rax
-	movq	$4, %r11
+	movq	$12, %r11
 	movl	$0, 1088(%rsp)
 	movl	$0, 1092(%rsp)
 	movl	$0, 1096(%rsp)
@@ -2787,7 +2785,9 @@ Lzkboo_encrypt$206:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$237
 Lzkboo_encrypt$238:
-	movl	1284(%rsp,%r11,4), %ebx
+	movq	%r11, %rbx
+	addq	%rbp, %rbx
+	movl	1284(%rsp,%rbx,4), %ebx
 	movl	1088(%rsp,%rbp,4), %r12d
 	xorl	%r12d, %ebx
 	movl	%r10d, %r12d
@@ -3169,7 +3169,8 @@ Lzkboo_encrypt$185:
 Lzkboo_encrypt$184:
 	movq	%rcx, %rbp
 	imulq	$8, %rbp, %rbp
-	addq	%r11, %rbp
+	addq	$5, %rbp
+	subq	%r11, %rbp
 	movq	%rax, %rbx
 	addq	$768, %rbx
 	subq	%r11, %rbx

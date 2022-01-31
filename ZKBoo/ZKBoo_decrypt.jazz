@@ -283,7 +283,7 @@ fn EP0(reg u32 x, reg u32 res) -> reg u32{
 }
 
 inline
-fn EP1(reg u32 x, reg u32 res) -> reg u32{
+fn EP1(reg u32 x, reg u32 res) -> reg u32 {
 
     reg u32 aux, aux0, aux1, aux2;
     reg u8 b;

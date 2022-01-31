@@ -17,8 +17,7 @@
 #define NUM_ROUNDS 128
 
 
-extern void zkboo_ref(uint64_t *privateKey, uint64_t *shares, uint64_t *rs, uint64_t *randomValues, uint64_t *keys, uint64_t *proofs,
-					  uint64_t *views_x, uint64_t *views_y, uint64_t *a_yp, uint64_t *a_h);
+extern void preparationZKBoo(uint64_t *rs, uint64_t *randomness, uint64_t *keys_shares, uint64_t *proofs, uint64_t *iews, uint64_t *a);
 
 
 

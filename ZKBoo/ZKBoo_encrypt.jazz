@@ -1,4 +1,4 @@
-1/****************************
+/****************************
 *                           *
 *  Sha1 auxiliar functions  *
 *                           *
@@ -298,7 +298,8 @@ fn mpc_words_hHa(stack u32[15] x, stack u32[3] y, stack u32[3] z, reg u64 pos_hH
 	reg u32 word_a, word_b;
 	reg u64 aux;
 
-	aux = pos_hHa + i;
+	aux = pos_hHa;
+	aux += i;
 	a = x[(int)aux];
 	b = y[(int)i];
 	c = z[(int)i];
