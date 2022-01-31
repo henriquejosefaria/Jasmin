@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.10.7)  31 JAN 2022 15:43
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.10.7)  31 JAN 2022 19:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1502,29 +1502,16 @@ Make it at least 21.59053pt.
 We now make it that large for the rest of the document.
 This may cause the page layout to be inconsistent, however.
 
-Package atenddvi Info: Last page = 2.
-[2.2] [3.3]
+[2.2]
+Package atenddvi Info: Last page = 3.
+ [3.3]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 139.
 Package atveryend Info: Executing hook `AfterLastShipout' on input line 139.
- (./artigo.aux
-
-Package atenddvi Warning: Rerun LaTeX, last page has changed.
-
-)
+ (./artigo.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 139.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 139.
-
-
-Package rerunfilecheck Warning: File `artigo.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `artigo.out':
-(rerunfilecheck)             Before: B323AE6C3B84195D99DCB22AE1A43413
-(rerunfilecheck)             After:  03CF0198DB33A4F5B720DB60A6A69175.
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
+Package rerunfilecheck Info: File `artigo.out' has not changed.
+(rerunfilecheck)             Checksum: 03CF0198DB33A4F5B720DB60A6A69175.
 Package logreq Info: Writing requests to 'artigo.run.xml'.
 \openout1 = `artigo.run.xml'.
 
@@ -1532,7 +1519,7 @@ Package logreq Info: Writing requests to 'artigo.run.xml'.
 Here is how much of TeX's memory you used:
  41765 strings out of 492916
  789583 string characters out of 6133345
- 1214119 words of memory out of 5000000
+ 1215119 words of memory out of 5000000
  45263 multiletter control sequences out of 15000+600000
  582140 words of font info for 56 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
