@@ -1,20 +1,15 @@
-[2] Config.pm:304> INFO - This is Biber 2.12
+[3] Config.pm:304> INFO - This is Biber 2.12
 [3] Config.pm:307> INFO - Logfile is 'artigo.blg'
-[71] biber-darwin:315> INFO - === Seg Jan 31, 2022, 19:23:49
-[153] Biber.pm:371> INFO - Reading 'artigo.bcf'
-[345] Biber.pm:889> INFO - Found 7 citekeys in bib section 0
-[367] Biber.pm:4093> INFO - Processing section 0
-[391] Biber.pm:4254> INFO - Looking for bibtex format file 'library.bib' for section 0
-[431] bibtex.pm:1523> INFO - LaTeX decoding ...
-[1658] bibtex.pm:1340> INFO - Found BibTeX data source 'library.bib'
-[1736] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/rm/l9695zr55lbfkw2m0r27vmzm0000gn/T/KcjZYtq3hW/library.bib_18821.utf8, line 6, warning: 177 characters of junk seen at toplevel
-[1739] Biber.pm:4254> INFO - Looking for bibtex format file 'local.bib' for section 0
-[1742] bibtex.pm:1523> INFO - LaTeX decoding ...
-[1848] bibtex.pm:1340> INFO - Found BibTeX data source 'local.bib'
-[1972] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1972] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1972] Biber.pm:3921> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[1972] Biber.pm:3927> INFO - No sort tailoring available for locale 'en-US'
-[1982] bbl.pm:636> INFO - Writing 'artigo.bbl' with encoding 'UTF-8'
-[1988] bbl.pm:739> INFO - Output to artigo.bbl
-[1989] Biber.pm:110> INFO - WARNINGS: 1
+[240] biber-darwin:315> INFO - === Ter Fev  1, 2022, 10:03:27
+[292] Biber.pm:371> INFO - Reading 'artigo.bcf'
+[538] Biber.pm:889> INFO - Found 24 citekeys in bib section 0
+[592] Biber.pm:4093> INFO - Processing section 0
+[660] Biber.pm:4254> INFO - Looking for bibtex format file 'local.bib' for section 0
+[669] bibtex.pm:1523> INFO - LaTeX decoding ...
+[777] bibtex.pm:1340> INFO - Found BibTeX data source 'local.bib'
+[1383] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1385] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1385] Biber.pm:3921> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[1385] Biber.pm:3927> INFO - No sort tailoring available for locale 'en-US'
+[1480] bbl.pm:636> INFO - Writing 'artigo.bbl' with encoding 'UTF-8'
+[1519] bbl.pm:739> INFO - Output to artigo.bbl

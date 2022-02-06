@@ -11,14 +11,14 @@
 #include <openssl/evp.h>
 #include <openssl/err.h>
 
-//#include <openssl/applink.c>
 #include <openssl/rand.h>
 
 #define NUM_ROUNDS 128
 
 
-extern void preparationZKBoo(uint64_t *rs, uint64_t *randomness, uint64_t *keys_shares, uint64_t *proofs, uint64_t *iews, uint64_t *a);
+extern void zkboo_encrypt(uint64_t *rs, uint64_t *randomness, uint64_t *keys_shares, uint64_t *proofs, uint64_t *iews, uint64_t *a);
 
+extern void zkboo_decrypt(uint64_t *proofs, uint64_t *a, uint64_t *randomness_p1, uint64_t *randomness_p2);
 
 
 void handleErrors(void)
@@ -26,7 +26,6 @@ void handleErrors(void)
 	ERR_print_errors_fp(stderr);
 	abort();
 }
-
 
 EVP_CIPHER_CTX* setupAES(unsigned char *key) {
 	
@@ -51,8 +50,6 @@ EVP_CIPHER_CTX* setupAES(unsigned char *key) {
 		handleErrors();
 
 	return ctx;
-
-
 }
 
 void getAllRandomness(unsigned char *key, unsigned char *randomness) {
@@ -115,10 +112,13 @@ int main(void)
 	uint64_t rs[192];									// NUM_ROUNDS * 3 * 4
 	
 	uint64_t keys_shares[1536];
-	uint64_t *keys = &keys_shares;						// NUM_ROUNDS * 3 * 16
+	uint64_t *keys = keys_shares;						// NUM_ROUNDS * 3 * 16
 	uint64_t *shares = &keys_shares[768];				// NUM_ROUNDS * 3 * 16
 	
 	uint64_t randomness[70656];							// NUM_ROUNDS * 3 * 1472
+
+	uint64_t randomness_p1[23552];
+	uint64_t randomness_p2[23552];
 
 	//a as[NUM_ROUNDS];
 	uint64_t a[3072]; 	 							
@@ -170,6 +170,38 @@ int main(void)
 	}
 
 
-	preparationZKBoo(rs, randomness, keys_shares, proofs, views, a);
+	zkboo_encrypt(rs, randomness, keys_shares, proofs, views, a);
+
+
+	uint64_t key[4];
+	int temp_zs;
+
+	// Generating randomness
+	#pragma omp parallel for
+	for(int k=0; k<NUM_ROUNDS; k++) {
+
+		temp_zs = k * 391;
+
+		key[0] = proofs[temp_zs];
+		temp_zs += 1;
+
+		key[1] = proofs[temp_zs];
+		temp_zs += 1;
+
+		key[2] = proofs[temp_zs];
+		temp_zs += 1;
+
+		key[3] = proofs[temp_zs];
+
+		getAllRandomness((unsigned char*)  keys, (unsigned char*) randomness_p1 + k * 1472);
+		getAllRandomness((unsigned char*)  keys + 16, (unsigned char*) randomness_p2 + k * 1472);
+
+	}
+
+
+	zkboo_decrypt(proofs, a, randomness_p1, randomness_p2);
+
+
+
 	return 0;
 }

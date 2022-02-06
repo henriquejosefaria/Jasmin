@@ -1,4 +1,4 @@
 all:
 	biber artigo
 	xelatex artigo.tex
-	#mv artigo.pdf planoDeTrabalhos.pdf
+	mv artigo.pdf workPlan.pdf

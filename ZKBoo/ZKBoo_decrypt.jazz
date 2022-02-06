@@ -212,27 +212,6 @@ fn mpc_LEFTROTATE2(stack u32[2] x, reg u64 i, stack u32[2] z) -> stack u32[2] {
 }
 
 
-
-
-inline
-fn getAllRandomness(stack u32[4] key, stack u32[368] randomness) -> stack u32[368] {
-	/*
-	EVP_CIPHER_CTX ctx;
-	ctx = setupAES(key);
-	unsigned char *plaintext =
-			(unsigned char *)"0000000000000000";
-	int len;
-	for(int j=0;j<92;j++) {
-		if(1 != EVP_EncryptUpdate(&ctx, &randomness[j*16], &len, plaintext, strlen ((char *)plaintext)))
-			handleErrors();
-
-	}
-	EVP_CIPHER_CTX_cleanup(&ctx);
-	*/
-	return randomness;
-}
-
-
 /******************************
 *                             *
 *  SHA256 auxiliar functions  *
@@ -1575,12 +1554,11 @@ fn reconstruct(reg u64 a, stack u32[8] y, stack u64 mpcRounds) -> stack u32[8]{
 
 
 inline 
-fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64 success) -> stack u64 {
+fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64 success, stack u32[368] randomness_p1, stack u32[368] randomness_p2) -> stack u64 {
 	
 	stack u32[8] hash_p1, hash_p2;
 	stack u32[5] result;
 	stack u32[4] rand;
-	stack u32[368] randomness_p1, randomness_p2;
 	stack u32[160] w;
 
 	reg u64 i;
@@ -1736,43 +1714,6 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 
 
 	a_s = a;
-
-
-	/* Get Player1 randomness */
-
-	temp_zs = mpc_round * 782;
-
-	rand[0] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-	rand[1] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-	rand[2] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-	rand[3] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-
-	randomness_p1 = getAllRandomness(rand, randomness_p1);
-
-
-	/* Get Player2 randomness */
-
-	rand[0] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-	rand[1] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-	rand[2] = [zs + (int)temp_zs];
-	temp_zs += 1;
-
-	rand[3] = [zs + (int)temp_zs];
-
-
-	randomness_p2 = getAllRandomness(rand, randomness_p2);
 
 
 	/* Get Player 1 view.x */
@@ -1997,15 +1938,37 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 ***************************************************/
 
 
-export fn zkboo_decrypt(reg u64 proofs, reg u64 a){
+export 
+fn zkboo_decrypt(reg u64 proofs, reg u64 a, reg u64 randomness_player1, reg u64 randomness_player2){
 
 	stack u32[8] y;
 	stack u64 mpcRounds, success;
 	stack u64[128] es;
+    stack u32[368] randomness_p1, randomness_p2;
+    reg u64 pos_randomness;
 
-	reg u64 i;
+	reg u64 i, j;
 
 	mpcRounds = 128;
+
+    i = 0;
+    pos_randomness = 0;
+    while(i < mpcRounds){
+
+        j = 0;
+        while(j < 368){
+
+            randomness_p1[(int) pos_randomness] = (u32)[randomness_player1 + (int) pos_randomness];
+
+            randomness_p2[(int) pos_randomness] = (u32)[randomness_player2 + (int) pos_randomness];
+
+            pos_randomness += 1;
+            j+= 1;
+        }
+        
+
+        i += 1;
+    }
 
 
 	y = reconstruct(a, y, mpcRounds);
@@ -2015,7 +1978,7 @@ export fn zkboo_decrypt(reg u64 proofs, reg u64 a){
 	i = 0;
 	while(i < mpcRounds){
 
-		success = verify(a, es, proofs, i, success);
+		success = verify(a, es, proofs, i, success, randomness_p1, randomness_p2);
 
 		if (success == 0){
 			i = mpcRounds;
@@ -2023,8 +1986,4 @@ export fn zkboo_decrypt(reg u64 proofs, reg u64 a){
 
 		i += 1;
 	}
-
-
-
-
 }
