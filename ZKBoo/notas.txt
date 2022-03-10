@@ -1,0 +1,1 @@
+PODE haver um erro na soma do bit length - função: fn dbl_int_add(stack u32[2] ctx_bitlen, reg u64 c) -> stack u32[2];
