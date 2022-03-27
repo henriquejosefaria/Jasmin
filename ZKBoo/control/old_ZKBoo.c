@@ -15,7 +15,6 @@
 #include <string.h>
 #include <time.h>
 #include "shared.h"
-#include "omp.h"
 
 
 #define CH(e,f,g) ((e & f) ^ ((~e) & g))
@@ -25,7 +24,7 @@ int totalRandom = 0;
 int totalSha = 0;
 int totalSS = 0;
 int totalHash = 0;
-
+int debug = 0;
 
 
 //static View views[3];
@@ -64,16 +63,71 @@ void mpc_AND(uint32_t x[3], uint32_t y[3], uint32_t z[3], unsigned char *randomn
 	*randCount += 4;
 	//kCount++;
 	uint32_t t[3] = { 0 };
+	uint8_t *z_aux = &z[0];
+	/*
+	printf("r[0] = %u; %u; %u; %u;\n",*(r_aux), *(r_aux + 1), *(r_aux + 2), *(r_aux + 3));
+	r_aux = &r[1];
+	printf("r[1] = %u; %u; %u; %u;\n",*(r_aux), *(r_aux + 1), *(r_aux + 2), *(r_aux + 3));
+	r_aux = &r[2];
+	printf("r[2] = %u; %u; %u; %u;\n\n",*(r_aux), *(r_aux + 1), *(r_aux + 2), *(r_aux + 3));
+	
+	printf("b[0] = %lu\n",x[0]);
+	printf("b[1] = %lu\n",x[1]);
+	printf("b[2] = %lu\n",x[2]);
 
+	printf("f[0] = %lu\n",z[0]);
+	printf("f[1] = %lu\n",z[1]);
+	printf("f[2] = %lu\n",z[2]);
+	*/
+
+	/*
+	if(debug == 4){
+
+		z_aux = &r[0];
+		printf("r[0] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &r[1];
+		printf("r[1] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &r[2];
+		printf("r[2] = %u; %u; %u; %u;\n\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		
+		z_aux = &x[0];
+		printf("x[0] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &x[1];
+		printf("x[1] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &x[2];
+		printf("x[2] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+
+		z_aux = &z[0];
+		printf("y[0] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &z[1];
+		printf("y[1] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &z[2];
+		printf("y[2] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		
+	}
+	*/
+	
 	t[0] = (x[0] & y[1]) ^ (x[1] & y[0]) ^ (x[0] & y[0]) ^ r[0] ^ r[1];
 	t[1] = (x[1] & y[2]) ^ (x[2] & y[1]) ^ (x[1] & y[1]) ^ r[1] ^ r[2];
 	t[2] = (x[2] & y[0]) ^ (x[0] & y[2]) ^ (x[2] & y[2]) ^ r[2] ^ r[0];
 	z[0] = t[0];
 	z[1] = t[1];
 	z[2] = t[2];
+	
+
 	views[0].y[*countY] = z[0];
 	views[1].y[*countY] = z[1];
 	views[2].y[*countY] = z[2];
+	/*
+	if(debug == 4){
+		printf("z[0] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &z[1];
+		printf("z[1] = %u; %u; %u; %u;\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+		z_aux = &z[2];
+		printf("z[2] = %u; %u; %u; %u;\n\n",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));	
+	}
+	*/
+
 	(*countY)++;
 }
 
@@ -91,13 +145,44 @@ void mpc_ADD(uint32_t x[3], uint32_t y[3], uint32_t z[3], unsigned char *randomn
 	uint32_t c[3] = { 0 };
 	uint32_t r[3] = { getRandom32(randomness[0], *randCount), getRandom32(randomness[1], *randCount), getRandom32(randomness[2], *randCount)};
 	*randCount += 4;
-
+	
 	uint8_t a[3], b[3];
 
 	uint8_t t;
 
+	uint8_t a_aux[31], b_aux[31], *x_aux, *z_aux, *c_aux, *y_aux;
+	int idx = 0;
+
+	c_aux = c;
+	x_aux = x;
+	y_aux = y;
+	
+
 	for(int i=0;i<31;i++)
 	{
+
+		//printf("\n\n-*-         ROUND %d         -*-\n", i);
+		/*
+		printf("\n\n%lu ^ %lu = %lu; %lu ^ %lu = %lu;\n\n",x[0],c[0], x[0]^c[0], y[1],c[1], y[1]^c[1]);//*(x_aux + idx), *(c_aux + idx), (*(x_aux + idx) ^ *(c_aux + idx)),*(y_aux + idx), *(c_aux + idx), (*(y_aux + idx) ^ *(c_aux + idx)));
+		printf("\n\n%lu ^ %lu = %lu; %lu ^ %lu = %lu;\n\n",x[1],c[1], x[1]^c[1], y[2],c[2], y[2]^c[2]);
+		printf("\n\n%lu ^ %lu = %lu; %lu ^ %lu = %lu;\n\n",x[2],c[2], x[2]^c[2], y[0],c[0], y[0]^c[0]);
+		*/
+
+		//printf("\n\n%u ^ %u = %u; %u ^ %u = %u; %u ^ %u = %u; %u ^ %u = %u\n\n", *(x_aux), *(c_aux), (*(x_aux) ^ *(c_aux)),  *(x_aux + 1), *(c_aux + 1), (*(x_aux + 1) ^ *(c_aux + 1)), *(x_aux + 2), *(c_aux + 2), (*(x_aux + 2) ^ *(c_aux + 2)), *(x_aux + 3), *(c_aux + 3), (*(x_aux + 3) ^ *(c_aux + 3)) );
+		//printf("%u ^ %u = %u; %u ^ %u = %u; %u ^ %u = %u; %u ^ %u = %u\n\n", *(y_aux), *(c_aux), (*(y_aux) ^ *(c_aux)),  *(y_aux + 1), *(c_aux + 1), (*(y_aux + 1) ^ *(c_aux + 1)), *(y_aux + 2), *(c_aux + 2), (*(y_aux + 2) ^ *(c_aux + 2)), *(y_aux + 3), *(c_aux + 3), (*(y_aux + 3) ^ *(c_aux + 3)) );
+		//printf("a (%d) = %lu\n", i, (((x[0]^c[0]) >> i) & 0x01) );
+		//printf("b (%d) = %lu\n", i, (((y[1]^c[1]) >> i) & 0x01) );
+		/*
+		if(debug == 1 && i == 0){
+			x_aux = &x[0];
+			printf("\n\n%u; %u; %u; %u;\n\n",x_aux[0],x_aux[1],x_aux[2],x_aux[3]);
+			x_aux = &x[1];
+			printf("%u; %u; %u; %u;\n\n",x_aux[0],x_aux[1],x_aux[2],x_aux[3]);
+			x_aux = &x[2];
+			printf("%u; %u; %u; %u;\n\n",x_aux[0],x_aux[1],x_aux[2],x_aux[3]);
+		}
+		*/
+
 		a[0]=GETBIT(x[0]^c[0],i);
 		a[1]=GETBIT(x[1]^c[1],i);
 		a[2]=GETBIT(x[2]^c[2],i);
@@ -106,35 +191,64 @@ void mpc_ADD(uint32_t x[3], uint32_t y[3], uint32_t z[3], unsigned char *randomn
 		b[1]=GETBIT(y[1]^c[1],i);
 		b[2]=GETBIT(y[2]^c[2],i);
 
+		/*
+		printf("\na[1] = %u; b[2] = %u; a & b = %u;",a[0], b[1], a[0]&b[1]);
+		printf("\na[1] = %u; b[2] = %u; a & b = %u;",a[1], b[2], a[1]&b[2]);
+		printf("\na[1] = %u; b[2] = %u; a & b = %u;\n\n",a[2], b[0], a[2]&b[0]);
+		*/
 
 		t = (a[0]&b[1]) ^ (a[1]&b[0]) ^ GETBIT(r[1],i);
-		SETBIT(c[0],i+1, t ^ (a[0]&b[0]) ^ GETBIT(c[0],i) ^ GETBIT(r[0],i));
-
+		SETBIT(c[0],i+1, t ^ GETBIT(c[0],i) ^ GETBIT(r[0],i));
+		
+		
 		t = (a[1]&b[2]) ^ (a[2]&b[1]) ^ GETBIT(r[2],i);
-		SETBIT(c[1],i+1, t ^ (a[1]&b[1]) ^ GETBIT(c[1],i) ^ GETBIT(r[1],i));
+		SETBIT(c[1],i+1, t ^ GETBIT(c[1],i) ^ GETBIT(r[1],i));
+
 
 		t = (a[2]&b[0]) ^ (a[0]&b[2]) ^ GETBIT(r[0],i);
-		SETBIT(c[2],i+1, t ^ (a[2]&b[2]) ^ GETBIT(c[2],i) ^ GETBIT(r[2],i));
-
-
+		SETBIT(c[2],i+1, t ^ GETBIT(c[2],i) ^ GETBIT(r[2],i));
+		/*
+		printf("c[0] => %u; %u; %u; %u; \n", *(c_aux), *(c_aux + 1), *(c_aux + 2), *(c_aux + 3));
+		printf("c[1] => %u; %u; %u; %u; \n", *(c_aux + 4), *(c_aux + 5), *(c_aux + 6), *(c_aux + 7));
+		printf("c[2] => %u; %u; %u; %u; \n", *(c_aux + 8), *(c_aux + 9), *(c_aux + 10), *(c_aux + 11));
+		*/
 	}
 
+	x_aux = x;
+	z_aux = z;
+	/*
+	printf("\n\nx[0] => %u, %u, %u, %u\n",*(x_aux), *(x_aux + 1), *(x_aux + 2), *(x_aux + 3));
+
+	printf("\nz[0] => %u, %u, %u, %u",*(z_aux), *(z_aux + 1), *(z_aux + 2), *(z_aux + 3));
+
+	printf("\n\na[0] => {");
+	for(int j = 0; j < 31; j++){
+		//if(j % 4 == 0) printf("\n");
+		printf("%u; ",a_aux[j]);
+	}
+
+	printf("}\n\nb[0] => {");
+	for(int j = 0; j < 31; j++){
+		//if(j % 4 == 0) printf("\n");
+		printf("%u; ",b_aux[j]);
+	}
+	printf("}\n\n");
+	*/
 	z[0]=x[0]^y[0]^c[0];
 	z[1]=x[1]^y[1]^c[1];
 	z[2]=x[2]^y[2]^c[2];
-
-
+	
 	views[0].y[*countY] = c[0];
 	views[1].y[*countY] = c[1];
 	views[2].y[*countY] = c[2];
 	*countY += 1;
+
 
 	/*views[0].y[countY] = z[0];
 	views[1].y[countY] = z[1];
 	views[2].y[countY] = z[2];
 	countY++;*/
 }
-
 
 void mpc_ADDK(uint32_t x[3], uint32_t y, uint32_t z[3], unsigned char *randomness[3], int* randCount, View views[3], int* countY) {
 	uint32_t c[3] = { 0 };
@@ -144,7 +258,7 @@ void mpc_ADDK(uint32_t x[3], uint32_t y, uint32_t z[3], unsigned char *randomnes
 	uint8_t a[3], b[3];
 
 	uint8_t t;
-
+	
 	for(int i=0;i<31;i++)
 	{
 		a[0]=GETBIT(x[0]^c[0],i);
@@ -166,6 +280,7 @@ void mpc_ADDK(uint32_t x[3], uint32_t y, uint32_t z[3], unsigned char *randomnes
 
 
 	}
+	
 
 	z[0]=x[0]^y^c[0];
 	z[1]=x[1]^y^c[1];
@@ -294,7 +409,9 @@ void mpc_MAJ(uint32_t a[], uint32_t b[3], uint32_t c[3], uint32_t z[3], unsigned
 
 	mpc_XOR(a, b, t0);
 	mpc_XOR(a, c, t1);
+
 	mpc_AND(t0, t1, z, randomness, randCount, views, countY);
+
 	mpc_XOR(z, a, z);
 }
 
@@ -333,12 +450,16 @@ int mpc_sha1(unsigned char* results[3], unsigned char* inputs[3], int numBits, u
 
 	int chars = numBits >> 3;
 	unsigned char* chunks[3];
-	uint32_t w[80][3];
+	uint32_t w[80][3] = { 0 };
+	uint8_t *aux;
 
-	for (int i = 0; i < 3; i++) {
+	for(int i = 0; i < 3; i++) {
 		chunks[i] = calloc(64, 1); //512 bits
+		
 		memcpy(chunks[i], inputs[i], chars);
+		
 		chunks[i][chars] = 0x80;
+
 		//Last 8 chars used for storing length of input without padding, in big-endian.
 		//Since we only care for one block, we are safe with just using last 9 bits and 0'ing the rest
 
@@ -346,23 +467,27 @@ int mpc_sha1(unsigned char* results[3], unsigned char* inputs[3], int numBits, u
 		//chunk[61] = numBits >> 16;
 		chunks[i][62] = numBits >> 8;
 		chunks[i][63] = numBits;
-
-
+		
 		memcpy(views[i].x, chunks[i], 64);
 		
-
 		for (int j = 0; j < 16; j++) {
+
 			w[j][i] = (chunks[i][j * 4] << 24) | (chunks[i][j * 4 + 1] << 16)
 							| (chunks[i][j * 4 + 2] << 8) | chunks[i][j * 4 + 3];
-
+			
 			//printf("%d: %02X %02X %02X %02X %02X\n", j, w[j][i], (chunks[i][j * 4]), (chunks[i][j * 4 + 1]), (chunks[i][j * 4 + 2]), chunks[i][j * 4 + 3]);
 		}
+		
+
+		
 		//printf("Chars: %d\n", chars);
 		free(chunks[i]);
 	}
 
+	
 	uint32_t temp[3];
 	uint32_t t0[3];
+	
 	for (int j = 16; j < 80; j++) {
 		mpc_XOR(w[j-3], w[j-8], temp);
 		mpc_XOR(temp, w[j-14], temp);
@@ -371,7 +496,8 @@ int mpc_sha1(unsigned char* results[3], unsigned char* inputs[3], int numBits, u
 
 		//printf("W[%d]: %02X\n", j, w[j][0]^w[j][1]^w[j][2]);
 	}
-
+	
+	
 	uint32_t a[3] = { hA[0],hA[0],hA[0] };
 	uint32_t b[3] = { hA[1],hA[1],hA[1] };
 	uint32_t c[3] = { hA[2],hA[2],hA[2] };
@@ -379,22 +505,125 @@ int mpc_sha1(unsigned char* results[3], unsigned char* inputs[3], int numBits, u
 	uint32_t e[3] = { hA[4],hA[4],hA[4] };
 	uint32_t f[3];
 	uint32_t k;
-	uint8_t *aux;
+	uint8_t *t_aux;
+
 
 	for (int i = 0; i < 80; i++) {
-
+		debug = i;
 		if(i <= 19) {
 			//f = d ^ (b & (c ^ d))
 			mpc_XOR(c,d,f);
+			/*
+			if(debug == 4){
+			
+				printf("\nc (round 4)\n");
+				t_aux = &c[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &c[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &c[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+				printf("\n\nd (round 4)\n");
+				t_aux = &d[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &d[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &d[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+				printf("\nb (round 4)\n");
+				t_aux = &b[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &b[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &b[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+				printf("\n\nf (round 4)\n");
+				t_aux = &f[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+			}
+			*/
 
 			mpc_AND(b, f, f, randomness, randCount, views, countY);
+			/*
+			if(debug == 4){
+
+				printf("\n\nf (round 4) after MPC_AND!!\n");
+				t_aux = &f[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+			}
+			*/
 
 			mpc_XOR(d,f,f);
+
 			k = 0x5A827999;
 		}
 		else if(i <= 39) {
 			mpc_XOR(b,c,f);
+			/*
+			if(debug == 20){
+			
+				printf("\nb (round 4)\n");
+				t_aux = &b[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &b[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &b[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+				printf("\n\nc (round 4)\n");
+				t_aux = &c[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &c[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &c[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+				printf("\nf (round 4)\n");
+				t_aux = &f[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+				printf("\nd (round 4)\n");
+				t_aux = &d[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &d[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &d[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+			}*/
+
 			mpc_XOR(d,f,f);
+			/*
+			if(debug == 20){
+
+				printf("\nf (round 4)\n");
+				t_aux = &f[0];
+				printf("\n\n %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[1];
+				printf(" %u; %u; %u; %u;", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+				t_aux = &f[2];
+				printf(" %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			}
+			*/
+
+
 			k = 0x6ED9EBA1;
 		}
 		else if(i <= 59) {
@@ -409,55 +638,167 @@ int mpc_sha1(unsigned char* results[3], unsigned char* inputs[3], int numBits, u
 			mpc_XOR(d,f,f);
 			k = 0xCA62C1D6;
 		}
+		
 
 		//temp = (a leftrotate 5) + f + e + k + w[i]
+		
 		mpc_LEFTROTATE(a,5,temp);
+		/*
+		if(debug == 3){
+			
+			printf("\nTemp (round 4)\n");
+			t_aux = &temp[0];
+			printf("\n\ntemp[0] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[1];
+			printf("temp[1] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[2];
+			printf("temp[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+			printf("\n\nf (round 4)\n");
+			t_aux = &f[0];
+			printf("\n\nf[0] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &f[1];
+			printf("f[1] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &f[2];
+			printf("f[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+		}
+		*/
+
 		mpc_ADD(f,temp,temp,randomness, randCount, views, countY);
+		/*
+		if(debug == 3){
+			
+			t_aux = &temp[0];
+			printf("\n\ntemp[0] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[1];
+			printf("temp[1] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[2];
+			printf("temp[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+		}
+		*/
+
 		mpc_ADD(e,temp,temp,randomness, randCount, views, countY);
+		/*
+		if(debug == 3){
+			
+			t_aux = &temp[0];
+			printf("\n\ntemp[0] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[1];
+			printf("temp[1] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[2];
+			printf("temp[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+			t_aux = &k;
+			printf("temp[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+		}
+		*/
 		mpc_ADDK(temp,k,temp,randomness, randCount, views, countY);
+		/*
+		if(debug == 3){
+
+			t_aux = &w[i][0];
+			printf("\n\ntemp[0] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &w[i][1];
+			printf("temp[1] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &w[i][2];
+			printf("temp[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+
+			
+			t_aux = &temp[0];
+			printf("\n\ntemp[0] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[1];
+			printf("temp[1] = %u; %u; %u; %u;\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+			t_aux = &temp[2];
+			printf("temp[2] = %u; %u; %u; %u;\n\n\n", t_aux[0], t_aux[1], t_aux[2], t_aux[3]);
+		}
+		*/
+		//debug = 1;
+
 		mpc_ADD(w[i],temp,temp,randomness, randCount, views, countY);
-	
+
 
 		memcpy(e, d, sizeof(uint32_t) * 3);
+		
 		memcpy(d, c, sizeof(uint32_t) * 3);
+		
 		mpc_LEFTROTATE(b,30,c);
+		
 		memcpy(b, a, sizeof(uint32_t) * 3);
+
 		memcpy(a, temp, sizeof(uint32_t) * 3);
-
+		
 	}
-
-	uint32_t hHa[5][3] = { { hA[0],hA[0],hA[0]  }, { hA[1],hA[1],hA[1] }, { hA[2],hA[2],hA[2] }, { hA[3],hA[3],hA[3] },
+	
+	
+	uint32_t hHa[5][3] = { { hA[0],hA[0],hA[0] }, { hA[1],hA[1],hA[1] }, { hA[2],hA[2],hA[2] }, { hA[3],hA[3],hA[3] },
 			{ hA[4],hA[4],hA[4] }};
 
+	/*
+	uint8_t *h;
+	h = &hHa[0][0];
+	printf("%u; %u; %u; %u;\n\n", h[0], h[1], h[2], h[3]);
+	h = &hHa[0][1];
+	printf("%u; %u; %u; %u;\n\n", h[0], h[1], h[2], h[3]);
+	h = &hHa[0][2];
+	printf("%u; %u; %u; %u;\n\n", h[0], h[1], h[2], h[3]);
+	*/
+	/*
+	uint8_t *a_aux;
+	a_aux = &a[0];
+	printf("a[...]\n%u; %u; %u; %u;\n\n", a_aux[0], a_aux[1], a_aux[2], a_aux[3]);
+	a_aux = &a[1];
+	printf("%u; %u; %u; %u;\n\n", a_aux[0], a_aux[1], a_aux[2], a_aux[3]);
+	a_aux = &a[2];
+	printf("%u; %u; %u; %u;\n\n", a_aux[0], a_aux[1], a_aux[2], a_aux[3]);
+	*/
 
 	mpc_ADD(hHa[0], a, hHa[0], randomness, randCount, views, countY);
 	mpc_ADD(hHa[1], b, hHa[1], randomness, randCount, views, countY);
 	mpc_ADD(hHa[2], c, hHa[2], randomness, randCount, views, countY);
 	mpc_ADD(hHa[3], d, hHa[3], randomness, randCount, views, countY);
 	mpc_ADD(hHa[4], e, hHa[4], randomness, randCount, views, countY);
+	
 
-	//aux = &hHa[0];
 
+	
 	for (int i = 0; i < 5; i++) {
+		
+		//h = &hHa[i][0];
+		//if(i == 0) printf("\nhHa[%d] = %u; %u; %u; %u;",i,*(h), *(h + 1), *(h + 2), *(h + 3));
 
 		mpc_RIGHTSHIFT(hHa[i], 24, t0);
 		results[0][i * 4] = t0[0];
 		results[1][i * 4] = t0[1];
 		results[2][i * 4] = t0[2];
+		//printf("results[0] = %u;",results[0][i * 4]);
+
+
 		mpc_RIGHTSHIFT(hHa[i], 16, t0);
 		results[0][i * 4 + 1] = t0[0];
 		results[1][i * 4 + 1] = t0[1];
 		results[2][i * 4 + 1] = t0[2];
+		//printf(" %u;",results[0][i * 4 + 1]);
+
 		mpc_RIGHTSHIFT(hHa[i], 8, t0);
 		results[0][i * 4 + 2] = t0[0];
 		results[1][i * 4 + 2] = t0[1];
 		results[2][i * 4 + 2] = t0[2];
+		//printf(" %u;",results[0][i * 4 + 2]);
 
 		results[0][i * 4 + 3] = hHa[i][0];
 		results[1][i * 4 + 3] = hHa[i][1];
 		results[2][i * 4 + 3] = hHa[i][2];
-		
+		//printf(" %u;",results[0][i * 4 + 3]);
+
+		//if(i == 0) printf("\nresults[0] = %u; %u; %u; %u;\n\n",results[0][0], results[0][1], results[0][2], results[0][3]);
+
 	}
+	
+	
+
+	
 	return 0;
 }
 
@@ -495,55 +836,63 @@ a commit(int numBytes,unsigned char shares[3][numBytes], unsigned char *randomne
 
 	int* countY = calloc(1, sizeof(int));
 	mpc_sha1(hashes, inputs, numBytes * 8, randomness, views, countY);
+	
+	//printf("\n\nStoring at pos %d\n",*countY );
 
-
+	//printf("\n\nVIEWS Y !!\n");
+	uint8_t *views_u8;
 	//Explicitly add y to view
+	//printf("\n\ncountY = %d\n\n", *(countY));
+	views_u8 = &views[0].y[*countY];
+
+	unsigned char hashes2[3][32];
+
+
+
+	
 	for(int i = 0; i<5; i++) {
 		
 		views[0].y[*countY] = 		(hashes[0][i * 4] << 24) | (hashes[0][i * 4 + 1] << 16)
 											| (hashes[0][i * 4 + 2] << 8) | hashes[0][i * 4 + 3];
-
 		views[1].y[*countY] = 		(hashes[1][i * 4] << 24) | (hashes[1][i * 4 + 1] << 16)
 											| (hashes[1][i * 4 + 2] << 8) | hashes[1][i * 4 + 3];
 		views[2].y[*countY] = 		(hashes[2][i * 4] << 24) | (hashes[2][i * 4 + 1] << 16)
 											| (hashes[2][i * 4 + 2] << 8) | hashes[2][i * 4 + 3];
-
+		
 		*countY += 1;
 	}
+	
+	//printf("\n\ncountY = %d\n\n", *(countY));
+	
+	
+	//printf("\n\n");
 
 	
-
+	
 	uint32_t* result1 = malloc(20);
 	output(views[0], result1);
 	uint32_t* result2 = malloc(20);
 	output(views[1], result2);
 	uint32_t* result3 = malloc(20);
 	output(views[2], result3);
-
+	
 	a a;
+
+	for(int j = 0; j < 8; j++){
+		a.yp[0][j] = 0;
+		a.yp[1][j] = 0;
+		a.yp[2][j] = 0;
+	}
+	for(int j = 0; j < 32; j++){
+		a.h[0][j] = 0;
+		a.h[1][j] = 0;
+		a.h[2][j] = 0;
+	}
+	
 	memcpy(a.yp[0], result1, 20);
 	memcpy(a.yp[1], result2, 20);
 	memcpy(a.yp[2], result3, 20);
-	/*
-	uint8_t *views_u8 = a.yp[0];
-	printf("\n\nviews[0].y[0] = {");
-	for(int j=0;j < 20; j++){
-		printf("%u,",views_u8[j]);
-	}
-	printf("}\n\n\n");
-	views_u8 = a.yp[1];
-	printf("\n\nviews[0].y[1] = {");
-	for(int j=0;j < 20; j++){
-		printf("%u,",views_u8[j]);
-	}
-	printf("}\n\n\n");
-	views_u8 = a.yp[2];
-	printf("\n\nviews[0].y[2] = {");
-	for(int j=0;j < 20; j++){
-		printf("%u,",views_u8[j]);
-	}
-	printf("}\n\n\n");
-	*/
+
 	return a;
 }
 
@@ -573,12 +922,11 @@ int main(void) {
 		return 0;
 	}
 	
-	printf("Enter the string to be hashed (Max 55 characters): ");
-	char userInput[55]; //55 is max length as we only support 447 bits = 55.875 bytes
+	//printf("Enter the string to be hashed (Max 55 characters): ");
+	//char userInput[55]; //55 is max length as we only support 447 bits = 55.875 bytes
 	//fgets(userInput, sizeof(userInput), stdin);
 	
-	int i = 16; strlen(userInput)-1; 
-	printf("String length: %d\n", i);
+	int i = 16;//strlen(userInput)-1; 
 	
 	printf("Iterations of SHA: %d\n", NUM_ROUNDS);
 
@@ -586,7 +934,7 @@ int main(void) {
 
 	unsigned char input[i];
 	for(int j = 0; j<i; j++) {
-		input[j] = 1;
+		input[j] = 1;//userInput[j];
 	}
 	
 	clock_t begin = clock(), delta, deltaA;
@@ -612,7 +960,7 @@ int main(void) {
 	
 
 
-
+	uint64_t shares64 = 1;
 
 
 	//Sharing secrets
@@ -628,8 +976,9 @@ int main(void) {
 		for (int j = 0; j < i; j++) {
 			shares[k][2][j] = input[j] ^ shares[k][0][j] ^ shares[k][1][j];
 		}
-
 	}
+
+
 	deltaSS = clock() - beginSS;
 	int inMilli = deltaSS * 1000 / CLOCKS_PER_SEC;
 	totalSS = inMilli;
@@ -649,46 +998,48 @@ int main(void) {
 	totalRandom = inMilli;
 
 
-	FILE *file2;
 
-	file2 = fopen("values.bin", "wb");
-	if (!file2) {
+	// Store all values!!
+
+	FILE *file, *file2;
+
+	char outputFile[3*sizeof(int) + 8];
+
+	file = fopen("values.bin", "wb");
+	if (!file) {
 		printf("Unable to open file!");
 		return 1;
 	}
-	fwrite(input, sizeof(unsigned char), i, file2);
-	fwrite(keys, sizeof(unsigned char), NUM_ROUNDS*3*16, file2);
-	fwrite(rs, sizeof(unsigned char), NUM_ROUNDS*3*4, file2);
-	fwrite(shares, sizeof(unsigned char), NUM_ROUNDS*3*i, file2);
+	fwrite(input, sizeof(unsigned char), i, file);
+	fwrite(keys, sizeof(unsigned char), NUM_ROUNDS*3*16, file);
+	fwrite(rs, sizeof(unsigned char), NUM_ROUNDS*3*4, file);
+	fwrite(shares, sizeof(unsigned char), NUM_ROUNDS*3*i, file);
 
-
-
-	uint8_t *views_u8;
 
 	//Running MPC-SHA1
 	clock_t beginSha = clock(), deltaSha;
 	#pragma omp parallel for
 	for(int k=0; k<NUM_ROUNDS; k++) {
 		as[k] = commit(i, shares[k], randomness[k], rs[k], localViews[k]);
-		
-		for(int j=0; j<3; j++) {
-			free(randomness[k][j]);
-		}
-
 	}
 	deltaSha = clock() - beginSha;
 	inMilli = deltaSha * 1000 / CLOCKS_PER_SEC;
 	totalSha = inMilli;
-	
-	fwrite(localViews, sizeof(View), NUM_ROUNDS * 3, file2);
-	
-	fclose(file2);
 
+	fwrite(localViews, sizeof(View), NUM_ROUNDS * 3, file);
+	
+	fclose(file);
+
+
+	uint8_t* keys_aux = &keys[0][0];
+	uint8_t *v = localViews[0][0].y;
 
 	//Committing
+	
 	clock_t beginHash = clock(), deltaHash;
 	#pragma omp parallel for
 	for(int k=0; k<NUM_ROUNDS; k++) {
+
 		unsigned char hash1[SHA256_DIGEST_LENGTH];
 		H(keys[k][0], localViews[k][0], rs[k][0], &hash1);
 		memcpy(as[k].h[0], &hash1, 32);
@@ -697,6 +1048,8 @@ int main(void) {
 		H(keys[k][2], localViews[k][2], rs[k][2], &hash1);
 		memcpy(as[k].h[2], &hash1, 32);
 	}
+	
+
 	deltaHash = clock() - beginHash;
 				inMilli = deltaHash * 1000 / CLOCKS_PER_SEC;
 				totalHash += inMilli;
@@ -708,34 +1061,12 @@ int main(void) {
 	clock_t beginE = clock(), deltaE;
 	int es[NUM_ROUNDS];
 	uint32_t finalHash[8];
-	uint8_t *hash_aux;
-	//printf("\n\n\nfinalHash = { ");
+	uint8_t *aux;
 	for (int j = 0; j < 8; j++) {
 		finalHash[j] = as[0].yp[0][j]^as[0].yp[1][j]^as[0].yp[2][j];
-		hash_aux = &as[0].yp[1][j];
-		//printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
+		aux = &finalHash;
+		
 	}
-	//printf("}\n\n\n");
-
-	printf("\n\n\na.yp[0] = { ");
-	for (int j = 0; j < 8; j++) {
-		hash_aux = &as[0].yp[0][j];
-		printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	printf("}\n\n\n");
-	printf("\n\n\na.yp[1] = { ");
-	for (int j = 0; j < 8; j++) {
-		hash_aux = &as[0].yp[1][j];
-		printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	printf("}\n\n\n");
-	printf("\n\n\na.yp[2] = { ");
-	for (int j = 0; j < 8; j++) {
-		hash_aux = &as[0].yp[2][j];
-		printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	printf("}\n\n\n");
-
 	H3(finalHash, as, NUM_ROUNDS, es);
 	deltaE = clock() - beginE;
 	int inMilliE = deltaE * 1000 / CLOCKS_PER_SEC;
@@ -745,65 +1076,20 @@ int main(void) {
 	clock_t beginZ = clock(), deltaZ;
 	z* zs = malloc(sizeof(z)*NUM_ROUNDS);
 
-	//printf("\n\n\nes = {");
 	#pragma omp parallel for
 	for(int i = 0; i<NUM_ROUNDS; i++) {
-		//printf("%d, ", es[i]);
 		zs[i] = prove(es[i],keys[i],rs[i], localViews[i]);
-		/*
-		printf("zs[0] = {\n\n");
-		printf("key1 = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ke[j]);
-		}
-		printf("}\n\nkey2 = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ke1[j]);
-		}
-		
-		printf("}\n\nview1.x = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ve.x[j]);
-		}
-		
-		printf("}\n\nview1.y = {");
-		views_u8 = &zs[i].ve.y[0];
-		for(int j=0;j<16;j++){
-			printf("%u, ",views_u8[j]);
-		}
-		
-		printf("}\n\nview2.x = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ve1.x[j]);
-		}
-		views_u8 = &zs[i].ve1.y[0];
-		printf("}\n\nview2.y = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",views_u8[j]);
-		}
-		printf("}\n\nre1 = {");
-		for(int j=0;j<4;j++){
-			printf("%u, ",zs[i].re[j]);
-		}
-		printf("}\n\nre2 = {");
-		for(int j=0;j<4;j++){
-			printf("%u, ",zs[i].re1[j]);
-		}
-		printf("}\n\n}\n\n");
-		*/
 	}
-		
-		
-	//printf("}\n\n\n");
 	deltaZ = clock() - beginZ;
 	int inMilliZ = deltaZ * 1000 / CLOCKS_PER_SEC;
-	
+
+
 
 	//Writing to file
 	clock_t beginWrite = clock();
-	FILE *file;
+	//FILE *file;
 
-	char outputFile[3*sizeof(int) + 8];
+	//char outputFile[3*sizeof(int) + 8];
 	sprintf(outputFile, "out%i.bin", NUM_ROUNDS);
 	file = fopen(outputFile, "wb");
 	if (!file) {
@@ -815,9 +1101,6 @@ int main(void) {
 
 	fclose(file);
 
-
-
-
 	clock_t deltaWrite = clock()-beginWrite;
 	free(zs);
 	int inMilliWrite = deltaWrite * 1000 / CLOCKS_PER_SEC;
@@ -827,6 +1110,7 @@ int main(void) {
 	inMilli = delta * 1000 / CLOCKS_PER_SEC;
 
 	int sumOfParts = 0;
+
 	/*
 	printf("Generating A: %ju\n", (uintmax_t)inMilliA);
 	printf("	Generating keys: %ju\n", (uintmax_t)totalCrypto);
@@ -845,7 +1129,7 @@ int main(void) {
 	printf("Writing file: %ju\n", (uintmax_t)inMilliWrite);
 	printf("Total: %d\n",inMilli);
 	printf("\n");
-	printf("Proof output to file %s", outputFile);
+	printf("Proof output to file %s\n\n", outputFile);
 	*/
 	openmp_thread_cleanup();
 	cleanup_EVP();

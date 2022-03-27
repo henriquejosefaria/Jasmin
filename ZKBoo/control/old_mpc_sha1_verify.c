@@ -49,10 +49,10 @@ int main(void) {
 	fread(&zs, sizeof(z), NUM_ROUNDS, file);
 	fclose(file);
 
+
 	uint32_t y[8];
 	reconstruct(as[0].yp[0],as[0].yp[1],as[0].yp[2],y);
-	uint8_t *ty;
-	
+
 	printf("Proof for hash: ");
 	for(int i=0;i<8;i++) {
 		printf("%02X", y[i]);
@@ -71,14 +71,12 @@ int main(void) {
 	int inMilliE = deltaE * 1000 / CLOCKS_PER_SEC;
 	printf("Generating E: %ju\n", (uintmax_t)inMilliE);
 
-	
+
 	clock_t beginV = clock(), deltaV;
 	#pragma omp parallel for
-	for(int i = 1; i<2; i++) {
-		//printf("-*- round %d -*-\n",i );
-
-		//printf("\ne[%d] = %d\n",i,es[i]);
+	for(int i = 0; i<1; i++) {
 		int verifyResult = verify(as[i], es[i], zs[i]);
+
 		if (verifyResult != 0) {
 			printf("Not Verified %d\n", i);
 		}

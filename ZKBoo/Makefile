@@ -18,19 +18,17 @@ full:
 	cp $(COMPILED)/ZKBoo_decrypt.s .
 	gcc $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
 	clear
-	./a.out
+	time ./a.out
 
 
 test:
 	clear
 	gcc -w $(CFLAGS) $(CONTROL_FILES) control/ZKBoo.c
-	./a.out
-	#gcc -w $(CFLAGS) control/SHA256_C.c
-	#./a.out
-	#gcc -w $(CFLAGS) $(ASSEMBLEY_DEBUG_FILES) ZKBoo.c
-	#./a.out
+	time ./a.out
+	gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
+	time ./a.out
 	gcc -w $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
-	./a.out
+	time ./a.out
 
 
 H:

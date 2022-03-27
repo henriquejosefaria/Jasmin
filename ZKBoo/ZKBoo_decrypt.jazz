@@ -8,42 +8,72 @@
 
 
 inline
-fn GETBIT_EXTENDED(stack u32[8] aux, stack u32 bit_idx) -> reg u32 {
+fn GETBIT_u32_v2(reg u8 x, reg u64 bit_idx) -> reg u8 {
 
-	reg u32 selectedBit;
-	reg u32 byte_idx, bit_aux;
+    while(bit_idx > 0){
+        x = x >> 1;
+        bit_idx -= 1;
+    }
 
-	
-	byte_idx =  bit_idx / 32;
-	bit_idx = bit_idx;
+    x &= 0x01; 
+    
+    return x;   
+}
 
-	selectedBit = aux[(int) byte_idx];
-    byte_idx *= 32;
-    bit_idx -= byte_idx;
+inline
+fn GETBIT_EXTENDED(stack u32[8] aux, stack u64 bit_idx) -> reg u8 {
 
-	selectedBit = selectedBit >> bit_idx; 
-	selectedBit &= 0x01;
+    reg u8 selectedBit;
+    reg u64 bit_aux;
+    reg u64 byte_aux;
+    
+    bit_aux = bit_idx;
+    byte_aux = 0;
 
-	selectedBit = 0;
+    while(bit_aux >= 8){
+        byte_aux += 1;
+        bit_aux -= 8;
+    }
 
-	return  selectedBit;	
+    selectedBit = aux[u8 (int)byte_aux];
+
+    selectedBit = GETBIT_u32_v2(selectedBit, bit_aux);
+
+    return  selectedBit;    
 }
 
 inline
 fn GETBIT_u32(reg u32 x, reg u64 bit_idx) -> reg u32 {
+    
+    reg u64 aux;
 
-	reg u32 n;
+    aux = bit_idx;
 
-	n = bit_idx;
+    while(aux > 0){
+        x = x >> 1;
+        aux -= 1;
+    }
 
-	while(n > 0){
-		x >>= 1;
-		n -= 1;
-	}
+    x &= 0x01; 
+    
+    return x;   
+}
 
-	x &= 0x01; 
-	
-	return x;	
+inline
+fn GETBIT_u32_left(reg u32 x, reg u64 bit_idx) -> reg u32 {
+    
+    reg u64 aux;
+
+    aux = bit_idx;
+
+    while(aux > 0){
+        x = x >> 1;
+        aux -= 1;
+    }
+
+    x &= 1; 
+    
+    return x;   
 }
 
 
@@ -211,6 +241,83 @@ fn mpc_LEFTROTATE2(stack u32[2] x, reg u64 i, stack u32[2] z) -> stack u32[2] {
 	return z;
 }
 
+inline
+fn mpc_LEFTROTATE2_5(stack u32[2] a, stack u32[2] temp) -> stack u32[2] {
+    
+    reg u32 storage_u32, storage_aux; 
+    
+    storage_u32 = a[0];
+    storage_aux = a[0];
+    storage_u32 = storage_u32 << 5;
+    storage_aux = storage_aux >> 27;
+    storage_u32 |= storage_aux;
+    temp[0] = storage_u32;
+
+    storage_u32 = a[1];
+    storage_aux = a[1];
+    storage_u32 = storage_u32 << 5;
+    storage_aux = storage_aux >> 27;
+    storage_u32 |= storage_aux;
+    temp[1] = storage_u32;
+
+    return temp;
+}
+
+inline
+fn mpc_LEFTROTATE_w(stack u32[2] x, reg u64 i, stack u32[160] w, reg u64 pos_w) -> stack u32[160] {
+    
+    reg u32 storage_u32, x_0;
+    reg u64 n;
+
+    storage_u32 = x[0];
+    n = i;
+    while(n > 0){
+        storage_u32 <<= 1;
+        n -= 1;
+    }
+
+    n = 32;
+    n -= i;
+
+    x_0 = x[0];
+
+    while(n > 0){
+        x_0 >>= 1;
+
+        n -= 1;
+    }
+    
+    storage_u32 |= x_0;
+
+    w[(int)pos_w] = storage_u32;
+
+    return w;
+}
+
+inline
+fn w_to_temp(stack u32[2] temp, stack u32[160] w, reg u64 pos_w) -> stack u32[2]{
+
+    reg u32 aux0, aux1;
+
+    aux0 = w[(int)pos_w - 3];
+    aux1 = w[(int)pos_w - 8];
+
+    temp[0] = aux0;
+    temp[0] ^= aux1;
+
+
+    aux0 = w[(int)pos_w - 14];
+
+    temp[0] ^= aux0;
+
+
+    aux0 = w[(int)pos_w - 16];
+
+    temp[0] ^= aux0;
+
+
+    return temp;
+}
 
 /******************************
 *                             *
@@ -219,113 +326,248 @@ fn mpc_LEFTROTATE2(stack u32[2] x, reg u64 i, stack u32[2] z) -> stack u32[2] {
 ******************************/
 
 
+
 fn ROTLEFT(reg u32 a, reg u8 b) -> reg u32{
 
-	a = ((a << b) | (a >> (32 - b)));
-	return a;
+    a = ((a << b) | (a >> (32 - b)));
+    return a;
 } 
 
 fn ROTRIGHT(reg u32 a, reg u8 b) -> stack u32 {
 
-	a = ((a >> b) | (a << (32 - b)));
-	return a;
-}
-
-inline
-fn ROTRIGHT_ep(reg u32 a, reg u8 b, reg u32 res) -> stack u32 {
-
     a = ((a >> b) | (a << (32 - b)));
-    res ^= a;
-
-    return res;
+    return a;
 }
 
-inline
-fn EP0(reg u32 x, reg u32 res) -> reg u32{
+fn ROTRIGHT_2(reg u32 a) -> stack u32 {
 
-    reg u32 aux, aux0, aux1, aux2;
-    reg u8 b;
+    reg u32 a_aux;
 
-    aux = x;
+    a_aux = a;
 
-    res = 0;
-    b = 2;
-    res = ROTRIGHT_ep(aux,b,res);
+    a >>= 2;
+    a_aux <<= 30;
 
-    b = 13;
-    res = ROTRIGHT_ep(aux,b,res);
+    a |= a_aux;
 
-    b = 22;
-    res = ROTRIGHT_ep(aux,b,res);
-
-    return res;
+    return a;
 }
 
+fn ROTRIGHT_13(reg u32 a) -> stack u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 13;
+    a_aux <<= 19;
+
+    a |= a_aux;
+
+    return a;
+}
+
+fn ROTRIGHT_22(reg u32 a) -> stack u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 22;
+    a_aux <<= 10;
+
+    a |= a_aux;
+
+    return a;
+}
+
+fn ROTRIGHT_6(reg u32 a) -> stack u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 6;
+    a_aux <<= 26;
+
+    a |= a_aux;
+
+    return a;
+}
+
+fn ROTRIGHT_11(reg u32 a) -> stack u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 11;
+    a_aux <<= 21;
+
+    a |= a_aux;
+
+    return a;
+}
+
+fn ROTRIGHT_25(reg u32 a) -> stack u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 25;
+    a_aux <<= 7;
+
+    a |= a_aux;
+
+    return a;
+}
+
+
 inline
-fn EP1(reg u32 x, reg u32 res) -> reg u32 {
+fn EP0(stack u32 x) -> reg u32{
 
-    reg u32 aux, aux0, aux1, aux2;
-    reg u8 b;
+    reg u32 res, res1, res2;
+    stack u32 r,r1,r2;
 
-    aux = x;
 
-    res = 0;
-    b = 6;
-    res = ROTRIGHT_ep(aux,b,res);
+    res = x;
+    res = ROTRIGHT_2(res);
+    r = res;
 
-    b = 11;
-    res = ROTRIGHT_ep(aux,b,res);
+    res1 = x;
+    res1 = ROTRIGHT_13(res1);
+    r1 = res1;
+
+
+    res2 = x;
+    res2 = ROTRIGHT_22(res2);
+    r2 = res2;
     
-    b = 25;
-    res = ROTRIGHT_ep(aux,b,res);
+    res = r;
+    res1 = r1;
+    res ^= res1;
+    res2 = r2;
+    res ^= res2;
 
+    return res;
+}
+
+inline
+fn EP1(stack u32 x) -> reg u32{
+
+    reg u32 res, res1, res2;
+
+    res = x;
+    res = ROTRIGHT_6(res);
+
+    res1 = x;
+    res1 = ROTRIGHT_11(res1);
+    
+    res2 = x;
+    res2 = ROTRIGHT_25(res2);
+
+    res ^= res1;
+    res ^= res2;
 
     return res;
 } 
 
-inline
-fn ROTRIGHT_sig(reg u32 a, reg u8 b, reg u32 aux) -> stack u32 {
 
-    aux = ((a >> b) | (a << (32 - b)));
-    return aux;
+fn ROTRIGHT_7(reg u32 a) -> reg u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 7;
+    a_aux <<= 25;
+
+    a ^= a_aux;
+
+    return a;
+}
+
+fn ROTRIGHT_18(reg u32 a) -> reg u32 {
+
+    reg u32 a_aux;
+
+    a_aux = a;
+
+    a >>= 18;
+    a_aux <<= 14;
+
+    a ^= a_aux;
+
+    return a;
+}
+
+fn ROTRIGHT_17(reg u32 a) -> reg u32 {
+
+    reg u32 a1, a2;
+
+    a1 = a;
+    a1 >>= 17;
+
+    a2 = a;
+    a2 <<= 15;
+
+    a1 |= a2;
+
+    return a1;
+}
+
+fn ROTRIGHT_19(reg u32 a) -> reg u32 {
+
+    reg u32 a1, a2;
+
+    a1 = a;
+    a1 >>= 19;
+
+    a2 = a;
+    a2 <<= 13;
+
+    a1 |= a2;
+
+    return a1;
 }
 
 inline
 fn SIG0(reg u32 x) -> reg u32 {
 
-    reg u32 aux0, aux1, aux2;
-    reg u8 b;
+    reg u32 x0, x1;
 
+    x0 = x;
+    x0 = ROTRIGHT_7(x0);
 
-    b = 7;
-    aux0 = ROTRIGHT_sig(x,b,aux0);
+    x1 = x;
+    x1 = ROTRIGHT_18(x1);
 
-    b=18;
-    aux1 = ROTRIGHT_sig(x,b,aux1);
+    x >>= 3;
 
-    aux2 = x >> 3;
+    x0 ^= x1;
+    x0 ^= x;
 
-    x = aux0 ^ aux1 ^ aux2;
-
-    return x;
+    return x0;
 }
 
 inline
 fn SIG1(reg u32 x) -> reg u32{
-    reg u32 aux, aux0, aux1, aux2;
-    reg u8 b;
+    reg u32 x0, x1, x2;
 
-    b = 17;
-    aux0 = ROTRIGHT_sig(x,b,aux0);
+    x0 = x;
+    x0 = ROTRIGHT_17(x0);
     
-    b = 19;
-    aux1 = ROTRIGHT_sig(x,b,aux1);
+    x1 = x;
+    x1 = ROTRIGHT_19(x1);
 
-    aux2 = (x >> 10); 
+    x2 = x;
+    x2 = (x2 >> 10); 
 
-    x = aux0 ^ aux1 ^ aux2;
+    x0 ^= x1;
+    x0 ^= x2;
 
-    return x;
+    return x0;
 }
 
 inline
@@ -348,17 +590,20 @@ fn CH(stack u32 x, stack u32 y, stack u32 z) -> reg u32{
 inline
 fn MAJ(stack u32 x, stack u32 y, stack u32 z) -> reg u32{
 
-    stack u32 t0, t1;
+    reg u32 t0, t1, tx, ty, tz;
 
     t0 = x;
-    t0 &= y;
+    ty = y;
+    t0 = t0 & ty;
 
     t1 = x;
-    t1 &= z;
+    tz = z;
+    t1 &= tz;
     t0 ^= t1;
 
     t1 = y;
-    t1 &= z;
+    tz = z;
+    t1 &= tz;
     t0 ^= t1;
 
     return t0;
@@ -435,111 +680,221 @@ fn initializeK(stack u32[64] k) -> stack u32[64]{
 }
 
 inline
-fn sha256_transform(stack u32[8] ctx_state, stack u32[16] ctx_data)
+fn dbl_int_add(stack u32[2] ctx_bitlen, reg u64 c) -> stack u32[2] {
+
+    reg u32 a, b;
+    
+    a = ctx_bitlen[0];
+    
+    b = 0xffffffff;
+    b -= c;
+
+    if(a > b){
+        a = ctx_bitlen[1];
+        a += 1; 
+        ctx_bitlen[1] = a;
+    } else {
+        a += c;
+        ctx_bitlen[0] = a;
+    }
+
+    return ctx_bitlen;
+}
+
+inline
+fn compute_t1(stack u32 e, stack u32 f, stack u32 g, stack u32 h, stack u32[64] k, stack u32[64] m, reg u64 i) -> reg u32{
+
+    reg u32 t, t1;
+
+    t1 = h;
+        
+    t = EP1(e);
+    t1 += t;
+
+    t = CH(e,f,g);
+    t1 += t;
+
+    t = k[(int)i];
+    t1 += t;
+    
+    t = m[(int)i];
+    t1 += t;
+
+    return t1;
+}
+
+inline
+fn compute_t2(stack u32 a, stack u32 b, stack u32 c) -> reg u32{
+    
+    reg u32 t, t2;
+
+
+    t2 = EP0(a);
+    
+    t = MAJ(a, b, c); 
+    t2 += t;
+    
+
+    return t2;
+}
+
+inline
+fn sha256_transform(stack u32[8] ctx_state, stack u8[64] ctx_data) -> stack u32[8], stack u8[64]
 {
-    reg u32 a, b, c, d, e, f, g, h, t1, t2, temp;
+    stack u32 a, b, c, d, e, f, g, h;
+    reg u32 t0, t1, t2, temp;
 
     stack u32[64] m;
 
     reg u32 sig0, sig1;
 
-    reg u64 i, j;
+    reg u64 i, j,z;
 
     inline int idx;
 
+    reg u8 t8;
+
     stack u32[64] k;
     k = initializeK(k);
+    
 
-    j = 0;
+    /* IGUAL!! */
     i = 0;
+    z = 0;
     while(i < 16){
 
-        m[(int)j] = (ctx_data[(int)j]);
-        j += 1;
+        t0 = ctx_data[u32 (int)i];
+
+        t0 = #BSWAP_32(t0);
+
+        m[(int)i] = t0;
+
         i += 1;
     }
+    
 
+    /* IGUAL */
+    z = 0;
     while(i < 64){
-        sig0 = m[(int)i - 15];
-        sig1 = m[(int)i - 2];
 
-        sig0 = SIG0(sig0);
-        sig1 = SIG1(sig1);
+        j = i;
+        j -= 2;
+        temp = m[(int)j];
+        temp = SIG1(temp);
+        m[(int)i] = temp;
+
+        j = i;
+        j -= 7;
+        temp =  m[(int)j];
+        m[(int)i] += temp;
+
+        j = i;
+        j -= 15;
+        temp = m[(int)j];
+        temp = SIG0(temp);
+        m[(int)i] += temp;
+
+        j = i;
+        j -= 16;
+        temp =  m[(int)j];
+        m[(int)i] += temp;
         
-        m[(int)i] = sig1;
-        temp = m[(int)i - 7];
-        m[(int)i] += temp;
-        m[(int)i] += sig0;
-        temp = m[(int)i - 16];
-        m[(int)i] += temp;
-
         i += 1;
     } 
+    
 
-    a = ctx_state[0];
-    b = ctx_state[1];
-    c = ctx_state[2];
-    d = ctx_state[3];
-    e = ctx_state[4];
-    f = ctx_state[5];
-    g = ctx_state[6];
-    h = ctx_state[7];
+    temp = ctx_state[0];
+    a = temp;
+    temp = ctx_state[1];
+    b = temp;
+    temp = ctx_state[2];
+    c = temp;
+    temp = ctx_state[3];
+    d = temp;
+    temp = ctx_state[4];
+    e = temp;
+    temp = ctx_state[5];
+    f = temp;
+    temp = ctx_state[6];
+    g = temp;
+    temp = ctx_state[7];
+    h = temp;
+
     
     i = 0;
+    j = 0;
     while(i < 64){
 
-        sig0 = EP1(e,sig0);
-        sig1 = CH(e,f,g);
+        t1 = compute_t1(e, f, g, h, k, m, i);
+        t2 = compute_t2(a,b,c);
+        
+        t0 = g;
+        h = t0;
 
-        t1 = h;
-        t1 += sig0;
-        t1 += sig1;
-        t1 += k[(int)i];
-        t1 += m[(int)i];
+        t0 = f;
+        g = t0;
 
-        sig0 = EP0(a,sig0);
-        sig1 = MAJ(a,b,c);
+        t0 = e;
+        f = t0;
 
-        t2 = sig0 + sig1;
+        t0 = d;
+        t0 += t1;
+        e = t0;
 
-        h = g;
-        g = f;
-        f = e;
-        e = d;
-        e += t1;
-        d = c;
-        c = b;
-        b = a;
-        a = t1;
-        a += t2;
 
+        t0 = c;
+        d = t0;
+
+        t0 = b;
+        c = t0;
+
+        t0 = a;
+        b = t0;
+
+        t0 = t1;
+        t0 += t2;
+        a = t0;
+
+        j += 4;
         i += 1;
     }
 
-    ctx_state[0] += a;
-    ctx_state[1] += b;
-    ctx_state[2] += c;
-    ctx_state[3] += d;
-    ctx_state[4] += e;
-    ctx_state[5] += f;
-    ctx_state[6] += g;
-    ctx_state[7] += h;
+    temp = ctx_state[0];
+    temp += a;
+    ctx_state[0] = temp;
+
+    temp = ctx_state[1];
+    temp += b;
+    ctx_state[1] = temp;
+
+    temp = ctx_state[2];
+    temp += c;
+    ctx_state[2] = temp;
+
+    temp = ctx_state[3];
+    temp += d;
+    ctx_state[3] = temp;
+
+    temp = ctx_state[4];
+    temp += e;
+    ctx_state[4] = temp;
+
+    temp = ctx_state[5];
+    temp += f;
+    ctx_state[5] = temp;
+
+    temp = ctx_state[6];
+    temp += g;
+    ctx_state[6] = temp;
+
+    temp = ctx_state[7];
+    temp += h;
+    ctx_state[7] = temp;
+    
+    return ctx_state, ctx_data;
 }
 
-inline
-fn sha256_init(stack u32[8] ctx_state, stack u32 ctx_datalen, stack u64 ctx_bitlen) 
-{
-    ctx_datalen = 0;
-    ctx_bitlen = 0;
-    ctx_state[0] = 0x6a09e667;
-    ctx_state[1] = 0xbb67ae85;
-    ctx_state[2] = 0x3c6ef372;
-    ctx_state[3] = 0xa54ff53a;
-    ctx_state[4] = 0x510e527f;
-    ctx_state[5] = 0x9b05688c;
-    ctx_state[6] = 0x1f83d9ab;
-    ctx_state[7] = 0x5be0cd19;
-}
+
 
 
 
@@ -550,160 +905,202 @@ fn sha256_init(stack u32[8] ctx_state, stack u32 ctx_datalen, stack u64 ctx_bitl
 *********************/
 
 inline
-fn sha256_update1(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[4] data, inline int len) -> stack u64, stack u64
+fn sha256_update1(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[16] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
-    reg u64 i;
+    reg u64 i, temp;
+    reg u8 t;
+    stack u64 i_aux;
+    reg u64 c;
 
     i = 0;
-
     while(i < len){
 
-    	ctx_data[(int)ctx_datalen] = data[(int)i];
-    	ctx_datalen += 1;
+        t = data[(int)i];
+        i_aux = i;
 
-    	if(ctx_datalen == 16){
-    		sha256_transform(ctx_state, ctx_data);
-    		ctx_bitlen += 512;
-    		ctx_datalen = 0;
-    	}
+        temp = ctx_datalen;
+        ctx_data[(int)temp] = t;
+        temp += 1;
+        ctx_datalen = temp;
 
-    	i += 1;
+        if(ctx_datalen == 64){
+            ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+            c = 512;
+            ctx_bitlen = dbl_int_add(ctx_bitlen,c);
+            ctx_datalen = 0;
+        }
+        
+        i = i_aux;
+        i += 1;
     }
-
-    return ctx_datalen, ctx_bitlen;
+    
+    return ctx_state, ctx_data, ctx_datalen, ctx_bitlen;
 }
 
+
 inline
-fn sha256_update2(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[16] data, inline int len) -> stack u64, stack u64
+fn sha256_update2(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[64] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
-    reg u64 i;
+    reg u64 i, temp;
+    reg u8 t;
+    stack u64 i_aux;
 
     i = 0;
-
     while(i < len){
+        i_aux = i;
+        t = data[(int)i];
 
-    	ctx_data[(int)ctx_datalen] = data[(int)i];
-    	ctx_datalen += 1;
+        temp = ctx_datalen;
+        ctx_data[(int)temp] = t;
+        temp += 1;
+        ctx_datalen = temp;
 
-    	if(ctx_datalen == 16){
-    		sha256_transform(ctx_state, ctx_data);
-    		ctx_bitlen += 512;
-    		ctx_datalen = 0;
-    	}
-    	i += 1;
+        if(ctx_datalen == 64){
+            ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+            temp = 512;
+            ctx_bitlen = dbl_int_add(ctx_bitlen,temp);
+            ctx_datalen = 0;
+        }
+
+        i = i_aux;
+        i += 1;
     }
-    return ctx_datalen, ctx_bitlen;
+    return ctx_state, ctx_data, ctx_datalen, ctx_bitlen;
 }
 
 inline
-fn sha256_update3(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[370] data, inline int len) -> stack u64, stack u64
+fn sha256_update3(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[1480] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
-    reg u64 i;
+    reg u64 i, temp;
+    reg u8 t;
+    stack u64 i_aux;
+    reg u32 c;
 
     i = 0;
-
     while(i < len){
+        t = data[(int)i];
 
-    	ctx_data[(int)ctx_datalen] = data[(int)i];
-    	ctx_datalen += 1;
+        temp = ctx_datalen;
+        ctx_data[(int)temp] = t;
+        temp += 1;
+        ctx_datalen = temp;
 
-    	if(ctx_datalen == 16){
-    		sha256_transform(ctx_state, ctx_data);
-    		ctx_bitlen += 512;
-    		ctx_datalen = 0;
-    	}
-    	i += 1;
+        if(ctx_datalen == 64){
+            ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+            temp = 512;
+            ctx_bitlen = dbl_int_add(ctx_bitlen,temp);
+            ctx_datalen = 0;
+        }
+
+        i += 1;
     }
-    return ctx_datalen, ctx_bitlen;
+    return ctx_state, ctx_data, ctx_datalen, ctx_bitlen;
 }
 
+
 inline
-fn sha256_update4(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32 data, inline int len) -> stack u64, stack u64
+fn sha256_update4(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[4] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
-	reg u64 aux;
+    reg u64 i, temp;
+    reg u8 t;
+    stack u64 i_aux;
 
-    ctx_data[(int)ctx_datalen] = data;
-    aux = ctx_datalen;
-    aux += 1;
-    ctx_datalen = aux;
+    i = 0;
+    while(i < len){
+        t = data[(int)i];
+        i_aux = i;
+        
+        temp = ctx_datalen;
+        ctx_data[(int)temp] = t;
+        temp += 1;
+        ctx_datalen = temp;
+        
+        if(temp == 64){
+            ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+            temp = 512;
+            ctx_bitlen = dbl_int_add(ctx_bitlen,temp);
+            ctx_datalen = 0;
+        }
 
-    if(ctx_datalen == 16){
-        sha256_transform(ctx_state, ctx_data);
-        ctx_bitlen += 512;
-        ctx_datalen = 0;
+        i = i_aux;
+        i += 1;
     }
 
-    return ctx_datalen, ctx_bitlen;
+    return ctx_state, ctx_data, ctx_datalen, ctx_bitlen;
 }
 
-
 inline
-fn sha256_final1(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[8] hash) -> stack u32[8]
+fn sha256_final1(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u32[8] hash) -> stack u32[8], stack u8[64], stack u32[8]
 {
     reg u64 i, temp;
     reg u32 value;
-    reg u64 addrs;
+    reg u32 stored_value;
+    reg u64 a_temp;
+    stack u64 i_aux;
+    reg u8 t8;
+
+    // Pad whatever data is left in the buffer.
+    
 
     i = ctx_datalen;
 
-
-    // Pad whatever data is left in the buffer.
-    if (ctx_datalen < 14) {
-        ctx_data[(int)i] = 0x80000000;
+    if (i < 56) {
+        ctx_data[(int)i] = 0x80;
         i += 1;
-        while (i < 14){
-            ctx_data[(int)i] = 0x00000000;
+        while (i < 56){
+            ctx_data[(int)i] = 0x00;
             i += 1;
         }
-    }
+    }    
     else {
-        ctx_data[(int)i] = 0x80000000;
+        ctx_data[(int)i] = 0x80;
         i += 1;
-        while (i < 16){
-            ctx_data[(int)i] = 0x00000000;
+        while (i < 64){
+            ctx_data[(int)i] = 0x00;
             i += 1;
         }
-        sha256_transform(ctx_state, ctx_data);
+        ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
 
         i = 0;
-
-        while(i < 14){
-        	ctx_data[(int)i] = 0x00000000;
-        	i += 1;
+        while(i < 56){
+            ctx_data[(int)i] = 0x00;
+            i += 1;
         }
     }
+
 
     // Append to the padding the total message's length in bits and transform.
     
-    ctx_bitlen += ctx_datalen * 8;
 
-    temp = ctx_bitlen;
-    temp += ctx_bitlen >> 8;
-    temp += ctx_bitlen >> 16;
-    temp += ctx_bitlen >> 24;
-    temp += ctx_bitlen >> 32;
-    temp += ctx_bitlen >> 40;
-    temp += ctx_bitlen >> 48;
-    temp += ctx_bitlen >> 56;
+    temp = ctx_datalen;
+    temp *= 8;
+    ctx_bitlen = dbl_int_add(ctx_bitlen, temp);
 
-    ctx_data[u64 7] = temp;
+    value = ctx_bitlen[0];
+    value = #BSWAP_32(value);
+    ctx_data[u32 15] = value;
+
+    value = ctx_bitlen[1];
+    value = #BSWAP_32(value);
+    ctx_data[u32 14] = value;
     
-    sha256_transform(ctx_state, ctx_data);
+    ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
 
-    // Since this implementation uses little endian byte ordering and SHA uses big endian,
-    // reverse all the bytes when copying the final state to the output hash.
-
+    
     i = 0;
     while(i < 8){
 
         value = ctx_state[(int)i];
 
+        value = #BSWAP_32(value);
+
         hash[(int)i] = value;
 
         i += 1;
-    } 
+    }
+    
 
-    return hash;
+    return ctx_state, ctx_data, hash;
 }
 
 
@@ -717,39 +1114,39 @@ inline
 fn H(reg u64 zs, stack u32[8] hash_p1, stack u32[8] hash_p2, reg u64 mpc_round) -> stack u32[8], stack u32[8] {
 
 	stack u64 ctx_datalen;
-	stack u64 ctx_bitlen;
+	stack u32[2] ctx_bitlen;
 	stack u32[8] ctx_state;
-    stack u32[16] ctx_data;
+    stack u8[64] ctx_data;
 
 
-    stack u32[4] k_p1, k_p2;
-    stack u32[16] view_x_p1, view_x_p2;
-    stack u32[370] view_y_p1, view_y_p2;
-    stack u32 rs_p1, rs_p2;
+    stack u8[16] k_p1, k_p2;
+    stack u8[64] view_x_p1, view_x_p2;
+    stack u8[1480] view_y_p1, view_y_p2;
+    stack u8[4] rs_p1, rs_p2;
 
     reg u64 i, temp_zs;
 
-
-	sha256_init(ctx_state, ctx_datalen, ctx_bitlen);
-
+    reg u8 t;
 
 	/* Copy Players' shares */
 
-	temp_zs = mpc_round * 782;					// mpc_round * 782 + 0 (player)  <= u32
+	temp_zs = mpc_round * 3128;					// mpc_round * 782 + 0 (player)  <= u32
 
 	i = 0;
-	while(i < 4){
+	while(i < 16){
 
-		k_p1[(int)i] = [zs + (int)temp_zs];
+        t = (u8)[zs + (int)temp_zs];
+		k_p1[(int)i] = t;
 
 		temp_zs += 1;
 		i += 1;
 	}
 
 	i = 0;
-	while(i < 4){
+	while(i < 16){
 
-		k_p2[(int)i] = [zs + (int)temp_zs];
+        t = (u8)[zs + (int)temp_zs];
+		k_p2[(int)i] = t;
 
 		temp_zs += 1;
 		i += 1;
@@ -759,32 +1156,40 @@ fn H(reg u64 zs, stack u32[8] hash_p1, stack u32[8] hash_p2, reg u64 mpc_round) 
 	/* Copy Players' Views */
 
 	i = 0;
-	while(i < 16){
-		view_x_p1[(int)i] = [zs + (int)temp_zs];
+	while(i < 64){
+
+        t = (u8)[zs + (int)temp_zs];
+		view_x_p1[(int)i] = t;
 
 		temp_zs += 1;
 		i += 1;
 	}
 
 	i = 0;
-	while(i < 370){
-		view_y_p1[(int)i] = [zs + (int)temp_zs];
+	while(i < 1480){
+
+        t = (u8)[zs + (int)temp_zs];
+		view_y_p1[(int)i] = t;
 
 		temp_zs += 1;
 		i += 1;
 	}
 
 	i = 0;
-	while(i < 16){
-		view_x_p2[(int)i] = [zs + (int)temp_zs];
+	while(i < 64){
+
+        t = (u8)[zs + (int)temp_zs];
+		view_x_p2[(int)i] = t;
 
 		temp_zs += 1;
 		i += 1;
 	}
 
 	i = 0;
-	while(i < 370){
-		view_y_p2[(int)i] = [zs + (int)temp_zs];
+	while(i < 1480){
+
+        t = (u8)[zs + (int)temp_zs];
+		view_y_p2[(int)i] = t;
 
 		temp_zs += 1;
 		i += 1;
@@ -793,27 +1198,67 @@ fn H(reg u64 zs, stack u32[8] hash_p1, stack u32[8] hash_p2, reg u64 mpc_round) 
 
 	/* Copy Players' Rs */
 
-	rs_p1 = [zs + (int)temp_zs];
+    i = 0;
+    while(i < 4){
 
-	temp_zs += 1;
-	rs_p2 = [zs + (int)temp_zs];
+        t = (u8)[zs + (int)temp_zs];
+        rs_p1[(int)i] = t;
 
+        temp_zs += 1;
+        i += 1;
+    }
+	
+    i = 0;
+    while(i < 4){
+
+        t = (u8)[zs + (int)temp_zs];
+        rs_p2[(int)i] = t;
+
+        temp_zs += 1;
+        i += 1;
+    }
 
 	/* Hash Player1's info */
 
-	ctx_datalen, ctx_bitlen = sha256_update1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, k_p1, 4);
-	ctx_datalen, ctx_bitlen = sha256_update2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_x_p1, 16);
-	ctx_datalen, ctx_bitlen = sha256_update3(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_y_p1, 370);
-	ctx_datalen, ctx_bitlen = sha256_update4(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, rs_p1, 1);
-	hash_p1 = sha256_final1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash_p1);
+    ctx_datalen = 0;
+    ctx_bitlen[0] = 0;
+    ctx_bitlen[1] = 0;
+    ctx_state[0] = 0x6a09e667;
+    ctx_state[1] = 0xbb67ae85;
+    ctx_state[2] = 0x3c6ef372;
+    ctx_state[3] = 0xa54ff53a;
+    ctx_state[4] = 0x510e527f;
+    ctx_state[5] = 0x9b05688c;
+    ctx_state[6] = 0x1f83d9ab;
+    ctx_state[7] = 0x5be0cd19;
+
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, k_p1, 16);
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_x_p1, 64);
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update3(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_y_p1, 1480);
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update4(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, rs_p1, 4);
+	ctx_state, ctx_data, hash_p1 = sha256_final1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash_p1);
+
+
 
 	/* Hash Player2's info */
 
-	ctx_datalen, ctx_bitlen = sha256_update1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, k_p2, 4);
-	ctx_datalen, ctx_bitlen = sha256_update2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_x_p2, 16);
-	ctx_datalen, ctx_bitlen = sha256_update3(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_y_p2, 370);
-	ctx_datalen, ctx_bitlen = sha256_update4(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, rs_p2, 1);
-	hash_p2 = sha256_final1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash_p2);
+    ctx_datalen = 0;
+    ctx_bitlen[0] = 0;
+    ctx_bitlen[1] = 0;
+    ctx_state[0] = 0x6a09e667;
+    ctx_state[1] = 0xbb67ae85;
+    ctx_state[2] = 0x3c6ef372;
+    ctx_state[3] = 0xa54ff53a;
+    ctx_state[4] = 0x510e527f;
+    ctx_state[5] = 0x9b05688c;
+    ctx_state[6] = 0x1f83d9ab;
+    ctx_state[7] = 0x5be0cd19;
+
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, k_p2, 16);
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_x_p2, 64);
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update3(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, view_y_p2, 1480);
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update4(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, rs_p2, 4);
+	ctx_state, ctx_data, hash_p2 = sha256_final1(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash_p2);
 
 
 	return hash_p1, hash_p2;
@@ -829,123 +1274,131 @@ fn H(reg u64 zs, stack u32[8] hash_p1, stack u32[8] hash_p2, reg u64 mpc_round) 
 
 
 inline
-fn sha256_update5(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[8] data, inline int len) -> stack u64, stack u64
+fn sha256_update5(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[32] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
-    reg u64 i;
-
+    reg u64 i, temp;
+    reg u8 t;
+    stack u64 i_aux;
+    
     i = 0;
     while(i < len){
-
-    	ctx_data[(int)ctx_datalen] = data[(int)i];
-    	ctx_datalen += 1;
-
-    	if(ctx_datalen == 16){
-    		sha256_transform(ctx_state, ctx_data);
-    		ctx_bitlen += 512;
-    		ctx_datalen = 0;
-    	}
-
-    	i += 1;
-    }
-
-    return ctx_datalen, ctx_bitlen;
-}
-
-inline
-fn sha256_update6(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, reg u64 data, inline int len) -> stack u64, stack u64
-{
-    reg u64 i;
-
-    i = 0;
-    while(i < len){
-
-        ctx_data[(int)ctx_datalen] = (u32)[data + i];
-        ctx_datalen += 1;
-
-        if(ctx_datalen == 16){
-            sha256_transform(ctx_state, ctx_data);
-            ctx_bitlen += 512;
+        t = data[(int)i];
+        i_aux = i;
+        
+        temp = ctx_datalen;
+        ctx_data[(int)temp] = t;
+        temp += 1;
+        ctx_datalen = temp;
+        
+        if(ctx_datalen == 64){
+            ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+            temp = 512;
+            ctx_bitlen = dbl_int_add(ctx_bitlen,temp);
             ctx_datalen = 0;
         }
 
+        i = i_aux;
         i += 1;
     }
+    
 
-    return ctx_datalen, ctx_bitlen;
+    return ctx_state, ctx_data, ctx_datalen, ctx_bitlen;
 }
 
 inline
-fn sha256_update7(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, reg u64 data, inline int len) -> stack u64, stack u64
+fn sha256_update6(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[1920] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
-    reg u64 i;
+    reg u64 i, temp;
+    reg u8 t;
+    stack u64 i_aux;
 
     i = 0;
     while(i < len){
-
-        ctx_data[(int)ctx_datalen] = (u32)[data + 384 + i];
-        ctx_datalen += 1;
-
-        if(ctx_datalen == 16){
-            sha256_transform(ctx_state, ctx_data);
-            ctx_bitlen += 512;
+        t = data[(int)i];
+        i_aux = i;
+        
+        temp = ctx_datalen;
+        ctx_data[(int)temp] = t;
+        temp += 1;
+        ctx_datalen = temp;
+        
+        if(temp == 64){
+            ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+            temp = 512;
+            ctx_bitlen = dbl_int_add(ctx_bitlen,temp);
             ctx_datalen = 0;
         }
 
+        i = i_aux;
         i += 1;
     }
 
-    return ctx_datalen, ctx_bitlen;
+    
+    temp = ctx_datalen;
+    while(temp < 64){
+        ctx_data[(int)temp] = 0;
+        temp += 1;
+    }
+    
+
+    return ctx_state, ctx_data, ctx_datalen, ctx_bitlen;
 }
 
+
 inline
-fn sha256_final2(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_datalen, stack u64 ctx_bitlen, stack u32[8] hash) -> stack u32[8]
+fn sha256_final2(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u32[8] hash) -> stack u8[64], stack u32[8]
 {
     reg u64 i, temp;
     reg u64 j;
-    reg u32 t;
+    reg u32 t, value, stored_value;
+
+
+    // Pad whatever data is left in the buffer.
 
     i = ctx_datalen;
 
-    // Pad whatever data is left in the buffer.
-    if (ctx_datalen < 14) {
-        ctx_data[(int)i] = 0x80000000;
+    if (i < 56) {
+        ctx_data[(int)i] = 0x80;
         i += 1;
-        while (i < 14){
-            ctx_data[(int)i] = 0x00000000;
+        while (i < 56){
+            ctx_data[(int)i] = 0x00;
             i += 1;
         }
-    }
+    }    
     else {
-        ctx_data[(int)i] = 0x80000000;
+        ctx_data[(int)i] = 0x80;
         i += 1;
-        while (i < 16){
-            ctx_data[(int)i] = 0x00000000;
+        while (i < 64){
+            ctx_data[(int)i] = 0x00;
             i += 1;
         }
-        sha256_transform(ctx_state, ctx_data);
+        ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+
         i = 0;
-        while(i < 14){
-        	ctx_data[(int)i] = 0x00000000;
-        	i += 1;
+        while(i < 56){
+            ctx_data[(int)i] = 0x00;
+            i += 1;
         }
     }
+
 
     // Append to the padding the total message's length in bits and transform.
-
-    ctx_bitlen += ctx_datalen * 8;
-
-    temp = ctx_bitlen;
-    temp += ctx_bitlen >> 8;
-    temp += ctx_bitlen >> 16;
-    temp += ctx_bitlen >> 24;
-    temp += ctx_bitlen >> 32;
-    temp += ctx_bitlen >> 40;
-    temp += ctx_bitlen >> 48;
-    temp += ctx_bitlen >> 56;
-
-    ctx_data[u64 7] = temp;
     
-    sha256_transform(ctx_state, ctx_data);
+
+    temp = ctx_datalen;
+    temp *= 8;
+    ctx_bitlen = dbl_int_add(ctx_bitlen, temp);
+
+    value = ctx_bitlen[0];
+    value = #BSWAP_32(value);
+    ctx_data[u32 15] = value;
+
+    value = ctx_bitlen[1];
+    value = #BSWAP_32(value);
+    ctx_data[u32 14] = value;
+    
+    ctx_state, ctx_data = sha256_transform(ctx_state, ctx_data);
+
 
     // Since this implementation uses little endian byte ordering and SHA uses big endian,
     // reverse all the bytes when copying the final state to the output hash.
@@ -953,13 +1406,16 @@ fn sha256_final2(stack u32[8] ctx_state, stack u32[16] ctx_data, stack u64 ctx_d
     i = 0;
     while(i < 8){
 
-        t = ctx_state[(int)i];
-    	hash[(int)i] = t;
-        i += 1;
+        value = ctx_state[(int)i];
 
+        value = #BSWAP_32(value);
+
+        hash[(int)i] = value;
+
+        i += 1;
     }
 
-    return hash;
+    return ctx_data, hash;
 }
 
 /*****************
@@ -972,84 +1428,197 @@ inline
 fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[128] es) -> stack u64[128] {
 
 
-	stack u32[8] hash; // unsigned char hash[SHA256_DIGEST_LENGTH];
-	
-	stack u32[16] ctx_data;
-	stack u64 ctx_datalen;
-	stack u64 ctx_bitlen;
-	stack u32[8] ctx_state;
-
-	reg u64 i, es_aux;
-	stack u32 bitTracker;
-	reg u32 b1, b2, bitTracker_aux;
-
-
-	
-	sha256_init(ctx_state, ctx_datalen, ctx_bitlen);
-
-	ctx_datalen, ctx_bitlen = sha256_update5(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, y, 20);
-
-	ctx_datalen, ctx_bitlen = sha256_update6(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a, 3072);
-
-	ctx_datalen, ctx_bitlen = sha256_update7(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a, 3072);
-
-	hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);
-
-	
-	//Pick bits from hash
-	i = 0;
-	bitTracker = 0;
+    stack u32[8] hash; // unsigned char hash[SHA256_DIGEST_LENGTH];
     
-	while(i < s) {
-		
-		if(bitTracker >= 256) { //Generate new hash
-			sha256_init(ctx_state, ctx_datalen, ctx_bitlen);
-			ctx_datalen, ctx_bitlen = sha256_update5(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash, 32);
-			hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);
-			bitTracker = 0;
-		}
-		
-		b1 = GETBIT_EXTENDED(hash, bitTracker);
-		bitTracker_aux = bitTracker;
-		bitTracker_aux += 1;
-		bitTracker = bitTracker_aux;
-		b2 = GETBIT_EXTENDED(hash, bitTracker);
-		
-		
-		if(b1 == 0) {
-			if(b2 == 0) {
-				es_aux = 0;
-				es[(int)i] = es_aux;
-				bitTracker_aux = bitTracker;
-				bitTracker_aux += 1;
-				bitTracker = bitTracker_aux;
-				i += 1;
-			} else {
-				es_aux = 1;
-				es[(int)i] = es_aux;
-				bitTracker_aux = bitTracker;
-				bitTracker_aux += 1;
-				bitTracker = bitTracker_aux;
-				i += 1;
-			}
-		} else {
-			if(b2 == 0) {
-				es_aux = 2;
-				es[(int)i] = es_aux;
-				bitTracker_aux = bitTracker;
-				bitTracker_aux += 1;
-				bitTracker = bitTracker_aux;
-				i += 1;
-			} else {
-				bitTracker_aux = bitTracker;
-				bitTracker_aux += 1;
-				bitTracker = bitTracker_aux;
-			}
-		}
-	}
-	
-	
-	return es;
+    stack u8[64] ctx_data;
+    stack u64 ctx_datalen;
+    stack u32[2] ctx_bitlen;
+    stack u32[8] ctx_state;
+
+    reg u64 i, j, z, es_aux, temp, temp_as, temp_a;
+    reg u64 bitTracker;
+    reg u8 b1, b2;
+    reg u32 j_aux;
+
+    stack u64 bitTracker_aux;
+
+    inline int len;
+
+    reg u8 t;
+    reg u32 t32;
+
+    reg u64 counter;
+    stack u64 counter_s;
+
+
+    stack u8[32] hash_s;
+    stack u8[1920] a_s; // 192 * mpcRounds
+
+    ctx_datalen = 0;
+    ctx_bitlen[0] = 0;
+    ctx_bitlen[1] = 0;
+    ctx_state[0] = 0x6a09e667;
+    ctx_state[1] = 0xbb67ae85;
+    ctx_state[2] = 0x3c6ef372;
+    ctx_state[3] = 0xa54ff53a;
+    ctx_state[4] = 0x510e527f;
+    ctx_state[5] = 0x9b05688c;
+    ctx_state[6] = 0x1f83d9ab;
+    ctx_state[7] = 0x5be0cd19;
+
+    counter_s = 0;
+
+    i = 0;
+    while(i < 20){
+        t = y[u8 (int)i];
+        hash_s[(int)i] = t;
+        i += 1;
+    }
+
+    i = 0;
+    while(i < 64){
+        ctx_data[(int)i] = 0;
+        i += 1;
+    }
+
+
+    ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update5(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash_s, 20); 
+    
+    i = 0;
+    while(i < s){
+
+        j = 0;
+        while(j < 3){
+
+            /* a.yp */
+
+            temp_as = i * 192;
+
+            temp = j * 32;
+            temp_as += temp;
+
+
+            temp_a = s * 32;
+            temp_a *= j;
+
+            temp = i * 32;
+            temp_a += temp;
+
+            z = 0;
+            while(z < 32){
+                t = (u8)[a + (int) temp_a];
+                a_s[(int) temp_as] = t;
+
+                temp_as += 1;
+                temp_a += 1;
+                z += 1;
+            }
+            
+
+            /* a.h */
+
+            temp_as = i * 192;
+
+            temp = 3 * 32;
+            temp_as += temp;
+
+            temp = j * 32;
+            temp_as += temp;
+
+
+            temp_a = s * 32;
+            temp_a *= 3;
+
+            temp = s * 32;
+            temp *= j;
+            temp_a += temp;
+
+            temp = i * 32;
+            temp_a += temp;
+
+            z = 0;
+            while(z < 32){
+                t = (u8)[a + (int) temp_a];
+                a_s[(int) temp_as] = t;
+
+                temp_as += 1;
+                temp_a += 1;
+                z += 1;
+            }
+
+            j += 1;
+        }
+        
+        i += 1;
+    }
+    
+
+    ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update6(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a_s, 1920);
+    
+    ctx_data, hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);
+
+    
+    //Pick bits from hash
+    i = 0;
+    bitTracker_aux = 0;
+    bitTracker = bitTracker_aux;
+    while(i < s) {
+
+        if(bitTracker_aux >= 256) { //Generate new hash
+
+            ctx_datalen = 0;
+            ctx_bitlen[0] = 0;
+            ctx_bitlen[1] = 0;
+            ctx_state[0] = 0x6a09e667;
+            ctx_state[1] = 0xbb67ae85;
+            ctx_state[2] = 0x3c6ef372;
+            ctx_state[3] = 0xa54ff53a;
+            ctx_state[4] = 0x510e527f;
+            ctx_state[5] = 0x9b05688c;
+            ctx_state[6] = 0x1f83d9ab;
+            ctx_state[7] = 0x5be0cd19;
+
+            j = 0;
+            while(j < 32){
+                t = hash[u8 (int)j];
+                hash_s[(int)j] = t;
+                j += 1;
+            }
+
+            ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update5(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash_s, 32);
+            ctx_data, hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);
+
+            bitTracker = 0;
+        }
+        bitTracker_aux = bitTracker;
+        
+        b1 = GETBIT_EXTENDED(hash, bitTracker_aux);
+        bitTracker = bitTracker_aux;
+        bitTracker += 1;
+        bitTracker_aux = bitTracker;
+        b2 = GETBIT_EXTENDED(hash, bitTracker_aux);
+        
+        if(b1 == 0) {
+            if(b2 == 0) {
+                es[(int)i] = 0;
+                i += 1;
+            } else {
+                es[(int)i] = 1;
+                i += 1;
+            }
+        } 
+        else {
+            if(b2 == 0) {
+                es[(int)i] = 2;
+                i += 1;
+            }
+        }
+
+        bitTracker = bitTracker_aux;
+        bitTracker += 1;                // alredy added 1 priviously!!
+    }
+    
+    return es;
 }
 
 
@@ -1068,7 +1637,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[128] es) -> stack u64[12
 
 
 inline
-fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[368] randomness_p1, stack u32[368] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success) -> stack u64 {
+fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success, reg u64 as) -> stack u32[2], stack u64, stack u64, stack u64 {
 
 	stack u32[2] r;
 
@@ -1079,88 +1648,146 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 	reg u64 count, temp_zs, i, i_plus;
 
 
+    count = mpc_round * 368;
+    count += randCount;
+
 	t0 = randomness_p1[(int)count];
 	r[0] = t0;
 
 	t0 = randomness_p2[(int)count];
 	r[1] = t0;
 
+    count = randCount;
+    count += 1;
+    randCount = count;
+	
 
-	count = randCount;
-	count += 1;
-	randCount = count;
-
-	temp_zs = mpc_round * 782;
+	temp_zs = mpc_round * 3128;
+    temp_zs += 32;
+    temp_zs += 64;
 	temp_zs += countY;
 
 	i = 0;
 	while(i < 31){
 
+        // Player 1's view.y
+
 		t0 = x[0];
 		t1 = (u32)[zs + (int)temp_zs];
 		t0 ^= t1;
 
-		t0 = GETBIT_u32(t0,i);
+		t0 = GETBIT_u32_left(t0,i);
 		a[0] = t0;
+        
+        (u32)[as + 0] = t0; 
+
+        t0 = y[0];
+        t1 = (u32)[zs + (int)temp_zs];
+        t0 ^= t1;
+
+        t0 = GETBIT_u32_left(t0,i);
+        b[0] = t0;
+
+        (u32)[as + 4] = t0; 
+
+        
+        // Player 2's view.y
+
+        temp_zs = mpc_round * 3128;
+        temp_zs += 32;
+        temp_zs += 64;
+        temp_zs += 1480;
+        temp_zs += 64;
+        temp_zs += countY;
 
 		t0 = x[1];
 		t1 = (u32)[zs + (int)temp_zs];
 		t0 ^= t1;
 
-		t0 = GETBIT_u32(t0,i);
+		t0 = GETBIT_u32_left(t0,i);
 		a[1] = t0;
 
+        (u32)[as + 8] = t0; 
 
-		t0 = y[0];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,i);
-		b[0] = t0;
 
 		t0 = y[1];
 		t1 = (u32)[zs + (int)temp_zs];
 		t0 ^= t1;
 
-		t0 = GETBIT_u32(t0,i);
+		t0 = GETBIT_u32_left(t0,i);
 		b[1] = t0;
+        
+        (u32)[as + 12] = t0; 
+
+
+        temp_zs = mpc_round * 3128;
+        temp_zs += 32;
+        temp_zs += 64;
+        temp_zs += countY;
 
 		t0 = a[0];
 		t0 &= b[1];
+
+        //(u32)[as + 0] = t0;
+        
 		
 		t1 = a[1];
 		t1 &= b[0];
 		t0 ^= t1;
 
+        //(u32)[as + 4] = t0;
+        
+
 		t1 = r[1];
-		t1 = GETBIT_u32(t1,i);
+		t1 = GETBIT_u32_left(t1,i);
 		t0 ^= t1;
 
-		t1 = (u32)[zs + (int)temp_zs];
+        //(u32)[as + 8] = t0;
+        
+
+        t1 = a[0];
+        t1 &= b[0];
+        t0 ^= t1;
+        
+        //(u32)[as + 12] = t0;
+
+        t1 = (u32)[zs + (int)temp_zs];
+        t1 = GETBIT_u32_left(t1, i);
+        t0 ^= t1;
+
+        //(u32)[as + 16] = t0;
+        
+
+        t1 = r[0];
+        t1 = GETBIT_u32_left(t1,i);
+        t0 ^= t1;
+
+        //(u32)[as + 20] = t0;
+       
+
+        t1 = (u32)[zs + (int)temp_zs];
 		i_plus = i;
 		i_plus += 1;
-		t1 = GETBIT_u32(t1, i_plus);
+		t1 = GETBIT_u32_left(t1, i_plus);
+        
+        //(u32)[as + 24] = t1;
 
-		t2 = a[0];
-		t2 &= b[0];
+    	if(t1 != t0){
+            //(u64)[as + 28] = i;
+    		success = 1;
 
-		t0 ^= t2;
+            i = 31;
+    	}
+        
 
-		t2 = (u32)[zs + (int)temp_zs];
-		t2 = GETBIT_u32(t2, i);
-		t0 ^= t2;
-
-		t2 = r[0];
-		t2 = GETBIT_u32(t2,i);
-		t0 ^= t2;
-
-
-		if(t1 != t0){
-			success = 0;
-		}
 
 		i += 1;
 	}
+
+    temp_zs = mpc_round * 3128;
+    temp_zs += 32;
+    temp_zs += 64;
+    temp_zs += countY;
 
 	t0 = x[0];
 	t0 ^= y[0];
@@ -1168,268 +1795,38 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 	t0 ^= t1;
 	z[0] = t0;
 
+    temp_zs = mpc_round * 3128;
+    temp_zs += 32;
+    temp_zs += 64;
+    temp_zs += 1480;
+    temp_zs += 64;
+    temp_zs += countY;
+
 	t0 = x[1];
 	t0 ^= y[1];
-	temp_zs += 386;
 	t1 = (u32)[zs + (int)temp_zs];
 	t0 ^= t1;
 	z[1] = t0;
 
 	count = countY;
-	count += 1;
+	count += 4;
 	countY = count;
 
-	return success;
-}
-
-inline
-fn mpc_ADD_W_verify(stack u32[160] w, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[368] randomness_p1, stack u32[368] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 pos_w, reg u64 mpc_round, stack u64 success) -> stack u64 {
-
-	stack u32[2] r;
-
-	reg u32[2] a, b;
-
-	reg u32 t0, t1, t2;
-
-	reg u64 count, temp_zs, j, j_plus, temp_w;
-
-	t0 = randomness_p1[(int)count];
-	r[0] = t0;
-
-	t0 = randomness_p2[(int)count];
-	r[1] = t0;
-
-	count = randCount;
-	count += 1;
-	randCount = count;
-
-	temp_zs = mpc_round * 782;
-	temp_zs += countY;
-
-	j = 0;
-	while(j < 31){
-
-		temp_w = pos_w;
-		t0 = w[(int)temp_w];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,j);
-		a[0] = t0;
-
-
-		temp_w = pos_w;
-		temp_w += 80;
-		t0 = w[(int)temp_w];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,j);
-		a[1] = t0;
-
-
-		t0 = y[0];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,j);
-		b[0] = t0;
-
-		t0 = y[1];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,j);
-		b[1] = t0;
-
-		t0 = a[0];
-		t0 &= b[1];
-		
-		t1 = a[1];
-		t1 &= b[0];
-		t0 ^= t1;
-
-		t1 = r[1];
-		t1 = GETBIT_u32(t1,j);
-		t0 ^= t1;
-
-		t1 = (u32)[zs + (int)temp_zs];
-		j_plus = j;
-		j_plus += 1;
-		t1 = GETBIT_u32(t1, j_plus);
-
-		t2 = a[0];
-		t2 &= b[0];
-
-		t0 ^= t2;
-
-		t2 = (u32)[zs + (int)temp_zs];
-		t2 = GETBIT_u32(t2, j);
-		t0 ^= t2;
-
-		t2 = r[0];
-		t2 = GETBIT_u32(t2,j);
-		t0 ^= t2;
-
-
-		if(t1 != t0){
-			success = 0;
-		}
-
-		j += 1;
-	}
-
-	temp_w = pos_w;
-	t0 = w[(int)temp_w];
-	t0 ^= y[0];
-	t1 = (u32)[zs + (int)temp_zs];
-	t0 ^= t1;
-	z[0] = t0;
-
-	temp_w = pos_w;
-	temp_w += 80;
-	t0 = w[(int) pos_w];
-	t0 ^= y[1];
-	temp_zs += 386;
-	t1 = (u32)[zs + (int)temp_zs];
-	t0 ^= t1;
-	z[1] = t0;
-
-	count = countY;
-	count += 1;
-	countY = count;
-
-	return success;
-}
-
-inline
-fn mpc_ADD_hHa_verify(stack u32[10] hHa, stack u32[2] y, stack u32[10] z, reg u64 zs, stack u32[368] randomness_p1, stack u32[368] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 pos_hHa, reg u64 mpc_round, stack u64 success) -> stack u64 {
-
-	stack u32[2] r;
-
-	reg u32[2] a, b;
-
-	reg u32 t0, t1, t2;
-
-	reg u64 count, temp_zs, i, i_plus;
-
-
-	t0 = randomness_p1[(int)count];
-	r[0] = t0;
-
-	t0 = randomness_p2[(int)count];
-	r[1] = t0;
-
-
-	count = randCount;
-	count += 1;
-	randCount = count;
-
-	temp_zs = mpc_round * 782;
-	temp_zs += countY;
-
-	i = 0;
-	while(i < 31){
-
-		t0 = hHa[(int)pos_hHa];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,i);
-		a[0] = t0;
-
-		pos_hHa += 1;
-		t0 = hHa[(int)pos_hHa];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,i);
-		a[1] = t0;
-
-
-		t0 = y[0];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,i);
-		b[0] = t0;
-
-		t0 = y[1];
-		t1 = (u32)[zs + (int)temp_zs];
-		t0 ^= t1;
-
-		t0 = GETBIT_u32(t0,i);
-		b[1] = t0;
-
-		t0 = a[0];
-		t0 &= b[1];
-		
-		t1 = a[1];
-		t1 &= b[0];
-		t0 ^= t1;
-
-		t1 = r[1];
-		t1 = GETBIT_u32(t1,i);
-		t0 ^= t1;
-
-		t1 = (u32)[zs + (int)temp_zs];
-		i_plus = i;
-		i_plus += 1;
-		t1 = GETBIT_u32(t1, i_plus);
-
-		t2 = a[0];
-		t2 &= b[0];
-
-		t0 ^= t2;
-
-		t2 = (u32)[zs + (int)temp_zs];
-		t2 = GETBIT_u32(t2, i);
-		t0 ^= t2;
-
-		t2 = r[0];
-		t2 = GETBIT_u32(t2,i);
-		t0 ^= t2;
-
-
-		if(t1 != t0){
-			success = 0;
-		}
-
-		pos_hHa -= 1;
-		i += 1;
-	}
-
-	t0 = hHa[(int)pos_hHa];
-	t0 ^= y[0];
-	t1 = (u32)[zs + (int)temp_zs];
-	t0 ^= t1;
-	z[0] = t0;
-
-	pos_hHa += 1;
-	t0 = hHa[(int)pos_hHa];
-	t0 ^= y[1];
-	temp_zs += 386;
-	t1 = (u32)[zs + (int)temp_zs];
-	t0 ^= t1;
-	z[1] = t0;
-
-	count = countY;
-	count += 1;
-	countY = count;
-
-	return success;
+	return z, randCount, countY, success;
 }
 
 
 inline
-fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[368] randomness_p1, stack u32[368] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success) -> stack u64 {
+fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success, reg u64 a) -> stack u32[2], stack u64, stack u64, stack u64  {
 
 	stack u32[2] r;
 
 	reg u32 t0, t1;
 	reg u64 count;
 
-	count = randCount;
+
+    count = mpc_round * 368;  // we will access a u32 array so 1472 => 
+	count += randCount;
 
 	t0 = randomness_p1[(int)count];
 	r[0] = t0;
@@ -1437,55 +1834,65 @@ fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 	t0 = randomness_p2[(int)count];
 	r[1] = t0;
 
+    count = randCount;
 	count += 1;
 	randCount = count;
 
-	t0 = 0;
 
 	t0 = x[0];
 	t0 &= y[1];
 
 	t1 = x[1];
 	t1 &= y[0];
-
 	t0 ^= t1;
 
 	t1 = x[0];
 	t1 &= y[0];
-
 	t0 ^= t1;
+
 	t0 ^= r[0];
+
 	t0 ^= r[1];
 
-	count = mpc_round * 782;
-	count += 8;
-	count += 16;
+
+	count = mpc_round * 3128;
+	count += 32;
+	count += 64;
 	count += countY;
 
-	t1 = (u32)[zs + (int)count];
-	
-
+	t1 = (u32)[zs + (int)count]; 
+    
 	if(t1 != t0) {
-		success = 0;
+        (u64)[a + 0] = 0;
+        (u32)[a + 8] = t0;
+        (u32)[a + 12] = t1;
+		success = 1;
 	}
+
 
 	z[0] = t0;
 
-	count += 386;			// Get the P2 view.y position by summing P1's view.y and P2's view.x
+    count = mpc_round * 3128;
+    count += 32;
+    count += 64;
+    count += 1480;
+    count += 64;
+    count += countY;		// Get the P2 view.y position by summing P1's view.y and P2's view.x and view.y
+
 	t0 = (u32)[zs + (int)count];
-	z[1] = t0;
+    z[1] = t0;
 
 
 	count = countY;
-	count += 1;
+	count += 4;
 	countY = count;
 
-	return success;
+	return z, randCount, countY, success;
 }
 
 
 inline
-fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z, reg u64 zs, stack u32[368] randomness_p1, stack u32[368] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success) -> stack u64 {
+fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z, reg u64 zs, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success, reg u64 a_s) -> stack u32[2], stack u64, stack u64, stack u64 {
 	
 	stack u32[2] t0;
 	stack u32[2] t1;
@@ -1493,11 +1900,11 @@ fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z
 	t0 = mpc_XOR2(a, b, t0);
 	t1 = mpc_XOR2(a, c, t1);
 
-	success = mpc_AND_verify(t0, t1, z, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
+	z, randCount, countY, success = mpc_AND_verify(t0, t1, z, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a_s);
 
-	mpc_XOR2(z, a, z);
+	z = mpc_XOR2(z, a, z);
 
-	return success;
+	return z, randCount, countY, success;
 }
 
 
@@ -1513,35 +1920,32 @@ fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z
 inline
 fn reconstruct(reg u64 a, stack u32[8] y, stack u64 mpcRounds) -> stack u32[8]{
 
-	reg u64 temp_a;
-	reg u64 i;
-	reg u32 xor;
+	reg u64 temp, temp_aux;
+	reg u64 i, j;
+	reg u8 a_aux;
 
-	i = 0;
-	while(i < 8){
+    temp_aux = 32;
+    temp_aux *= mpcRounds;
 
-		temp_a = 0;
+    j = 0;
+    i = 0;
+    while(j<32){
+        temp = j;
 
-		xor = (u32)[a + (int)temp_a];
+        a_aux = (u8)[a + (int)temp];
 
+        temp += temp_aux;
 
-		temp_a = 1;
-		temp_a *= 8;
-		temp_a *= mpcRounds;
+        a_aux ^= (u8)[a + (int)temp];
 
-		xor ^= (u32)[a + (int)temp_a];
+        temp += temp_aux;
 
+        a_aux ^= (u8)[a + (int)temp];
 
-		temp_a = 2;
-		temp_a *= 8;
-		temp_a *= mpcRounds;
-
-		xor ^= (u32)[a + (int)temp_a];
-
-		y[(int)i] = xor;
-
-		i += 1;
-	}
+        y[u8(int)j] = a_aux;
+        
+        j += 1;
+    }
 
 	return y;	
 }
@@ -1554,28 +1958,28 @@ fn reconstruct(reg u64 a, stack u32[8] y, stack u64 mpcRounds) -> stack u32[8]{
 
 
 inline 
-fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64 success, stack u32[368] randomness_p1, stack u32[368] randomness_p2) -> stack u64 {
+fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64 mpcRounds, stack u64 success, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, reg u64 randomness_player1) -> stack u64 {
 	
 	stack u32[8] hash_p1, hash_p2;
 	stack u32[5] result;
 	stack u32[4] rand;
 	stack u32[160] w;
 
-	reg u64 i;
-	stack u64 randCount, countY, a_s, zs_s;
+	reg u64 i, j;
+	stack u64 randCount, countY, a_s, zs_s, i_s;
 
-	reg u64 player, temp_zs, temp_a, temp_w;
+	reg u64 player, temp_aux, temp_zs, temp_a, temp_w, pos_w;
 	reg u64 n;
 
-	reg u32 mem, storage_u32, k;
+	reg u32 storage_u32, k;
 
-	stack u32[2] va, vb, vc, vd, ve, f, temp, temp1;
+	stack u32[2] va, vb, vc, vd, ve, f, temp, temp1, w_aux;
 	stack u32[5] hA;
-	stack u32[10] hHa;
+	stack u32[2] hHa;
 
-	stack u64 three;
+    reg u8 t, mem;
 
-	three = 3;
+    stack u64 random_player1_s;
 
 	hA[0] = 0x67452301;
 	hA[1] = 0xEFCDAB89;
@@ -1586,181 +1990,234 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 
 	hash_p1, hash_p2 = H(zs, hash_p1, hash_p2, mpc_round);
 
-	/* Compare Player1 hash */
+	// Compare Player1 hash 
 
 	player = es[(int)mpc_round];
 
 	temp_a = player;
-	temp_a *= mpc_round;
-	temp_a *= 8;
-	temp_a += 3072;				// A.yp => A.h
+	temp_a *= mpcRounds;
+	temp_a *= 32;
+
+    temp_aux = mpcRounds * 32;      // A.yp => A.h
+    temp_aux *= 3;
+	temp_a += temp_aux;				
+
+    temp_aux = mpc_round * 32;
+    temp_a += temp_aux;
+
 
 	i = 0;
-	while(i < 8){
+	while(i < 32){
 
-		temp_a += 1;
+        t = hash_p1[u8 (int)i];
 
-		storage_u32 = hash_p1[(int)i];
-		mem = (u32)[a + (int)temp_a];
+		mem = (u8)[a + (int)temp_a];
 
-		if( storage_u32 != mem){
-			success = 0;
+		if( t != mem){
+            (u8)[a + 0] = 0;
+			success = 1;
 		}
 
+        temp_a += 1;
 		i += 1;
 	}
 
-	/* Compare Player2 hash */
+	// Compare Player2 hash
 
 	player += 1;
-	player = player % three;
+    if(player == 3){
+        player = 0;
+    }
 
 	temp_a = player;
-	temp_a *= mpc_round;
-	temp_a *= 8;
-	temp_a += 3072;
+    temp_a *= mpcRounds;
+    temp_a *= 32;
+
+    temp_aux = mpcRounds * 32;      // A.yp => A.h
+    temp_aux *= 3;
+    temp_a += temp_aux;             
+
+    temp_aux = mpc_round * 32;
+    temp_a += temp_aux;
 
 	i = 0;
-	while(i < 8){
-	
-		temp_a += 1;
+	while(i < 32){
 
-		storage_u32 = hash_p2[(int)i];
-		mem = (u32)[a + (int)temp_a];
+		t = hash_p2[u8 (int)i];
+		mem = (u8)[a + (int)temp_a];
 
-		if( storage_u32 != mem){
-			success = 0;
+		if( t != mem){
+            (u8)[a + 1] = 1;
+			success = 1;
 		}
 
-		i += 1;
-	}
-
-	/* Compare Player1 transcript */
-
-	temp_zs = mpc_round * 782;					// mpc_round * 782 + 0 (player)  <= u32
-
-	temp_zs += 8;
-	temp_zs += 16;
-	temp_zs += 370;
-
-	i = 5;
-	while(i > 0){
-		temp_zs -= i; 
-
-		storage_u32 = (u32)[zs + (int)temp_zs];
-
-		result[(int)i] = storage_u32;
-
-		temp_zs += i;
-		i -= 1;
-	}
-
-	player = es[(int)mpc_round];
-
-	temp_a = player;
-	temp_a *= 8;
-	temp_a *= mpc_round;
-
-	// i = 0;
-	while(i < 5){
-
-		storage_u32 = (u32)[a + (int)temp_a];
-
-		if(result[(int)i] != storage_u32){
-			success = 0;
-		}
-
-		temp_a += 1;
-		i += 1;
-	}
-
-	/* Compare Player2 transcript */
-
-	temp_zs += 16;
-	temp_zs += 370;
-
-	i = 5;
-	while(i > 0){
-		temp_zs -= i; 
-
-		storage_u32 = (u32)[zs + (int)temp_zs];
-
-		result[(int)i] = storage_u32;
-
-		temp_zs += i;
-		i -= 1;
-	}
-
-	player = es[(int)mpc_round];
-	player += 1;
-	player = player % three;
-
-	temp_a = player;
-	temp_a *= 8;
-	temp_a *= mpc_round;
-
-	// i = 0;
-	while(i < 5){
-
-		storage_u32 = (u32)[a + (int)temp_a];
-
-		if(result[(int)i] != storage_u32){
-			success = 0;
-		}
-
-		temp_a += 1;
+        temp_a += 1;
 		i += 1;
 	}
 
 
+	// Compare Player1 transcript
+
+    player = es[(int)mpc_round];
+
+
+	temp_zs = mpc_round * 3128;					// mpc_round * 3128 + 0 (player)  <= u8
+
+	temp_zs += 32;
+	temp_zs += 64;
+	temp_zs += 1460;
+
+
+    temp_a = 32 * mpcRounds;
+    temp_a *= player;
+
+    temp_aux = mpc_round * 32;
+    temp_a += temp_aux;
+
+    i=0;
+	while(i < 20){
+
+		t = (u8)[a + (int)temp_a];
+
+        mem = (u8)[zs + (int) temp_zs];
+
+		if(t != mem){
+            (u8)[a + 2] = 2;
+			success = 1;
+		}
+
+        temp_zs += 1;
+		temp_a += 1;
+		i += 1;
+	}
+
+	// Compare Player2 transcript
+
+    player += 1;
+    if(player == 3){
+        player = 0;
+    }
+
+    // update pos to the next player's ys
+    temp_zs += 64;
+    temp_zs += 1460;
+
+
+	temp_a = 32 * mpcRounds;
+    temp_a *= player;
+
+    temp_aux = mpc_round * 32;
+    temp_a += temp_aux;
+
+    i=0;
+	while(i < 20){
+
+        t = (u8)[a + (int)temp_a];
+
+        mem = (u8)[zs + (int) temp_zs];
+
+        if(t != mem){
+            (u8)[a + 3] = 3;
+            success = 1;
+        }
+
+        temp_zs += 1;
+        temp_a += 1;
+        i += 1;
+    }
+    
 	a_s = a;
 
+    i=0;
+    while(i < 160){
+        w[(int)i] = 0;
+        i += 1;
+    }
 
-	/* Get Player 1 view.x */
 
-	randCount = 0;
-	countY = 0;
+	// Get Player 1 view.x 
 
-	temp_zs = mpc_round * 782;
-	temp_zs += 8;
+    player = es[(int)mpc_round];
+
+	temp_zs = mpc_round * 3128;
+	temp_zs += 32;
 
 	i = 0;
 	while(i < 16){
 
-		w[(int)i] = (u32)[zs + (int) temp_zs];
+        storage_u32 = (u32)[zs + (int)temp_zs];
+        storage_u32 = #BSWAP_32(storage_u32);
+		w[(int)i] = storage_u32;
 
-		temp_zs += 1;
-
+		temp_zs += 4;
 		i += 1;
 	}
 
-	/*Get Player 2 view.x */
 
-	temp_zs += 370;
+	// Get Player 2 view.x 
+
+    player += 1;
+    if(player == 3){
+        player = 0;
+    }
+
+    temp_zs = mpc_round * 3128;
+    temp_zs += 32;
+    temp_zs += 64;
+    temp_zs += 1480;
 
 	temp_w = 80;
 
 	i = 0;
 	while(i < 16){
+        storage_u32 = (u32)[zs + (int)temp_zs];
+        storage_u32 = #BSWAP_32(storage_u32);
+        w[(int)temp_w] = storage_u32;
 
-		temp_w += 1;
-
-		w[(int)temp_w] = (u32)[zs + (int) temp_zs];
-
-		temp_zs += 1;
-
+		temp_zs += 4;
+        temp_w += 1;
 		i += 1;
 	}
 
+    j = 16;
+    while(j < 80){
+        i = 0;
+        while(i < 2){
+            pos_w = i;
+            pos_w *= 80;
+            pos_w += j;
 
-	// i = 16;
-	while(i < 80){
+            temp = w_to_temp(temp, w, pos_w);
 
-		w = mpc_XOR_w(w, i);
+            n = 1;
+            w = mpc_LEFTROTATE_w(temp,n,w,pos_w);
 
-		i += 1;
-	}
+            i += 1;
+        }
+        j += 1;
+    }
+    
+    /*
+        i = 0;
+        while(i < 100){
+            t = w[u8 (int)i]; 
+            (u8)[a + (int)i] = t;
 
+            i += 1;
+        }
+
+        j = 80 * 4;
+        i = 100;
+        while(i < 200){
+            t = w[u8 (int)j]; 
+            (u8)[a + (int)i] = t;
+
+            j += 1;
+            i += 1;
+        }
+    */
+    
+    
 	// uint32_t a[2] = { hA[0],hA[0] };
 	
 	storage_u32 = hA[0];
@@ -1792,122 +2249,145 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 	storage_u32 = hA[4];
 	ve[0] = storage_u32;
 	ve[1] = storage_u32;
+    
 
+    random_player1_s = randomness_player1;
+    
+    randCount = 0;
+    countY = 0;
 	i = 0;
+    
 	while(i < 80){
+        i_s = i;
+		if(i_s <= 19){
 
-		if(i <= 19){
-
-			mpc_XOR2(vc,vd,f);
-
-			success = mpc_AND_verify(vb, f, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
-
-			mpc_XOR2(vd,f,f);
+			f = mpc_XOR2(vc,vd,f);
+            
+			f, randCount, countY, success = mpc_AND_verify(vb, f, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+            
+			f = mpc_XOR2(vd,f,f);
 
 			k = 0x5A827999;
 		} 
-		if(i <= 39) {
+        if(i_s > 19){
+            if(i_s <= 39) {
 
-			mpc_XOR2(vb,vc,f);
-			mpc_XOR2(vd,f,f);
-			k = 0x6ED9EBA1;
+                f = mpc_XOR2(vb,vc,f);
+                f = mpc_XOR2(vd,f,f);
+                k = 0x6ED9EBA1;
 
-		}
-		if(i <= 59) {
-			
-			success = mpc_MAJ_verify(vb, vc, vd, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
+            }
+            if(i_s > 39){
+                if(i_s <= 59) {
+                    
+                    f, randCount, countY, success = mpc_MAJ_verify(vb, vc, vd, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
 
-			k = 0x8F1BBCDC;
+                    k = 0x8F1BBCDC;
 
-		} else {
+                } else {
 
-			mpc_XOR2(vb,vc,f);
-			mpc_XOR2(vd,f,f);
-			k = 0xCA62C1D6;
-		}
-
-		n = 5;
-		temp = mpc_LEFTROTATE2(va,n,temp);
-
-		success = mpc_ADD_verify(f, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
-
-		success = mpc_ADD_verify(ve, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
-
-		temp1[0] = k;
-		temp1[1] = k;
-
-		success = mpc_ADD_verify(temp,temp1,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
-
-		success = mpc_ADD_W_verify(w, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, i, mpc_round, success);
+                    f = mpc_XOR2(vb,vc,f);
+                    f = mpc_XOR2(vd,f,f);
+                    k = 0xCA62C1D6;
+                }
+            }
+        }
+            
+        temp = mpc_LEFTROTATE2_5(va,temp);
 
 
-		storage_u32 = ve[0];
-		vd[0] = storage_u32;
+    	temp, randCount, countY, success = mpc_ADD_verify(f, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+            
+        
+        temp, randCount, countY, success = mpc_ADD_verify(ve, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
 
-		storage_u32 = ve[1];
-		vd[1] = storage_u32;
+        temp1[0] = k;
+        temp1[1] = k;
 
+                 
+        temp, randCount, countY, success = mpc_ADD_verify(temp,temp1,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+                
+        i = i_s;
 
+        storage_u32 = w[(int)i];
+        w_aux[0] = storage_u32;
+        j = i;
+        j += 80;
+        storage_u32 = w[(int)j];
+        w_aux[1] = storage_u32;
+
+    	temp, randCount, countY, success = mpc_ADD_verify(w_aux,temp,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+        
+        
 		storage_u32 = vd[0];
-		vc[0] = storage_u32;
+		ve[0] = storage_u32;
 
 		storage_u32 = vd[1];
-		vc[1] = storage_u32;
+		ve[1] = storage_u32;
+
+
+		storage_u32 = vc[0];
+		vd[0] = storage_u32;
+
+		storage_u32 = vc[1];
+		vd[1] = storage_u32;
 
 
 		n = 30;
 		vc = mpc_LEFTROTATE2(vb,n,vc);
 
 
-		storage_u32 = vb[0];
-		va[0] = storage_u32;
-
-		storage_u32 = vb[1];
-		va[1] = storage_u32;
-
-
 		storage_u32 = va[0];
-		temp[0] = storage_u32;
+		vb[0] = storage_u32;
 
 		storage_u32 = va[1];
-		temp[1] = storage_u32;
+		vb[1] = storage_u32;
 
+
+		storage_u32 = temp[0];
+		va[0] = storage_u32;
+
+		storage_u32 = temp[1];
+		va[1] = storage_u32;
 
 		i += 1;
 	}
-	
+    
+    
 	storage_u32 = hA[0];
 	hHa[0] = storage_u32;
 	hHa[1] = storage_u32;
 
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, va, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+
+
 	storage_u32 = hA[1];
-	hHa[2] = storage_u32;
-	hHa[3] = storage_u32;
+	hHa[0] = storage_u32;
+	hHa[1] = storage_u32;
+
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+
 
 	storage_u32 = hA[2];
-	hHa[4] = storage_u32;
-	hHa[5] = storage_u32;
+	hHa[0] = storage_u32;
+	hHa[1] = storage_u32;
+
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, vc, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+
 
 	storage_u32 = hA[3];
-	hHa[6] = storage_u32;
-	hHa[7] = storage_u32;
+	hHa[0] = storage_u32;
+	hHa[1] = storage_u32;
+
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, vd, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+
 
 	storage_u32 = hA[4];
-	hHa[8] = storage_u32;
-	hHa[9] = storage_u32;
+	hHa[0] = storage_u32;
+	hHa[1] = storage_u32;
 
-	/*
-	n = 0;
-	success = mpc_ADD_hHa_verify(hHa, va, hHa, zs, randomness_p1, randomness_p2, randCount, countY, n, mpc_round, success);
-	n = 2;
-	success = mpc_ADD_hHa_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, n, mpc_round, success);
-	n = 4;
-	success = mpc_ADD_hHa_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, n, mpc_round, success);
-	n = 6;
-	success = mpc_ADD_hHa_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, n, mpc_round, success);
-	n = 8;
-	success = mpc_ADD_hHa_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, n, mpc_round, success);
-	*/
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, ve, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+
 	return success;
 }
 
@@ -1939,51 +2419,55 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 
 
 export 
-fn zkboo_decrypt(reg u64 proofs, reg u64 a, reg u64 randomness_player1, reg u64 randomness_player2){
+fn zkboo_decrypt(reg u64 proofs, reg u64 a, reg u64 randomness_player1, reg u64 randomness_player2, reg u64 success_reg){
 
 	stack u32[8] y;
 	stack u64 mpcRounds, success;
 	stack u64[128] es;
-    stack u32[368] randomness_p1, randomness_p2;
+    stack u32[14720] randomness_p1, randomness_p2;
     reg u64 pos_randomness;
 
-	reg u64 i, j;
+	reg u64 i, j, z;
+    reg u8 t;
 
-	mpcRounds = 128;
+	mpcRounds = 10;
 
     i = 0;
     pos_randomness = 0;
     while(i < mpcRounds){
 
         j = 0;
-        while(j < 368){
+        while(j < 1472){
 
-            randomness_p1[(int) pos_randomness] = (u32)[randomness_player1 + (int) pos_randomness];
+            t = (u8)[randomness_player1 + (int) pos_randomness];
+            randomness_p1[u8(int) pos_randomness] = t;
 
-            randomness_p2[(int) pos_randomness] = (u32)[randomness_player2 + (int) pos_randomness];
+            
+            t = (u8)[randomness_player2 + (int) pos_randomness];
+            randomness_p2[u8(int) pos_randomness] = t; 
+
 
             pos_randomness += 1;
             j+= 1;
         }
         
-
         i += 1;
     }
 
-
+    
 	y = reconstruct(a, y, mpcRounds);
-
-	H3(y, a, mpcRounds, es);
-
+    
+	es = H3(y, a, mpcRounds, es);
+    
+    
+    success = 0;
 	i = 0;
 	while(i < mpcRounds){
 
-		success = verify(a, es, proofs, i, success, randomness_p1, randomness_p2);
-
-		if (success == 0){
-			i = mpcRounds;
-		}
+		success = verify(a, es, proofs, i, mpcRounds, success, randomness_p1, randomness_p2, randomness_player1);
 
 		i += 1;
 	}
+
+    (u64)[success_reg + 0] = success; 
 }
