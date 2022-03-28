@@ -1306,7 +1306,7 @@ fn sha256_update5(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_d
 }
 
 inline
-fn sha256_update6(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[1920] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
+fn sha256_update6(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[26112] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
     reg u64 i, temp;
     reg u8 t;
@@ -1425,7 +1425,7 @@ fn sha256_final2(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_da
 *****************/
 
 inline
-fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[128] es) -> stack u64[128] {
+fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[136] es) -> stack u64[136] {
 
 
     stack u32[8] hash; // unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -1452,7 +1452,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[128] es) -> stack u64[12
 
 
     stack u8[32] hash_s;
-    stack u8[1920] a_s; // 192 * mpcRounds
+    stack u8[26112] a_s; // 192 * mpcRounds
 
     ctx_datalen = 0;
     ctx_bitlen[0] = 0;
@@ -1553,7 +1553,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[128] es) -> stack u64[12
     }
     
 
-    ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update6(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a_s, 1920);
+    ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update6(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a_s, 26112);
     
     ctx_data, hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);
 
@@ -1637,7 +1637,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[128] es) -> stack u64[12
 
 
 inline
-fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success, reg u64 as) -> stack u32[2], stack u64, stack u64, stack u64 {
+fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[200192] randomness_p1, stack u32[200192] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success) -> stack u32[2], stack u64, stack u64, stack u64 {
 
 	stack u32[2] r;
 
@@ -1679,7 +1679,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 		t0 = GETBIT_u32_left(t0,i);
 		a[0] = t0;
         
-        (u32)[as + 0] = t0; 
 
         t0 = y[0];
         t1 = (u32)[zs + (int)temp_zs];
@@ -1687,8 +1686,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 
         t0 = GETBIT_u32_left(t0,i);
         b[0] = t0;
-
-        (u32)[as + 4] = t0; 
 
         
         // Player 2's view.y
@@ -1707,7 +1704,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 		t0 = GETBIT_u32_left(t0,i);
 		a[1] = t0;
 
-        (u32)[as + 8] = t0; 
 
 
 		t0 = y[1];
@@ -1716,8 +1712,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 
 		t0 = GETBIT_u32_left(t0,i);
 		b[1] = t0;
-        
-        (u32)[as + 12] = t0; 
 
 
         temp_zs = mpc_round * 3128;
@@ -1727,42 +1721,31 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 
 		t0 = a[0];
 		t0 &= b[1];
-
-        //(u32)[as + 0] = t0;
         
 		
 		t1 = a[1];
 		t1 &= b[0];
 		t0 ^= t1;
 
-        //(u32)[as + 4] = t0;
-        
 
 		t1 = r[1];
 		t1 = GETBIT_u32_left(t1,i);
 		t0 ^= t1;
-
-        //(u32)[as + 8] = t0;
         
 
         t1 = a[0];
         t1 &= b[0];
         t0 ^= t1;
         
-        //(u32)[as + 12] = t0;
 
         t1 = (u32)[zs + (int)temp_zs];
         t1 = GETBIT_u32_left(t1, i);
         t0 ^= t1;
-
-        //(u32)[as + 16] = t0;
         
 
         t1 = r[0];
         t1 = GETBIT_u32_left(t1,i);
         t0 ^= t1;
-
-        //(u32)[as + 20] = t0;
        
 
         t1 = (u32)[zs + (int)temp_zs];
@@ -1770,10 +1753,8 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 		i_plus += 1;
 		t1 = GETBIT_u32_left(t1, i_plus);
         
-        //(u32)[as + 24] = t1;
 
     	if(t1 != t0){
-            //(u64)[as + 28] = i;
     		success = 1;
 
             i = 31;
@@ -1817,7 +1798,7 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 
 
 inline
-fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success, reg u64 a) -> stack u32[2], stack u64, stack u64, stack u64  {
+fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, stack u32[200192] randomness_p1, stack u32[200192] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success) -> stack u32[2], stack u64, stack u64, stack u64  {
 
 	stack u32[2] r;
 
@@ -1863,9 +1844,6 @@ fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 	t1 = (u32)[zs + (int)count]; 
     
 	if(t1 != t0) {
-        (u64)[a + 0] = 0;
-        (u32)[a + 8] = t0;
-        (u32)[a + 12] = t1;
 		success = 1;
 	}
 
@@ -1892,7 +1870,7 @@ fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
 
 
 inline
-fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z, reg u64 zs, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success, reg u64 a_s) -> stack u32[2], stack u64, stack u64, stack u64 {
+fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z, reg u64 zs, stack u32[200192] randomness_p1, stack u32[200192] randomness_p2, stack u64 randCount, stack u64 countY, reg u64 mpc_round, stack u64 success) -> stack u32[2], stack u64, stack u64, stack u64 {
 	
 	stack u32[2] t0;
 	stack u32[2] t1;
@@ -1900,7 +1878,7 @@ fn mpc_MAJ_verify(stack u32[2] a, stack u32[2] b, stack u32[2] c, stack u32[2] z
 	t0 = mpc_XOR2(a, b, t0);
 	t1 = mpc_XOR2(a, c, t1);
 
-	z, randCount, countY, success = mpc_AND_verify(t0, t1, z, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a_s);
+	z, randCount, countY, success = mpc_AND_verify(t0, t1, z, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
 	z = mpc_XOR2(z, a, z);
 
@@ -1958,7 +1936,7 @@ fn reconstruct(reg u64 a, stack u32[8] y, stack u64 mpcRounds) -> stack u32[8]{
 
 
 inline 
-fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64 mpcRounds, stack u64 success, stack u32[14720] randomness_p1, stack u32[14720] randomness_p2, reg u64 randomness_player1) -> stack u64 {
+fn verify(reg u64 a, stack u64[136] es, reg u64 zs, reg u64 mpc_round, stack u64 mpcRounds, stack u64 success, stack u32[200192] randomness_p1, stack u32[200192] randomness_p2, reg u64 randomness_player1) -> stack u64 {
 	
 	stack u32[8] hash_p1, hash_p2;
 	stack u32[5] result;
@@ -2014,7 +1992,6 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 		mem = (u8)[a + (int)temp_a];
 
 		if( t != mem){
-            (u8)[a + 0] = 0;
 			success = 1;
 		}
 
@@ -2047,7 +2024,6 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 		mem = (u8)[a + (int)temp_a];
 
 		if( t != mem){
-            (u8)[a + 1] = 1;
 			success = 1;
 		}
 
@@ -2082,7 +2058,6 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
         mem = (u8)[zs + (int) temp_zs];
 
 		if(t != mem){
-            (u8)[a + 2] = 2;
 			success = 1;
 		}
 
@@ -2117,7 +2092,6 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
         mem = (u8)[zs + (int) temp_zs];
 
         if(t != mem){
-            (u8)[a + 3] = 3;
             success = 1;
         }
 
@@ -2263,7 +2237,7 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 
 			f = mpc_XOR2(vc,vd,f);
             
-			f, randCount, countY, success = mpc_AND_verify(vb, f, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+			f, randCount, countY, success = mpc_AND_verify(vb, f, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
             
 			f = mpc_XOR2(vd,f,f);
 
@@ -2280,7 +2254,7 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
             if(i_s > 39){
                 if(i_s <= 59) {
                     
-                    f, randCount, countY, success = mpc_MAJ_verify(vb, vc, vd, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+                    f, randCount, countY, success = mpc_MAJ_verify(vb, vc, vd, f, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
                     k = 0x8F1BBCDC;
 
@@ -2296,16 +2270,16 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
         temp = mpc_LEFTROTATE2_5(va,temp);
 
 
-    	temp, randCount, countY, success = mpc_ADD_verify(f, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    	temp, randCount, countY, success = mpc_ADD_verify(f, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
             
         
-        temp, randCount, countY, success = mpc_ADD_verify(ve, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+        temp, randCount, countY, success = mpc_ADD_verify(ve, temp, temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
         temp1[0] = k;
         temp1[1] = k;
 
                  
-        temp, randCount, countY, success = mpc_ADD_verify(temp,temp1,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+        temp, randCount, countY, success = mpc_ADD_verify(temp,temp1,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
                 
         i = i_s;
 
@@ -2316,7 +2290,7 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
         storage_u32 = w[(int)j];
         w_aux[1] = storage_u32;
 
-    	temp, randCount, countY, success = mpc_ADD_verify(w_aux,temp,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    	temp, randCount, countY, success = mpc_ADD_verify(w_aux,temp,temp, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
         
         
 		storage_u32 = vd[0];
@@ -2358,35 +2332,35 @@ fn verify(reg u64 a, stack u64[128] es, reg u64 zs, reg u64 mpc_round, stack u64
 	hHa[0] = storage_u32;
 	hHa[1] = storage_u32;
 
-    temp, randCount, countY, success = mpc_ADD_verify(hHa, va, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, va, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
 
 	storage_u32 = hA[1];
 	hHa[0] = storage_u32;
 	hHa[1] = storage_u32;
 
-    temp, randCount, countY, success = mpc_ADD_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, vb, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
 
 	storage_u32 = hA[2];
 	hHa[0] = storage_u32;
 	hHa[1] = storage_u32;
 
-    temp, randCount, countY, success = mpc_ADD_verify(hHa, vc, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, vc, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
 
 	storage_u32 = hA[3];
 	hHa[0] = storage_u32;
 	hHa[1] = storage_u32;
 
-    temp, randCount, countY, success = mpc_ADD_verify(hHa, vd, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, vd, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
 
 	storage_u32 = hA[4];
 	hHa[0] = storage_u32;
 	hHa[1] = storage_u32;
 
-    temp, randCount, countY, success = mpc_ADD_verify(hHa, ve, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success, a);
+    temp, randCount, countY, success = mpc_ADD_verify(hHa, ve, hHa, zs, randomness_p1, randomness_p2, randCount, countY, mpc_round, success);
 
 	return success;
 }
@@ -2423,14 +2397,14 @@ fn zkboo_decrypt(reg u64 proofs, reg u64 a, reg u64 randomness_player1, reg u64 
 
 	stack u32[8] y;
 	stack u64 mpcRounds, success;
-	stack u64[128] es;
-    stack u32[14720] randomness_p1, randomness_p2;
+	stack u64[136] es;
+    stack u32[200192] randomness_p1, randomness_p2;
     reg u64 pos_randomness;
 
 	reg u64 i, j, z;
     reg u8 t;
 
-	mpcRounds = 10;
+	mpcRounds = 136;
 
     i = 0;
     pos_randomness = 0;
@@ -2462,12 +2436,13 @@ fn zkboo_decrypt(reg u64 proofs, reg u64 a, reg u64 randomness_player1, reg u64 
     
     success = 0;
 	i = 0;
-	while(i < mpcRounds){
+	while(i < 10){
 
 		success = verify(a, es, proofs, i, mpcRounds, success, randomness_p1, randomness_p2, randomness_player1);
 
 		i += 1;
 	}
+
 
     (u64)[success_reg + 0] = success; 
 }

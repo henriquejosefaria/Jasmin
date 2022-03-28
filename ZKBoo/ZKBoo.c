@@ -13,7 +13,7 @@
 
 #include <openssl/rand.h>
 
-#define NUM_ROUNDS 10
+#define NUM_ROUNDS 136
 #define debug 0
 
 typedef struct {
@@ -106,7 +106,7 @@ int main(void)
 	//uint64_t *mpcRounds = &mpcRounds;
 
 
-	uint64_t rs[192];							// NUM_ROUNDS * 3 * 4
+	uint64_t rs[204];							// NUM_ROUNDS * 3 * 4
 	uint8_t *r;
 	
 	uint8_t *s;
@@ -177,15 +177,6 @@ int main(void)
 		for(int j = 0; j<3; j++) {
 			randomness_aux[k][j] = malloc(1472*sizeof(unsigned char));
 			getAllRandomness(keys_aux[k][j], randomness_aux[k][j]);
-			/*
-			if(k == 0){
-				printf("key = {\n");
-				for(int i =0; i< 16;i++){
-					printf("%u, ",keys_aux[k][j][i] );
-				}
-				printf("}\n\n");
-			}
-			*/
 		}
 	}
 
@@ -283,6 +274,7 @@ int main(void)
 
 	zkboo_encrypt(rs, randomness, keys_shares, proofs, views, a);	
 
+	
 	uint8_t key[32];
 	int temp_zs;
 	proofs_p = proofs;
@@ -302,7 +294,7 @@ int main(void)
 		getAllRandomness((unsigned char*)  key + 16, (unsigned char*) &randomness_p2[k * 1472]);
 	}
 
-	
+	printf("\n\n!!!!\n\n");
 	zkboo_decrypt(proofs, a, randomness_p1, randomness_p2, &success);
 
 	if(success == 1) printf("Success(%d) != 0 => Failed!!\n", success);

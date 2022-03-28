@@ -5,33 +5,32 @@
 _zkboo_encrypt:
 zkboo_encrypt:
 	movq	%rsp, %rax
-	leaq	-6832(%rsp), %rsp
+	leaq	-31104(%rsp), %rsp
 	andq	$-8, %rsp
-	movq	%rax, 6776(%rsp)
-	movq	%rbx, 6784(%rsp)
-	movq	%rbp, 6792(%rsp)
-	movq	%r12, 6800(%rsp)
-	movq	%r13, 6808(%rsp)
-	movq	%r14, 6816(%rsp)
-	movq	%r15, 6824(%rsp)
-	movq	$10, (%rsp)
-	movq	$128, %rax
-	movq	%rax, 8(%rsp)
+	movq	%rax, 31048(%rsp)
+	movq	%rbx, 31056(%rsp)
+	movq	%rbp, 31064(%rsp)
+	movq	%r12, 31072(%rsp)
+	movq	%r13, 31080(%rsp)
+	movq	%r14, 31088(%rsp)
+	movq	%r15, 31096(%rsp)
+	movq	$136, (%rsp)
+	movq	$128, 8(%rsp)
 	movq	%rcx, 16(%rsp)
 	movq	$0, %r15
 	jmp 	Lzkboo_encrypt$205
 Lzkboo_encrypt$206:
 	movq	$0, %rax
-	movl	$1732584193, 1296(%rsp)
-	movl	$-271733879, 1300(%rsp)
-	movl	$-1732584194, 1304(%rsp)
-	movl	$271733878, 1308(%rsp)
-	movl	$-1009589776, 1312(%rsp)
+	movl	$1732584193, 1372(%rsp)
+	movl	$-271733879, 1376(%rsp)
+	movl	$-1732584194, 1380(%rsp)
+	movl	$271733878, 1384(%rsp)
+	movl	$-1009589776, 1388(%rsp)
 	movq	$0, %rcx
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3409
 Lzkboo_encrypt$3410:
-	movb	$0, 3184(%rsp,%r10)
+	movb	$0, 3260(%rsp,%r10)
 	incq	%r10
 Lzkboo_encrypt$3409:
 	cmpq	$192, %r10
@@ -39,7 +38,7 @@ Lzkboo_encrypt$3409:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3407
 Lzkboo_encrypt$3408:
-	movl	$0, 2112(%rsp,%r10,4)
+	movl	$0, 2188(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$3407:
 	cmpq	$240, %r10
@@ -60,7 +59,7 @@ Lzkboo_encrypt$3400:
 	jmp 	Lzkboo_encrypt$3405
 Lzkboo_encrypt$3406:
 	movb	(%rdx,%r10), %bl
-	movb	%bl, 3184(%rsp,%r11)
+	movb	%bl, 3260(%rsp,%r11)
 	incq	%r11
 	incq	%r10
 	incq	%rbp
@@ -69,15 +68,15 @@ Lzkboo_encrypt$3405:
 	jb  	Lzkboo_encrypt$3406
 	imulq	$64, 24(%rsp), %r10
 	addq	$16, %r10
-	movb	$-128, 3184(%rsp,%r10)
+	movb	$-128, 3260(%rsp,%r10)
 	imulq	$64, 24(%rsp), %r10
 	addq	$62, %r10
 	movq	8(%rsp), %r11
 	shrq	$8, %r11
-	movb	%r11b, 3184(%rsp,%r10)
+	movb	%r11b, 3260(%rsp,%r10)
 	incq	%r10
 	movq	8(%rsp), %r11
-	movb	%r11b, 3184(%rsp,%r10)
+	movb	%r11b, 3260(%rsp,%r10)
 	imulq	$64, 24(%rsp), %r10
 	imulq	$64, 24(%rsp), %r11
 	imulq	(%rsp), %r11
@@ -86,7 +85,7 @@ Lzkboo_encrypt$3405:
 	movq	$0, 32(%rsp)
 	jmp 	Lzkboo_encrypt$3403
 Lzkboo_encrypt$3404:
-	movb	3184(%rsp,%r10), %bpl
+	movb	3260(%rsp,%r10), %bpl
 	movb	%bpl, (%r8,%r11)
 	incq	%r11
 	incq	%r10
@@ -100,22 +99,22 @@ Lzkboo_encrypt$3402:
 	imulq	$64, 24(%rsp), %r10
 	imulq	$4, 32(%rsp), %r11
 	addq	%r11, %r10
-	movb	3184(%rsp,%r10), %r11b
-	movb	%r11b, 1095(%rsp)
+	movb	3260(%rsp,%r10), %r11b
+	movb	%r11b, 1159(%rsp)
 	incq	%r10
-	movb	3184(%rsp,%r10), %r11b
-	movb	%r11b, 1094(%rsp)
+	movb	3260(%rsp,%r10), %r11b
+	movb	%r11b, 1158(%rsp)
 	incq	%r10
-	movb	3184(%rsp,%r10), %r11b
-	movb	%r11b, 1093(%rsp)
+	movb	3260(%rsp,%r10), %r11b
+	movb	%r11b, 1157(%rsp)
 	incq	%r10
-	movb	3184(%rsp,%r10), %r10b
-	movb	%r10b, 1092(%rsp)
-	movl	1092(%rsp), %r10d
+	movb	3260(%rsp,%r10), %r10b
+	movb	%r10b, 1156(%rsp)
+	movl	1156(%rsp), %r10d
 	movq	24(%rsp), %r11
 	imulq	$80, %r11, %r11
 	addq	32(%rsp), %r11
-	movl	%r10d, 2112(%rsp,%r11,4)
+	movl	%r10d, 2188(%rsp,%r11,4)
 	incq	32(%rsp)
 Lzkboo_encrypt$3401:
 	cmpq	$16, 32(%rsp)
@@ -133,16 +132,16 @@ Lzkboo_encrypt$3394:
 	movq	32(%rsp), %r10
 	imulq	$80, %r10, %r10
 	addq	24(%rsp), %r10
-	movl	2100(%rsp,%r10,4), %r11d
-	movl	2080(%rsp,%r10,4), %ebp
-	movl	%r11d, 1140(%rsp)
-	xorl	%ebp, 1140(%rsp)
-	movl	2056(%rsp,%r10,4), %r11d
-	xorl	%r11d, 1140(%rsp)
-	movl	2048(%rsp,%r10,4), %r11d
-	xorl	%r11d, 1140(%rsp)
+	movl	2176(%rsp,%r10,4), %r11d
+	movl	2156(%rsp,%r10,4), %ebp
+	movl	%r11d, 1204(%rsp)
+	xorl	%ebp, 1204(%rsp)
+	movl	2132(%rsp,%r10,4), %r11d
+	xorl	%r11d, 1204(%rsp)
+	movl	2124(%rsp,%r10,4), %r11d
+	xorl	%r11d, 1204(%rsp)
 	movq	$1, %r11
-	movl	1140(%rsp), %ebp
+	movl	1204(%rsp), %ebp
 	movq	%r11, %rbx
 	jmp 	Lzkboo_encrypt$3397
 Lzkboo_encrypt$3398:
@@ -153,7 +152,7 @@ Lzkboo_encrypt$3397:
 	jnbe	Lzkboo_encrypt$3398
 	movq	$32, %rbx
 	subq	%r11, %rbx
-	movl	1140(%rsp), %r11d
+	movl	1204(%rsp), %r11d
 	jmp 	Lzkboo_encrypt$3395
 Lzkboo_encrypt$3396:
 	shrl	$1, %r11d
@@ -162,7 +161,7 @@ Lzkboo_encrypt$3395:
 	cmpq	$0, %rbx
 	jnbe	Lzkboo_encrypt$3396
 	orl 	%r11d, %ebp
-	movl	%ebp, 2112(%rsp,%r10,4)
+	movl	%ebp, 2188(%rsp,%r10,4)
 	incq	32(%rsp)
 Lzkboo_encrypt$3393:
 	cmpq	$3, 32(%rsp)
@@ -171,43 +170,43 @@ Lzkboo_encrypt$3393:
 Lzkboo_encrypt$3391:
 	cmpq	$80, 24(%rsp)
 	jb  	Lzkboo_encrypt$3392
-	movl	1296(%rsp), %r10d
-	movl	%r10d, 1152(%rsp)
-	movl	%r10d, 1156(%rsp)
-	movl	%r10d, 1160(%rsp)
-	movl	1300(%rsp), %r10d
-	movl	%r10d, 1164(%rsp)
-	movl	%r10d, 1168(%rsp)
-	movl	%r10d, 1172(%rsp)
-	movl	1304(%rsp), %r10d
-	movl	%r10d, 1176(%rsp)
-	movl	%r10d, 1180(%rsp)
-	movl	%r10d, 1184(%rsp)
-	movl	1308(%rsp), %r10d
-	movl	%r10d, 1188(%rsp)
-	movl	%r10d, 1192(%rsp)
-	movl	%r10d, 1196(%rsp)
-	movl	1312(%rsp), %r10d
-	movl	%r10d, 1200(%rsp)
-	movl	%r10d, 1204(%rsp)
-	movl	%r10d, 1208(%rsp)
+	movl	1372(%rsp), %r10d
+	movl	%r10d, 1216(%rsp)
+	movl	%r10d, 1220(%rsp)
+	movl	%r10d, 1224(%rsp)
+	movl	1376(%rsp), %r10d
+	movl	%r10d, 1228(%rsp)
+	movl	%r10d, 1232(%rsp)
+	movl	%r10d, 1236(%rsp)
+	movl	1380(%rsp), %r10d
+	movl	%r10d, 1240(%rsp)
+	movl	%r10d, 1244(%rsp)
+	movl	%r10d, 1248(%rsp)
+	movl	1384(%rsp), %r10d
+	movl	%r10d, 1252(%rsp)
+	movl	%r10d, 1256(%rsp)
+	movl	%r10d, 1260(%rsp)
+	movl	1388(%rsp), %r10d
+	movl	%r10d, 1264(%rsp)
+	movl	%r10d, 1268(%rsp)
+	movl	%r10d, 1272(%rsp)
 	movq	$0, 24(%rsp)
 	jmp 	Lzkboo_encrypt$2217
 Lzkboo_encrypt$2218:
 	cmpq	$19, 24(%rsp)
 	jnbe	Lzkboo_encrypt$3386
-	movl	1176(%rsp), %r10d
-	xorl	1188(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1180(%rsp), %r10d
-	xorl	1192(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1184(%rsp), %r10d
-	xorl	1196(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	1212(%rsp), %r10d
-	movl	1216(%rsp), %ebp
-	movl	1220(%rsp), %r11d
+	movl	1240(%rsp), %r10d
+	xorl	1252(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1244(%rsp), %r10d
+	xorl	1256(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1248(%rsp), %r10d
+	xorl	1260(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	1288(%rsp), %r10d
+	movl	1292(%rsp), %ebp
+	movl	1296(%rsp), %r11d
 	movq	$0, %rbx
 	jmp 	Lzkboo_encrypt$3389
 Lzkboo_encrypt$3390:
@@ -217,57 +216,57 @@ Lzkboo_encrypt$3390:
 	addq	%r13, %r12
 	addq	%rcx, %r12
 	movl	(%rsi,%r12), %r12d
-	movl	%r12d, 1224(%rsp,%rbx,4)
+	movl	%r12d, 1300(%rsp,%rbx,4)
 	incq	%rbx
 Lzkboo_encrypt$3389:
 	cmpq	$3, %rbx
 	jb  	Lzkboo_encrypt$3390
 	addq	$4, %rcx
-	movl	1164(%rsp), %ebx
+	movl	1228(%rsp), %ebx
 	movl	%ebp, %r12d
 	andl	%r12d, %ebx
-	movl	1168(%rsp), %r12d
+	movl	1232(%rsp), %r12d
 	movl	%r10d, %r13d
 	andl	%r13d, %r12d
-	movl	1164(%rsp), %r13d
+	movl	1228(%rsp), %r13d
 	movl	%r10d, %r14d
 	andl	%r14d, %r13d
 	xorl	%r12d, %ebx
 	xorl	%r13d, %ebx
-	movl	1224(%rsp), %r12d
+	movl	1300(%rsp), %r12d
 	xorl	%r12d, %ebx
-	movl	1228(%rsp), %r12d
+	movl	1304(%rsp), %r12d
 	xorl	%r12d, %ebx
-	movl	%ebx, 1212(%rsp)
-	movl	1168(%rsp), %ebx
+	movl	%ebx, 1288(%rsp)
+	movl	1232(%rsp), %ebx
 	movl	%r11d, %r12d
 	andl	%r12d, %ebx
-	movl	1172(%rsp), %r12d
+	movl	1236(%rsp), %r12d
 	movl	%ebp, %r13d
 	andl	%r13d, %r12d
-	movl	1168(%rsp), %r13d
+	movl	1232(%rsp), %r13d
 	andl	%ebp, %r13d
 	xorl	%r12d, %ebx
 	xorl	%r13d, %ebx
-	movl	1228(%rsp), %ebp
+	movl	1304(%rsp), %ebp
 	xorl	%ebp, %ebx
-	movl	1232(%rsp), %ebp
+	movl	1308(%rsp), %ebp
 	xorl	%ebp, %ebx
-	movl	%ebx, 1216(%rsp)
-	movl	1172(%rsp), %ebp
+	movl	%ebx, 1292(%rsp)
+	movl	1236(%rsp), %ebp
 	andl	%r10d, %ebp
-	movl	1164(%rsp), %r10d
+	movl	1228(%rsp), %r10d
 	movl	%r11d, %ebx
 	andl	%ebx, %r10d
-	movl	1172(%rsp), %ebx
+	movl	1236(%rsp), %ebx
 	andl	%r11d, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	movl	1232(%rsp), %r10d
+	movl	1308(%rsp), %r10d
 	xorl	%r10d, %ebp
-	movl	1224(%rsp), %r10d
+	movl	1300(%rsp), %r10d
 	xorl	%r10d, %ebp
-	movl	%ebp, 1220(%rsp)
+	movl	%ebp, 1296(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3387
 Lzkboo_encrypt$3388:
@@ -280,85 +279,85 @@ Lzkboo_encrypt$3388:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1212(%rsp,%r10,4), %ebp
+	movl	1288(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$3387:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$3388
 	addq	$4, %rax
-	movl	1188(%rsp), %r10d
-	xorl	1212(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1192(%rsp), %r10d
-	xorl	1216(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1196(%rsp), %r10d
-	xorl	1220(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	$1518500249, 1088(%rsp)
+	movl	1252(%rsp), %r10d
+	xorl	1288(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1256(%rsp), %r10d
+	xorl	1292(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1260(%rsp), %r10d
+	xorl	1296(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$1518500249, 1152(%rsp)
 Lzkboo_encrypt$3386:
 	cmpq	$19, 24(%rsp)
 	jbe 	Lzkboo_encrypt$3377
 	cmpq	$39, 24(%rsp)
 	jnbe	Lzkboo_encrypt$3385
-	movl	1164(%rsp), %r10d
-	xorl	1176(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1168(%rsp), %r10d
-	xorl	1180(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1172(%rsp), %r10d
-	xorl	1184(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	1188(%rsp), %r10d
-	xorl	1212(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1192(%rsp), %r10d
-	xorl	1216(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1196(%rsp), %r10d
-	xorl	1220(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	$1859775393, 1088(%rsp)
+	movl	1228(%rsp), %r10d
+	xorl	1240(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1232(%rsp), %r10d
+	xorl	1244(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1236(%rsp), %r10d
+	xorl	1248(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	1252(%rsp), %r10d
+	xorl	1288(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1256(%rsp), %r10d
+	xorl	1292(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1260(%rsp), %r10d
+	xorl	1296(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$1859775393, 1152(%rsp)
 Lzkboo_encrypt$3385:
 	cmpq	$39, 24(%rsp)
 	jbe 	Lzkboo_encrypt$3377
 	cmpq	$59, 24(%rsp)
 	jnbe	Lzkboo_encrypt$3380
-	movl	$0, 1224(%rsp)
-	movl	$0, 1228(%rsp)
-	movl	$0, 1232(%rsp)
-	movl	$0, 1236(%rsp)
-	movl	$0, 1240(%rsp)
-	movl	$0, 1244(%rsp)
-	movl	1164(%rsp), %r10d
-	xorl	1176(%rsp), %r10d
-	movl	%r10d, 1224(%rsp)
-	movl	1168(%rsp), %r10d
-	xorl	1180(%rsp), %r10d
-	movl	%r10d, 1228(%rsp)
-	movl	1172(%rsp), %r10d
-	xorl	1184(%rsp), %r10d
-	movl	%r10d, 1232(%rsp)
-	movl	1164(%rsp), %r10d
-	xorl	1188(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
-	movl	1168(%rsp), %r10d
-	xorl	1192(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
-	movl	1172(%rsp), %r10d
-	xorl	1196(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
+	movl	$0, 1300(%rsp)
+	movl	$0, 1304(%rsp)
+	movl	$0, 1308(%rsp)
+	movl	$0, 1312(%rsp)
+	movl	$0, 1316(%rsp)
+	movl	$0, 1320(%rsp)
+	movl	1228(%rsp), %r10d
+	xorl	1240(%rsp), %r10d
+	movl	%r10d, 1300(%rsp)
+	movl	1232(%rsp), %r10d
+	xorl	1244(%rsp), %r10d
+	movl	%r10d, 1304(%rsp)
 	movl	1236(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1240(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1244(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
+	xorl	1248(%rsp), %r10d
+	movl	%r10d, 1308(%rsp)
+	movl	1228(%rsp), %r10d
+	xorl	1252(%rsp), %r10d
+	movl	%r10d, 1312(%rsp)
+	movl	1232(%rsp), %r10d
+	xorl	1256(%rsp), %r10d
+	movl	%r10d, 1316(%rsp)
 	movl	1236(%rsp), %r10d
-	movl	1240(%rsp), %ebp
-	movl	1244(%rsp), %r11d
+	xorl	1260(%rsp), %r10d
+	movl	%r10d, 1320(%rsp)
+	movl	1312(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1316(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1320(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	1312(%rsp), %r10d
+	movl	1316(%rsp), %ebp
+	movl	1320(%rsp), %r11d
 	movq	$0, %rbx
 	jmp 	Lzkboo_encrypt$3383
 Lzkboo_encrypt$3384:
@@ -368,57 +367,57 @@ Lzkboo_encrypt$3384:
 	addq	%r13, %r12
 	addq	%rcx, %r12
 	movl	(%rsi,%r12), %r12d
-	movl	%r12d, 1236(%rsp,%rbx,4)
+	movl	%r12d, 1312(%rsp,%rbx,4)
 	incq	%rbx
 Lzkboo_encrypt$3383:
 	cmpq	$3, %rbx
 	jb  	Lzkboo_encrypt$3384
 	addq	$4, %rcx
-	movl	1224(%rsp), %ebx
+	movl	1300(%rsp), %ebx
 	movl	%ebp, %r12d
 	andl	%r12d, %ebx
-	movl	1228(%rsp), %r12d
+	movl	1304(%rsp), %r12d
 	movl	%r10d, %r13d
 	andl	%r13d, %r12d
-	movl	1224(%rsp), %r13d
+	movl	1300(%rsp), %r13d
 	movl	%r10d, %r14d
 	andl	%r14d, %r13d
 	xorl	%r12d, %ebx
 	xorl	%r13d, %ebx
-	movl	1236(%rsp), %r12d
+	movl	1312(%rsp), %r12d
 	xorl	%r12d, %ebx
-	movl	1240(%rsp), %r12d
+	movl	1316(%rsp), %r12d
 	xorl	%r12d, %ebx
-	movl	%ebx, 1212(%rsp)
-	movl	1228(%rsp), %ebx
+	movl	%ebx, 1288(%rsp)
+	movl	1304(%rsp), %ebx
 	movl	%r11d, %r12d
 	andl	%r12d, %ebx
-	movl	1232(%rsp), %r12d
+	movl	1308(%rsp), %r12d
 	movl	%ebp, %r13d
 	andl	%r13d, %r12d
-	movl	1228(%rsp), %r13d
+	movl	1304(%rsp), %r13d
 	andl	%ebp, %r13d
 	xorl	%r12d, %ebx
 	xorl	%r13d, %ebx
-	movl	1240(%rsp), %ebp
+	movl	1316(%rsp), %ebp
 	xorl	%ebp, %ebx
-	movl	1244(%rsp), %ebp
+	movl	1320(%rsp), %ebp
 	xorl	%ebp, %ebx
-	movl	%ebx, 1216(%rsp)
-	movl	1232(%rsp), %ebp
+	movl	%ebx, 1292(%rsp)
+	movl	1308(%rsp), %ebp
 	andl	%r10d, %ebp
-	movl	1224(%rsp), %r10d
+	movl	1300(%rsp), %r10d
 	movl	%r11d, %ebx
 	andl	%ebx, %r10d
-	movl	1232(%rsp), %ebx
+	movl	1308(%rsp), %ebx
 	andl	%r11d, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	movl	1244(%rsp), %r10d
+	movl	1320(%rsp), %r10d
 	xorl	%r10d, %ebp
-	movl	1236(%rsp), %r10d
+	movl	1312(%rsp), %r10d
 	xorl	%r10d, %ebp
-	movl	%ebp, 1220(%rsp)
+	movl	%ebp, 1296(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3381
 Lzkboo_encrypt$3382:
@@ -431,81 +430,81 @@ Lzkboo_encrypt$3382:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1212(%rsp,%r10,4), %ebp
+	movl	1288(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$3381:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$3382
 	addq	$4, %rax
-	movl	1212(%rsp), %r10d
-	xorl	1164(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1216(%rsp), %r10d
-	xorl	1168(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1220(%rsp), %r10d
-	xorl	1172(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	$-1894007588, 1088(%rsp)
+	movl	1288(%rsp), %r10d
+	xorl	1228(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1292(%rsp), %r10d
+	xorl	1232(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1296(%rsp), %r10d
+	xorl	1236(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$-1894007588, 1152(%rsp)
 Lzkboo_encrypt$3380:
 	cmpq	$59, 24(%rsp)
 	jbe 	Lzkboo_encrypt$3377
-	movl	1164(%rsp), %r10d
-	xorl	1176(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1168(%rsp), %r10d
-	xorl	1180(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1172(%rsp), %r10d
-	xorl	1184(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	1188(%rsp), %r10d
-	xorl	1212(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1192(%rsp), %r10d
-	xorl	1216(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1196(%rsp), %r10d
-	xorl	1220(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	$-899497514, 1088(%rsp)
+	movl	1228(%rsp), %r10d
+	xorl	1240(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1232(%rsp), %r10d
+	xorl	1244(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1236(%rsp), %r10d
+	xorl	1248(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	1252(%rsp), %r10d
+	xorl	1288(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1256(%rsp), %r10d
+	xorl	1292(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1260(%rsp), %r10d
+	xorl	1296(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$-899497514, 1152(%rsp)
 Lzkboo_encrypt$3379:
 Lzkboo_encrypt$3378:
 Lzkboo_encrypt$3377:
-	movl	1152(%rsp), %r10d
-	movl	1152(%rsp), %r11d
-	shll	$5, %r10d
-	shrl	$27, %r11d
-	orl 	%r11d, %r10d
-	movl	%r10d, 1140(%rsp)
-	movl	1156(%rsp), %r10d
-	movl	1156(%rsp), %r11d
-	shll	$5, %r10d
-	shrl	$27, %r11d
-	orl 	%r11d, %r10d
-	movl	%r10d, 1144(%rsp)
-	movl	1160(%rsp), %r10d
-	movl	1160(%rsp), %r11d
-	shll	$5, %r10d
-	shrl	$27, %r11d
-	orl 	%r11d, %r10d
-	movl	%r10d, 1148(%rsp)
-	movl	1212(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
 	movl	1216(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
+	movl	1216(%rsp), %r11d
+	shll	$5, %r10d
+	shrl	$27, %r11d
+	orl 	%r11d, %r10d
+	movl	%r10d, 1204(%rsp)
 	movl	1220(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1224(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1228(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1232(%rsp)
-	movl	$0, 1248(%rsp)
-	movl	$0, 1252(%rsp)
-	movl	$0, 1256(%rsp)
+	movl	1220(%rsp), %r11d
+	shll	$5, %r10d
+	shrl	$27, %r11d
+	orl 	%r11d, %r10d
+	movl	%r10d, 1208(%rsp)
+	movl	1224(%rsp), %r10d
+	movl	1224(%rsp), %r11d
+	shll	$5, %r10d
+	shrl	$27, %r11d
+	orl 	%r11d, %r10d
+	movl	%r10d, 1212(%rsp)
+	movl	1288(%rsp), %r10d
+	movl	%r10d, 1312(%rsp)
+	movl	1292(%rsp), %r10d
+	movl	%r10d, 1316(%rsp)
+	movl	1296(%rsp), %r10d
+	movl	%r10d, 1320(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1300(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1304(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1308(%rsp)
+	movl	$0, 1324(%rsp)
+	movl	$0, 1328(%rsp)
+	movl	$0, 1332(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3375
 Lzkboo_encrypt$3376:
@@ -515,7 +514,7 @@ Lzkboo_encrypt$3376:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1260(%rsp,%r10,4)
+	movl	%r11d, 1336(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$3375:
 	cmpq	$3, %r10
@@ -529,8 +528,8 @@ Lzkboo_encrypt$3008:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$3309
 Lzkboo_encrypt$3310:
-	movl	1212(%rsp,%rbp,4), %ebx
-	xorl	1248(%rsp,%rbp,4), %ebx
+	movl	1288(%rsp,%rbp,4), %ebx
+	xorl	1324(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3374
 	shrl	$0, %ebx
@@ -691,9 +690,9 @@ Lzkboo_encrypt$3344:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$3343:
-	movl	%ebx, 1284(%rsp,%rbp,4)
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1248(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1360(%rsp,%rbp,4)
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1324(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3342
 	shrl	$0, %ebx
@@ -854,22 +853,22 @@ Lzkboo_encrypt$3312:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$3311:
-	movl	%ebx, 1272(%rsp,%rbp,4)
+	movl	%ebx, 1348(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$3309:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$3310
-	movl	1284(%rsp), %ebp
-	andl	1276(%rsp), %ebp
-	movl	1288(%rsp), %ebx
-	movl	1272(%rsp), %r12d
+	movl	1360(%rsp), %ebp
+	andl	1352(%rsp), %ebp
+	movl	1364(%rsp), %ebx
+	movl	1348(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1284(%rsp), %ebx
-	movl	1272(%rsp), %r12d
+	movl	1360(%rsp), %ebx
+	movl	1348(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3308
 	shrl	$0, %ebx
@@ -1031,7 +1030,7 @@ Lzkboo_encrypt$3278:
 	andl	$1, %ebx
 Lzkboo_encrypt$3277:
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
+	movl	1324(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3276
 	shrl	$0, %ebx
@@ -1193,7 +1192,7 @@ Lzkboo_encrypt$3246:
 	andl	$1, %ebx
 Lzkboo_encrypt$3245:
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3244
 	shrl	$0, %ebx
@@ -1355,7 +1354,7 @@ Lzkboo_encrypt$3214:
 	andl	$1, %ebx
 Lzkboo_encrypt$3213:
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
+	movl	1324(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$3211
@@ -1374,18 +1373,18 @@ Lzkboo_encrypt$3211:
 Lzkboo_encrypt$3209:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$3210:
-	movl	%ebx, 1248(%rsp)
-	movl	1288(%rsp), %ebp
-	andl	1280(%rsp), %ebp
-	movl	1292(%rsp), %ebx
-	movl	1276(%rsp), %r12d
+	movl	%ebx, 1324(%rsp)
+	movl	1364(%rsp), %ebp
+	andl	1356(%rsp), %ebp
+	movl	1368(%rsp), %ebx
+	movl	1352(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1288(%rsp), %ebx
-	movl	1276(%rsp), %r12d
+	movl	1364(%rsp), %ebx
+	movl	1352(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3208
 	shrl	$0, %ebx
@@ -1547,7 +1546,7 @@ Lzkboo_encrypt$3178:
 	andl	$1, %ebx
 Lzkboo_encrypt$3177:
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
+	movl	1328(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3176
 	shrl	$0, %ebx
@@ -1709,7 +1708,7 @@ Lzkboo_encrypt$3146:
 	andl	$1, %ebx
 Lzkboo_encrypt$3145:
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3144
 	shrl	$0, %ebx
@@ -1871,7 +1870,7 @@ Lzkboo_encrypt$3114:
 	andl	$1, %ebx
 Lzkboo_encrypt$3113:
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
+	movl	1328(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$3111
@@ -1890,18 +1889,18 @@ Lzkboo_encrypt$3111:
 Lzkboo_encrypt$3109:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$3110:
-	movl	%ebx, 1252(%rsp)
-	movl	1292(%rsp), %ebp
-	andl	1272(%rsp), %ebp
-	movl	1284(%rsp), %ebx
-	movl	1280(%rsp), %r12d
+	movl	%ebx, 1328(%rsp)
+	movl	1368(%rsp), %ebp
+	andl	1348(%rsp), %ebp
+	movl	1360(%rsp), %ebx
+	movl	1356(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1292(%rsp), %ebx
-	movl	1280(%rsp), %r12d
+	movl	1368(%rsp), %ebx
+	movl	1356(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3108
 	shrl	$0, %ebx
@@ -2063,7 +2062,7 @@ Lzkboo_encrypt$3078:
 	andl	$1, %ebx
 Lzkboo_encrypt$3077:
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
+	movl	1332(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3076
 	shrl	$0, %ebx
@@ -2225,7 +2224,7 @@ Lzkboo_encrypt$3046:
 	andl	$1, %ebx
 Lzkboo_encrypt$3045:
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3044
 	shrl	$0, %ebx
@@ -2387,7 +2386,7 @@ Lzkboo_encrypt$3014:
 	andl	$1, %ebx
 Lzkboo_encrypt$3013:
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
+	movl	1332(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$3011
 Lzkboo_encrypt$3012:
@@ -2405,7 +2404,7 @@ Lzkboo_encrypt$3011:
 Lzkboo_encrypt$3009:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$3010:
-	movl	%ebx, 1256(%rsp)
+	movl	%ebx, 1332(%rsp)
 	incq	%r10
 Lzkboo_encrypt$3007:
 	cmpq	$31, %r10
@@ -2413,12 +2412,12 @@ Lzkboo_encrypt$3007:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3005
 Lzkboo_encrypt$3006:
-	movl	1236(%rsp,%r10,4), %r11d
-	movl	1224(%rsp,%r10,4), %ebp
-	movl	1248(%rsp,%r10,4), %ebx
+	movl	1312(%rsp,%r10,4), %r11d
+	movl	1300(%rsp,%r10,4), %ebp
+	movl	1324(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -2427,28 +2426,28 @@ Lzkboo_encrypt$3006:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1248(%rsp,%r10,4), %ebp
+	movl	1324(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$3005:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$3006
 	addq	$4, %rax
-	movl	1200(%rsp), %r10d
-	movl	%r10d, 1248(%rsp)
+	movl	1264(%rsp), %r10d
+	movl	%r10d, 1324(%rsp)
+	movl	1268(%rsp), %r10d
+	movl	%r10d, 1328(%rsp)
+	movl	1272(%rsp), %r10d
+	movl	%r10d, 1332(%rsp)
 	movl	1204(%rsp), %r10d
-	movl	%r10d, 1252(%rsp)
+	movl	%r10d, 1300(%rsp)
 	movl	1208(%rsp), %r10d
-	movl	%r10d, 1256(%rsp)
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1224(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1228(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1232(%rsp)
-	movl	$0, 1236(%rsp)
-	movl	$0, 1240(%rsp)
-	movl	$0, 1244(%rsp)
+	movl	%r10d, 1304(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1308(%rsp)
+	movl	$0, 1312(%rsp)
+	movl	$0, 1316(%rsp)
+	movl	$0, 1320(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$3003
 Lzkboo_encrypt$3004:
@@ -2458,7 +2457,7 @@ Lzkboo_encrypt$3004:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1284(%rsp,%r10,4)
+	movl	%r11d, 1360(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$3003:
 	cmpq	$3, %r10
@@ -2472,8 +2471,8 @@ Lzkboo_encrypt$2636:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$2937
 Lzkboo_encrypt$2938:
-	movl	1200(%rsp,%rbp,4), %ebx
-	xorl	1236(%rsp,%rbp,4), %ebx
+	movl	1264(%rsp,%rbp,4), %ebx
+	xorl	1312(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$3002
 	shrl	$0, %ebx
@@ -2634,9 +2633,9 @@ Lzkboo_encrypt$2972:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$2971:
-	movl	%ebx, 1260(%rsp,%rbp,4)
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1236(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1336(%rsp,%rbp,4)
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1312(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2970
 	shrl	$0, %ebx
@@ -2797,22 +2796,22 @@ Lzkboo_encrypt$2940:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$2939:
-	movl	%ebx, 1272(%rsp,%rbp,4)
+	movl	%ebx, 1348(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$2937:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$2938
-	movl	1260(%rsp), %ebp
-	andl	1276(%rsp), %ebp
-	movl	1264(%rsp), %ebx
-	movl	1272(%rsp), %r12d
+	movl	1336(%rsp), %ebp
+	andl	1352(%rsp), %ebp
+	movl	1340(%rsp), %ebx
+	movl	1348(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
-	movl	1272(%rsp), %r12d
+	movl	1336(%rsp), %ebx
+	movl	1348(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1288(%rsp), %ebx
+	movl	1364(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2936
 	shrl	$0, %ebx
@@ -2974,7 +2973,7 @@ Lzkboo_encrypt$2906:
 	andl	$1, %ebx
 Lzkboo_encrypt$2905:
 	xorl	%ebx, %ebp
-	movl	1236(%rsp), %ebx
+	movl	1312(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2904
 	shrl	$0, %ebx
@@ -3136,7 +3135,7 @@ Lzkboo_encrypt$2874:
 	andl	$1, %ebx
 Lzkboo_encrypt$2873:
 	xorl	%ebx, %ebp
-	movl	1284(%rsp), %ebx
+	movl	1360(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2872
 	shrl	$0, %ebx
@@ -3298,7 +3297,7 @@ Lzkboo_encrypt$2842:
 	andl	$1, %ebx
 Lzkboo_encrypt$2841:
 	xorl	%ebx, %ebp
-	movl	1236(%rsp), %ebx
+	movl	1312(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$2839
@@ -3317,18 +3316,18 @@ Lzkboo_encrypt$2839:
 Lzkboo_encrypt$2837:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$2838:
-	movl	%ebx, 1236(%rsp)
-	movl	1264(%rsp), %ebp
-	andl	1280(%rsp), %ebp
-	movl	1268(%rsp), %ebx
-	movl	1276(%rsp), %r12d
+	movl	%ebx, 1312(%rsp)
+	movl	1340(%rsp), %ebp
+	andl	1356(%rsp), %ebp
+	movl	1344(%rsp), %ebx
+	movl	1352(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
-	movl	1276(%rsp), %r12d
+	movl	1340(%rsp), %ebx
+	movl	1352(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1292(%rsp), %ebx
+	movl	1368(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2836
 	shrl	$0, %ebx
@@ -3490,7 +3489,7 @@ Lzkboo_encrypt$2806:
 	andl	$1, %ebx
 Lzkboo_encrypt$2805:
 	xorl	%ebx, %ebp
-	movl	1240(%rsp), %ebx
+	movl	1316(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2804
 	shrl	$0, %ebx
@@ -3652,7 +3651,7 @@ Lzkboo_encrypt$2774:
 	andl	$1, %ebx
 Lzkboo_encrypt$2773:
 	xorl	%ebx, %ebp
-	movl	1288(%rsp), %ebx
+	movl	1364(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2772
 	shrl	$0, %ebx
@@ -3814,7 +3813,7 @@ Lzkboo_encrypt$2742:
 	andl	$1, %ebx
 Lzkboo_encrypt$2741:
 	xorl	%ebx, %ebp
-	movl	1240(%rsp), %ebx
+	movl	1316(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$2739
@@ -3833,18 +3832,18 @@ Lzkboo_encrypt$2739:
 Lzkboo_encrypt$2737:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$2738:
-	movl	%ebx, 1240(%rsp)
-	movl	1268(%rsp), %ebp
-	andl	1272(%rsp), %ebp
-	movl	1260(%rsp), %ebx
-	movl	1280(%rsp), %r12d
+	movl	%ebx, 1316(%rsp)
+	movl	1344(%rsp), %ebp
+	andl	1348(%rsp), %ebp
+	movl	1336(%rsp), %ebx
+	movl	1356(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
-	movl	1280(%rsp), %r12d
+	movl	1344(%rsp), %ebx
+	movl	1356(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1284(%rsp), %ebx
+	movl	1360(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2736
 	shrl	$0, %ebx
@@ -4006,7 +4005,7 @@ Lzkboo_encrypt$2706:
 	andl	$1, %ebx
 Lzkboo_encrypt$2705:
 	xorl	%ebx, %ebp
-	movl	1244(%rsp), %ebx
+	movl	1320(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2704
 	shrl	$0, %ebx
@@ -4168,7 +4167,7 @@ Lzkboo_encrypt$2674:
 	andl	$1, %ebx
 Lzkboo_encrypt$2673:
 	xorl	%ebx, %ebp
-	movl	1292(%rsp), %ebx
+	movl	1368(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2672
 	shrl	$0, %ebx
@@ -4330,7 +4329,7 @@ Lzkboo_encrypt$2642:
 	andl	$1, %ebx
 Lzkboo_encrypt$2641:
 	xorl	%ebx, %ebp
-	movl	1244(%rsp), %ebx
+	movl	1320(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$2639
 Lzkboo_encrypt$2640:
@@ -4348,7 +4347,7 @@ Lzkboo_encrypt$2639:
 Lzkboo_encrypt$2637:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$2638:
-	movl	%ebx, 1244(%rsp)
+	movl	%ebx, 1320(%rsp)
 	incq	%r10
 Lzkboo_encrypt$2635:
 	cmpq	$31, %r10
@@ -4356,12 +4355,12 @@ Lzkboo_encrypt$2635:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$2633
 Lzkboo_encrypt$2634:
-	movl	1248(%rsp,%r10,4), %r11d
-	movl	1224(%rsp,%r10,4), %ebp
-	movl	1236(%rsp,%r10,4), %ebx
+	movl	1324(%rsp,%r10,4), %r11d
+	movl	1300(%rsp,%r10,4), %ebp
+	movl	1312(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -4370,16 +4369,16 @@ Lzkboo_encrypt$2634:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1236(%rsp,%r10,4), %ebp
+	movl	1312(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$2633:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$2634
 	addq	$4, %rax
-	movl	$0, 1236(%rsp)
-	movl	$0, 1240(%rsp)
-	movl	$0, 1244(%rsp)
+	movl	$0, 1312(%rsp)
+	movl	$0, 1316(%rsp)
+	movl	$0, 1320(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$2631
 Lzkboo_encrypt$2632:
@@ -4389,7 +4388,7 @@ Lzkboo_encrypt$2632:
 	addq	%rbp, %r11
 	addq	%rcx, %r11
 	movl	(%rsi,%r11), %r11d
-	movl	%r11d, 1224(%rsp,%r10,4)
+	movl	%r11d, 1300(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$2631:
 	cmpq	$3, %r10
@@ -4403,9 +4402,9 @@ Lzkboo_encrypt$2594:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$2625
 Lzkboo_encrypt$2626:
-	movl	1140(%rsp,%rbp,4), %r12d
-	movl	1236(%rsp,%rbp,4), %r13d
-	movl	1088(%rsp), %ebx
+	movl	1204(%rsp,%rbp,4), %r12d
+	movl	1312(%rsp,%rbp,4), %r13d
+	movl	1152(%rsp), %ebx
 	xorl	%r13d, %r12d
 	xorl	%r13d, %ebx
 	movq	%r10, %r13
@@ -4417,7 +4416,7 @@ Lzkboo_encrypt$2629:
 	cmpq	$0, %r13
 	jnbe	Lzkboo_encrypt$2630
 	andl	$1, %r12d
-	movl	%r12d, 1260(%rsp,%rbp,4)
+	movl	%r12d, 1336(%rsp,%rbp,4)
 	movq	%r10, %r12
 	jmp 	Lzkboo_encrypt$2627
 Lzkboo_encrypt$2628:
@@ -4427,16 +4426,16 @@ Lzkboo_encrypt$2627:
 	cmpq	$0, %r12
 	jnbe	Lzkboo_encrypt$2628
 	andl	$1, %ebx
-	movl	%ebx, 1248(%rsp,%rbp,4)
+	movl	%ebx, 1324(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$2625:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$2626
 	movq	$1, %rbp
 	movq	$0, %r12
-	movl	1224(%rsp,%rbp,4), %ebp
-	movl	1236(%rsp,%r12,4), %ebx
-	movl	1224(%rsp,%r12,4), %r12d
+	movl	1300(%rsp,%rbp,4), %ebp
+	movl	1312(%rsp,%r12,4), %ebx
+	movl	1300(%rsp,%r12,4), %r12d
 	movq	%r10, %r13
 	jmp 	Lzkboo_encrypt$2623
 Lzkboo_encrypt$2624:
@@ -4464,14 +4463,14 @@ Lzkboo_encrypt$2619:
 	cmpq	$0, %r13
 	jnbe	Lzkboo_encrypt$2620
 	andl	$1, %r12d
-	movl	1260(%rsp), %r13d
-	andl	1252(%rsp), %r13d
+	movl	1336(%rsp), %r13d
+	andl	1328(%rsp), %r13d
 	xorl	%ebp, %r13d
-	movl	1264(%rsp), %ebp
-	andl	1248(%rsp), %ebp
+	movl	1340(%rsp), %ebp
+	andl	1324(%rsp), %ebp
 	xorl	%ebp, %r13d
-	movl	1260(%rsp), %ebp
-	andl	1248(%rsp), %ebp
+	movl	1336(%rsp), %ebp
+	andl	1324(%rsp), %ebp
 	xorl	%ebp, %r13d
 	xorl	%ebx, %r13d
 	xorl	%r12d, %r13d
@@ -4485,7 +4484,7 @@ Lzkboo_encrypt$2618:
 Lzkboo_encrypt$2617:
 	cmpq	$0, %rbx
 	jnbe	Lzkboo_encrypt$2618
-	movl	1236(%rsp,%rbp,4), %ebx
+	movl	1312(%rsp,%rbp,4), %ebx
 	cmpl	$1, %r13d
 	je  	Lzkboo_encrypt$2615
 	xorl	$-1, %r12d
@@ -4494,12 +4493,12 @@ Lzkboo_encrypt$2617:
 Lzkboo_encrypt$2615:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$2616:
-	movl	%ebx, 1236(%rsp,%rbp,4)
+	movl	%ebx, 1312(%rsp,%rbp,4)
 	movq	$2, %rbp
 	movq	$1, %r12
-	movl	1224(%rsp,%rbp,4), %ebp
-	movl	1236(%rsp,%r12,4), %ebx
-	movl	1224(%rsp,%r12,4), %r12d
+	movl	1300(%rsp,%rbp,4), %ebp
+	movl	1312(%rsp,%r12,4), %ebx
+	movl	1300(%rsp,%r12,4), %r12d
 	movq	%r10, %r13
 	jmp 	Lzkboo_encrypt$2613
 Lzkboo_encrypt$2614:
@@ -4527,14 +4526,14 @@ Lzkboo_encrypt$2609:
 	cmpq	$0, %r13
 	jnbe	Lzkboo_encrypt$2610
 	andl	$1, %r12d
-	movl	1264(%rsp), %r13d
-	andl	1256(%rsp), %r13d
+	movl	1340(%rsp), %r13d
+	andl	1332(%rsp), %r13d
 	xorl	%ebp, %r13d
-	movl	1268(%rsp), %ebp
-	andl	1252(%rsp), %ebp
+	movl	1344(%rsp), %ebp
+	andl	1328(%rsp), %ebp
 	xorl	%ebp, %r13d
-	movl	1264(%rsp), %ebp
-	andl	1252(%rsp), %ebp
+	movl	1340(%rsp), %ebp
+	andl	1328(%rsp), %ebp
 	xorl	%ebp, %r13d
 	xorl	%ebx, %r13d
 	xorl	%r12d, %r13d
@@ -4548,7 +4547,7 @@ Lzkboo_encrypt$2608:
 Lzkboo_encrypt$2607:
 	cmpq	$0, %rbx
 	jnbe	Lzkboo_encrypt$2608
-	movl	1236(%rsp,%rbp,4), %ebx
+	movl	1312(%rsp,%rbp,4), %ebx
 	cmpl	$1, %r13d
 	je  	Lzkboo_encrypt$2605
 	xorl	$-1, %r12d
@@ -4557,12 +4556,12 @@ Lzkboo_encrypt$2607:
 Lzkboo_encrypt$2605:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$2606:
-	movl	%ebx, 1236(%rsp,%rbp,4)
+	movl	%ebx, 1312(%rsp,%rbp,4)
 	movq	$0, %rbp
 	movq	$2, %r12
-	movl	1224(%rsp,%rbp,4), %ebp
-	movl	1236(%rsp,%r12,4), %ebx
-	movl	1224(%rsp,%r12,4), %r12d
+	movl	1300(%rsp,%rbp,4), %ebp
+	movl	1312(%rsp,%r12,4), %ebx
+	movl	1300(%rsp,%r12,4), %r12d
 	movq	%r10, %r13
 	jmp 	Lzkboo_encrypt$2603
 Lzkboo_encrypt$2604:
@@ -4590,14 +4589,14 @@ Lzkboo_encrypt$2599:
 	cmpq	$0, %r13
 	jnbe	Lzkboo_encrypt$2600
 	andl	$1, %r12d
-	movl	1268(%rsp), %r13d
-	andl	1248(%rsp), %r13d
+	movl	1344(%rsp), %r13d
+	andl	1324(%rsp), %r13d
 	xorl	%ebp, %r13d
-	movl	1260(%rsp), %ebp
-	andl	1256(%rsp), %ebp
+	movl	1336(%rsp), %ebp
+	andl	1332(%rsp), %ebp
 	xorl	%ebp, %r13d
-	movl	1268(%rsp), %ebp
-	andl	1256(%rsp), %ebp
+	movl	1344(%rsp), %ebp
+	andl	1332(%rsp), %ebp
 	xorl	%ebp, %r13d
 	xorl	%ebx, %r13d
 	xorl	%r12d, %r13d
@@ -4610,7 +4609,7 @@ Lzkboo_encrypt$2598:
 Lzkboo_encrypt$2597:
 	cmpq	$0, %r11
 	jnbe	Lzkboo_encrypt$2598
-	movl	1236(%rsp,%rbp,4), %r11d
+	movl	1312(%rsp,%rbp,4), %r11d
 	cmpl	$1, %r13d
 	je  	Lzkboo_encrypt$2595
 	xorl	$-1, %ebx
@@ -4619,7 +4618,7 @@ Lzkboo_encrypt$2597:
 Lzkboo_encrypt$2595:
 	orl 	%ebx, %r11d
 Lzkboo_encrypt$2596:
-	movl	%r11d, 1236(%rsp,%rbp,4)
+	movl	%r11d, 1312(%rsp,%rbp,4)
 	incq	%r10
 Lzkboo_encrypt$2593:
 	cmpq	$31, %r10
@@ -4636,31 +4635,52 @@ Lzkboo_encrypt$2592:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1140(%rsp,%r10,4), %ebp
-	movl	1236(%rsp,%r10,4), %ebx
+	movl	1204(%rsp,%r10,4), %ebp
+	movl	1312(%rsp,%r10,4), %ebx
 	xorl	%ebx, %ebp
-	xorl	1088(%rsp), %ebp
-	movl	%ebp, 1140(%rsp,%r10,4)
-	movl	1236(%rsp,%r10,4), %ebp
+	xorl	1152(%rsp), %ebp
+	movl	%ebp, 1204(%rsp,%r10,4)
+	movl	1312(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$2591:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$2592
 	addq	$4, %rax
-	movl	$0, 1236(%rsp)
-	movl	$0, 1240(%rsp)
-	movl	$0, 1244(%rsp)
+	movq	24(%rsp), %r10
+	movl	2188(%rsp,%r10,4), %r11d
+	movl	%r11d, 1276(%rsp)
+	addq	$80, %r10
+	movl	2188(%rsp,%r10,4), %r11d
+	movl	%r11d, 1276(%rsp)
+	addq	$80, %r10
+	movl	2188(%rsp,%r10,4), %r10d
+	movl	%r10d, 1276(%rsp)
+	movl	1276(%rsp), %r10d
+	movl	%r10d, 1312(%rsp)
+	movl	1280(%rsp), %r10d
+	movl	%r10d, 1316(%rsp)
+	movl	1284(%rsp), %r10d
+	movl	%r10d, 1320(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1300(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1304(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1308(%rsp)
+	movl	$0, 1336(%rsp)
+	movl	$0, 1340(%rsp)
+	movl	$0, 1344(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$2589
 Lzkboo_encrypt$2590:
-	imulq	$1472, %r10, %r11
-	imulq	(%rsp), %r11
+	imulq	$1472, (%rsp), %r11
+	imulq	%r10, %r11
 	imulq	$1472, %r15, %rbp
-	addq	%rbp, %r11
-	addq	%rcx, %r11
-	movl	(%rsi,%r11), %r11d
-	movl	%r11d, 1224(%rsp,%r10,4)
+	addq	%r11, %rbp
+	addq	%rcx, %rbp
+	movl	(%rsi,%rbp), %r11d
+	movl	%r11d, 1324(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$2589:
 	cmpq	$3, %r10
@@ -4674,10 +4694,8 @@ Lzkboo_encrypt$2222:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$2523
 Lzkboo_encrypt$2524:
-	imulq	$80, %rbp, %rbx
-	addq	24(%rsp), %rbx
-	movl	2112(%rsp,%rbx,4), %ebx
-	xorl	1236(%rsp,%rbp,4), %ebx
+	movl	1276(%rsp,%rbp,4), %ebx
+	xorl	1336(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2588
 	shrl	$0, %ebx
@@ -4838,9 +4856,9 @@ Lzkboo_encrypt$2558:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$2557:
-	movl	%ebx, 1248(%rsp,%rbp,4)
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1236(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1360(%rsp,%rbp,4)
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1336(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2556
 	shrl	$0, %ebx
@@ -5001,22 +5019,22 @@ Lzkboo_encrypt$2526:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$2525:
-	movl	%ebx, 1260(%rsp,%rbp,4)
+	movl	%ebx, 1348(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$2523:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$2524
-	movl	1248(%rsp), %ebp
-	andl	1264(%rsp), %ebp
-	movl	1252(%rsp), %ebx
-	movl	1260(%rsp), %r12d
+	movl	1360(%rsp), %ebp
+	andl	1352(%rsp), %ebp
+	movl	1364(%rsp), %ebx
+	movl	1348(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
-	movl	1260(%rsp), %r12d
+	movl	1360(%rsp), %ebx
+	movl	1348(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1228(%rsp), %ebx
+	movl	1328(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2522
 	shrl	$0, %ebx
@@ -5178,7 +5196,7 @@ Lzkboo_encrypt$2492:
 	andl	$1, %ebx
 Lzkboo_encrypt$2491:
 	xorl	%ebx, %ebp
-	movl	1236(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2490
 	shrl	$0, %ebx
@@ -5340,7 +5358,7 @@ Lzkboo_encrypt$2460:
 	andl	$1, %ebx
 Lzkboo_encrypt$2459:
 	xorl	%ebx, %ebp
-	movl	1224(%rsp), %ebx
+	movl	1324(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2458
 	shrl	$0, %ebx
@@ -5502,7 +5520,7 @@ Lzkboo_encrypt$2428:
 	andl	$1, %ebx
 Lzkboo_encrypt$2427:
 	xorl	%ebx, %ebp
-	movl	1236(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$2425
@@ -5521,18 +5539,18 @@ Lzkboo_encrypt$2425:
 Lzkboo_encrypt$2423:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$2424:
-	movl	%ebx, 1236(%rsp)
-	movl	1252(%rsp), %ebp
-	andl	1268(%rsp), %ebp
-	movl	1256(%rsp), %ebx
-	movl	1264(%rsp), %r12d
+	movl	%ebx, 1336(%rsp)
+	movl	1364(%rsp), %ebp
+	andl	1356(%rsp), %ebp
+	movl	1368(%rsp), %ebx
+	movl	1352(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
-	movl	1264(%rsp), %r12d
+	movl	1364(%rsp), %ebx
+	movl	1352(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1232(%rsp), %ebx
+	movl	1332(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2422
 	shrl	$0, %ebx
@@ -5694,7 +5712,7 @@ Lzkboo_encrypt$2392:
 	andl	$1, %ebx
 Lzkboo_encrypt$2391:
 	xorl	%ebx, %ebp
-	movl	1240(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2390
 	shrl	$0, %ebx
@@ -5856,7 +5874,7 @@ Lzkboo_encrypt$2360:
 	andl	$1, %ebx
 Lzkboo_encrypt$2359:
 	xorl	%ebx, %ebp
-	movl	1228(%rsp), %ebx
+	movl	1328(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2358
 	shrl	$0, %ebx
@@ -6018,7 +6036,7 @@ Lzkboo_encrypt$2328:
 	andl	$1, %ebx
 Lzkboo_encrypt$2327:
 	xorl	%ebx, %ebp
-	movl	1240(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$2325
@@ -6037,18 +6055,18 @@ Lzkboo_encrypt$2325:
 Lzkboo_encrypt$2323:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$2324:
-	movl	%ebx, 1240(%rsp)
-	movl	1256(%rsp), %ebp
-	andl	1260(%rsp), %ebp
-	movl	1248(%rsp), %ebx
-	movl	1268(%rsp), %r12d
+	movl	%ebx, 1340(%rsp)
+	movl	1368(%rsp), %ebp
+	andl	1348(%rsp), %ebp
+	movl	1360(%rsp), %ebx
+	movl	1356(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
-	movl	1268(%rsp), %r12d
+	movl	1368(%rsp), %ebx
+	movl	1356(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1224(%rsp), %ebx
+	movl	1324(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2322
 	shrl	$0, %ebx
@@ -6210,7 +6228,7 @@ Lzkboo_encrypt$2292:
 	andl	$1, %ebx
 Lzkboo_encrypt$2291:
 	xorl	%ebx, %ebp
-	movl	1244(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2290
 	shrl	$0, %ebx
@@ -6372,7 +6390,7 @@ Lzkboo_encrypt$2260:
 	andl	$1, %ebx
 Lzkboo_encrypt$2259:
 	xorl	%ebx, %ebp
-	movl	1232(%rsp), %ebx
+	movl	1332(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2258
 	shrl	$0, %ebx
@@ -6534,7 +6552,7 @@ Lzkboo_encrypt$2228:
 	andl	$1, %ebx
 Lzkboo_encrypt$2227:
 	xorl	%ebx, %ebp
-	movl	1244(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$2225
 Lzkboo_encrypt$2226:
@@ -6552,7 +6570,7 @@ Lzkboo_encrypt$2225:
 Lzkboo_encrypt$2223:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$2224:
-	movl	%ebx, 1244(%rsp)
+	movl	%ebx, 1344(%rsp)
 	incq	%r10
 Lzkboo_encrypt$2221:
 	cmpq	$31, %r10
@@ -6560,14 +6578,12 @@ Lzkboo_encrypt$2221:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$2219
 Lzkboo_encrypt$2220:
-	imulq	$80, %r10, %r11
-	addq	24(%rsp), %r11
-	movl	2112(%rsp,%r11,4), %r11d
-	movl	1140(%rsp,%r10,4), %ebp
-	movl	1236(%rsp,%r10,4), %ebx
+	movl	1312(%rsp,%r10,4), %r11d
+	movl	1300(%rsp,%r10,4), %ebp
+	movl	1336(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -6576,78 +6592,78 @@ Lzkboo_encrypt$2220:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1236(%rsp,%r10,4), %ebp
+	movl	1336(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$2219:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$2220
 	addq	$4, %rax
-	movl	1188(%rsp), %r10d
-	movl	%r10d, 1200(%rsp)
-	movl	1192(%rsp), %r10d
-	movl	%r10d, 1204(%rsp)
-	movl	1196(%rsp), %r10d
-	movl	%r10d, 1208(%rsp)
-	movl	1176(%rsp), %r10d
-	movl	%r10d, 1188(%rsp)
-	movl	1180(%rsp), %r10d
-	movl	%r10d, 1192(%rsp)
-	movl	1184(%rsp), %r10d
-	movl	%r10d, 1196(%rsp)
-	movl	1164(%rsp), %r10d
-	movl	1164(%rsp), %r11d
+	movl	1252(%rsp), %r10d
+	movl	%r10d, 1264(%rsp)
+	movl	1256(%rsp), %r10d
+	movl	%r10d, 1268(%rsp)
+	movl	1260(%rsp), %r10d
+	movl	%r10d, 1272(%rsp)
+	movl	1240(%rsp), %r10d
+	movl	%r10d, 1252(%rsp)
+	movl	1244(%rsp), %r10d
+	movl	%r10d, 1256(%rsp)
+	movl	1248(%rsp), %r10d
+	movl	%r10d, 1260(%rsp)
+	movl	1228(%rsp), %r10d
+	movl	1228(%rsp), %r11d
 	shll	$30, %r10d
 	shrl	$2, %r11d
 	orl 	%r11d, %r10d
-	movl	%r10d, 1176(%rsp)
-	movl	1168(%rsp), %r10d
-	movl	1168(%rsp), %r11d
+	movl	%r10d, 1240(%rsp)
+	movl	1232(%rsp), %r10d
+	movl	1232(%rsp), %r11d
 	shll	$30, %r10d
 	shrl	$2, %r11d
 	orl 	%r11d, %r10d
-	movl	%r10d, 1180(%rsp)
-	movl	1172(%rsp), %r10d
-	movl	1172(%rsp), %r11d
+	movl	%r10d, 1244(%rsp)
+	movl	1236(%rsp), %r10d
+	movl	1236(%rsp), %r11d
 	shll	$30, %r10d
 	shrl	$2, %r11d
 	orl 	%r11d, %r10d
-	movl	%r10d, 1184(%rsp)
-	movl	1152(%rsp), %r10d
-	movl	%r10d, 1164(%rsp)
-	movl	1156(%rsp), %r10d
-	movl	%r10d, 1168(%rsp)
-	movl	1160(%rsp), %r10d
-	movl	%r10d, 1172(%rsp)
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1152(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1156(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1160(%rsp)
+	movl	%r10d, 1248(%rsp)
+	movl	1216(%rsp), %r10d
+	movl	%r10d, 1228(%rsp)
+	movl	1220(%rsp), %r10d
+	movl	%r10d, 1232(%rsp)
+	movl	1224(%rsp), %r10d
+	movl	%r10d, 1236(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1216(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1220(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1224(%rsp)
 	incq	24(%rsp)
 Lzkboo_encrypt$2217:
 	cmpq	$80, 24(%rsp)
 	jb  	Lzkboo_encrypt$2218
-	movl	1296(%rsp), %r10d
-	movl	%r10d, 1140(%rsp)
-	movl	%r10d, 1144(%rsp)
-	movl	%r10d, 1148(%rsp)
-	movl	1140(%rsp), %r10d
+	movl	1372(%rsp), %r10d
+	movl	%r10d, 1204(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	%r10d, 1212(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	1152(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
-	movl	1156(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
-	movl	1160(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
-	movl	$0, 1248(%rsp)
-	movl	$0, 1252(%rsp)
-	movl	$0, 1256(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1276(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1280(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1284(%rsp)
+	movl	1216(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1220(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1224(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$0, 1336(%rsp)
+	movl	$0, 1340(%rsp)
+	movl	$0, 1344(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$2215
 Lzkboo_encrypt$2216:
@@ -6657,7 +6673,7 @@ Lzkboo_encrypt$2216:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1260(%rsp,%r10,4)
+	movl	%r11d, 1300(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$2215:
 	cmpq	$3, %r10
@@ -6671,8 +6687,8 @@ Lzkboo_encrypt$1848:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$2149
 Lzkboo_encrypt$2150:
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1248(%rsp,%rbp,4), %ebx
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1336(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2214
 	shrl	$0, %ebx
@@ -6833,9 +6849,9 @@ Lzkboo_encrypt$2184:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$2183:
-	movl	%ebx, 1272(%rsp,%rbp,4)
-	movl	1152(%rsp,%rbp,4), %ebx
-	xorl	1248(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1360(%rsp,%rbp,4)
+	movl	1216(%rsp,%rbp,4), %ebx
+	xorl	1336(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2182
 	shrl	$0, %ebx
@@ -6996,22 +7012,22 @@ Lzkboo_encrypt$2152:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$2151:
-	movl	%ebx, 1224(%rsp,%rbp,4)
+	movl	%ebx, 1312(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$2149:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$2150
-	movl	1272(%rsp), %ebp
-	andl	1228(%rsp), %ebp
-	movl	1276(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1360(%rsp), %ebp
+	andl	1316(%rsp), %ebp
+	movl	1364(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1272(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1360(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
+	movl	1304(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2148
 	shrl	$0, %ebx
@@ -7173,7 +7189,7 @@ Lzkboo_encrypt$2118:
 	andl	$1, %ebx
 Lzkboo_encrypt$2117:
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2116
 	shrl	$0, %ebx
@@ -7335,7 +7351,7 @@ Lzkboo_encrypt$2086:
 	andl	$1, %ebx
 Lzkboo_encrypt$2085:
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
+	movl	1300(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2084
 	shrl	$0, %ebx
@@ -7497,7 +7513,7 @@ Lzkboo_encrypt$2054:
 	andl	$1, %ebx
 Lzkboo_encrypt$2053:
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$2051
@@ -7516,18 +7532,18 @@ Lzkboo_encrypt$2051:
 Lzkboo_encrypt$2049:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$2050:
-	movl	%ebx, 1248(%rsp)
-	movl	1276(%rsp), %ebp
-	andl	1232(%rsp), %ebp
-	movl	1280(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	%ebx, 1336(%rsp)
+	movl	1364(%rsp), %ebp
+	andl	1320(%rsp), %ebp
+	movl	1368(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1276(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	1364(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
+	movl	1308(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2048
 	shrl	$0, %ebx
@@ -7689,7 +7705,7 @@ Lzkboo_encrypt$2018:
 	andl	$1, %ebx
 Lzkboo_encrypt$2017:
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$2016
 	shrl	$0, %ebx
@@ -7851,7 +7867,7 @@ Lzkboo_encrypt$1986:
 	andl	$1, %ebx
 Lzkboo_encrypt$1985:
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
+	movl	1304(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1984
 	shrl	$0, %ebx
@@ -8013,7 +8029,7 @@ Lzkboo_encrypt$1954:
 	andl	$1, %ebx
 Lzkboo_encrypt$1953:
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$1951
@@ -8032,18 +8048,18 @@ Lzkboo_encrypt$1951:
 Lzkboo_encrypt$1949:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$1950:
-	movl	%ebx, 1252(%rsp)
-	movl	1280(%rsp), %ebp
-	andl	1224(%rsp), %ebp
-	movl	1272(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	%ebx, 1340(%rsp)
+	movl	1368(%rsp), %ebp
+	andl	1312(%rsp), %ebp
+	movl	1360(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1280(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	1368(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
+	movl	1300(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1948
 	shrl	$0, %ebx
@@ -8205,7 +8221,7 @@ Lzkboo_encrypt$1918:
 	andl	$1, %ebx
 Lzkboo_encrypt$1917:
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1916
 	shrl	$0, %ebx
@@ -8367,7 +8383,7 @@ Lzkboo_encrypt$1886:
 	andl	$1, %ebx
 Lzkboo_encrypt$1885:
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
+	movl	1308(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1884
 	shrl	$0, %ebx
@@ -8529,7 +8545,7 @@ Lzkboo_encrypt$1854:
 	andl	$1, %ebx
 Lzkboo_encrypt$1853:
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$1851
 Lzkboo_encrypt$1852:
@@ -8547,7 +8563,7 @@ Lzkboo_encrypt$1851:
 Lzkboo_encrypt$1849:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$1850:
-	movl	%ebx, 1256(%rsp)
+	movl	%ebx, 1344(%rsp)
 	incq	%r10
 Lzkboo_encrypt$1847:
 	cmpq	$31, %r10
@@ -8555,12 +8571,12 @@ Lzkboo_encrypt$1847:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$1845
 Lzkboo_encrypt$1846:
-	movl	1212(%rsp,%r10,4), %r11d
-	movl	1236(%rsp,%r10,4), %ebp
-	movl	1248(%rsp,%r10,4), %ebx
+	movl	1276(%rsp,%r10,4), %r11d
+	movl	1288(%rsp,%r10,4), %ebp
+	movl	1336(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -8569,38 +8585,38 @@ Lzkboo_encrypt$1846:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1248(%rsp,%r10,4), %ebp
+	movl	1336(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$1845:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$1846
 	addq	$4, %rax
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1380(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1384(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1388(%rsp)
-	movl	1300(%rsp), %r10d
-	movl	%r10d, 1140(%rsp)
-	movl	%r10d, 1144(%rsp)
-	movl	%r10d, 1148(%rsp)
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1248(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1252(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1256(%rsp)
-	movl	1164(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
-	movl	1168(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
-	movl	1172(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
-	movl	$0, 1212(%rsp)
-	movl	$0, 1216(%rsp)
-	movl	$0, 1220(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1456(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1460(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1464(%rsp)
+	movl	1376(%rsp), %r10d
+	movl	%r10d, 1204(%rsp)
+	movl	%r10d, 1208(%rsp)
+	movl	%r10d, 1212(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1336(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1340(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1344(%rsp)
+	movl	1228(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1232(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1236(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$0, 1276(%rsp)
+	movl	$0, 1280(%rsp)
+	movl	$0, 1284(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$1843
 Lzkboo_encrypt$1844:
@@ -8610,7 +8626,7 @@ Lzkboo_encrypt$1844:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1272(%rsp,%r10,4)
+	movl	%r11d, 1360(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$1843:
 	cmpq	$3, %r10
@@ -8624,8 +8640,8 @@ Lzkboo_encrypt$1476:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$1777
 Lzkboo_encrypt$1778:
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1212(%rsp,%rbp,4), %ebx
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1276(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1842
 	shrl	$0, %ebx
@@ -8786,9 +8802,9 @@ Lzkboo_encrypt$1812:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$1811:
-	movl	%ebx, 1260(%rsp,%rbp,4)
-	movl	1164(%rsp,%rbp,4), %ebx
-	xorl	1212(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1300(%rsp,%rbp,4)
+	movl	1228(%rsp,%rbp,4), %ebx
+	xorl	1276(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1810
 	shrl	$0, %ebx
@@ -8949,22 +8965,22 @@ Lzkboo_encrypt$1780:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$1779:
-	movl	%ebx, 1224(%rsp,%rbp,4)
+	movl	%ebx, 1312(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$1777:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$1778
-	movl	1260(%rsp), %ebp
-	andl	1228(%rsp), %ebp
-	movl	1264(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1300(%rsp), %ebp
+	andl	1316(%rsp), %ebp
+	movl	1304(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1300(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1276(%rsp), %ebx
+	movl	1364(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1776
 	shrl	$0, %ebx
@@ -9126,7 +9142,7 @@ Lzkboo_encrypt$1746:
 	andl	$1, %ebx
 Lzkboo_encrypt$1745:
 	xorl	%ebx, %ebp
-	movl	1212(%rsp), %ebx
+	movl	1276(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1744
 	shrl	$0, %ebx
@@ -9288,7 +9304,7 @@ Lzkboo_encrypt$1714:
 	andl	$1, %ebx
 Lzkboo_encrypt$1713:
 	xorl	%ebx, %ebp
-	movl	1272(%rsp), %ebx
+	movl	1360(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1712
 	shrl	$0, %ebx
@@ -9450,7 +9466,7 @@ Lzkboo_encrypt$1682:
 	andl	$1, %ebx
 Lzkboo_encrypt$1681:
 	xorl	%ebx, %ebp
-	movl	1212(%rsp), %ebx
+	movl	1276(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$1679
@@ -9469,18 +9485,18 @@ Lzkboo_encrypt$1679:
 Lzkboo_encrypt$1677:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$1678:
-	movl	%ebx, 1212(%rsp)
-	movl	1264(%rsp), %ebp
-	andl	1232(%rsp), %ebp
-	movl	1268(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	%ebx, 1276(%rsp)
+	movl	1304(%rsp), %ebp
+	andl	1320(%rsp), %ebp
+	movl	1308(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	1304(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1280(%rsp), %ebx
+	movl	1368(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1676
 	shrl	$0, %ebx
@@ -9642,7 +9658,7 @@ Lzkboo_encrypt$1646:
 	andl	$1, %ebx
 Lzkboo_encrypt$1645:
 	xorl	%ebx, %ebp
-	movl	1216(%rsp), %ebx
+	movl	1280(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1644
 	shrl	$0, %ebx
@@ -9804,7 +9820,7 @@ Lzkboo_encrypt$1614:
 	andl	$1, %ebx
 Lzkboo_encrypt$1613:
 	xorl	%ebx, %ebp
-	movl	1276(%rsp), %ebx
+	movl	1364(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1612
 	shrl	$0, %ebx
@@ -9966,7 +9982,7 @@ Lzkboo_encrypt$1582:
 	andl	$1, %ebx
 Lzkboo_encrypt$1581:
 	xorl	%ebx, %ebp
-	movl	1216(%rsp), %ebx
+	movl	1280(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$1579
@@ -9985,18 +10001,18 @@ Lzkboo_encrypt$1579:
 Lzkboo_encrypt$1577:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$1578:
-	movl	%ebx, 1216(%rsp)
-	movl	1268(%rsp), %ebp
-	andl	1224(%rsp), %ebp
-	movl	1260(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	%ebx, 1280(%rsp)
+	movl	1308(%rsp), %ebp
+	andl	1312(%rsp), %ebp
+	movl	1300(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	1308(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1272(%rsp), %ebx
+	movl	1360(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1576
 	shrl	$0, %ebx
@@ -10158,7 +10174,7 @@ Lzkboo_encrypt$1546:
 	andl	$1, %ebx
 Lzkboo_encrypt$1545:
 	xorl	%ebx, %ebp
-	movl	1220(%rsp), %ebx
+	movl	1284(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1544
 	shrl	$0, %ebx
@@ -10320,7 +10336,7 @@ Lzkboo_encrypt$1514:
 	andl	$1, %ebx
 Lzkboo_encrypt$1513:
 	xorl	%ebx, %ebp
-	movl	1280(%rsp), %ebx
+	movl	1368(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1512
 	shrl	$0, %ebx
@@ -10482,7 +10498,7 @@ Lzkboo_encrypt$1482:
 	andl	$1, %ebx
 Lzkboo_encrypt$1481:
 	xorl	%ebx, %ebp
-	movl	1220(%rsp), %ebx
+	movl	1284(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$1479
 Lzkboo_encrypt$1480:
@@ -10500,7 +10516,7 @@ Lzkboo_encrypt$1479:
 Lzkboo_encrypt$1477:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$1478:
-	movl	%ebx, 1220(%rsp)
+	movl	%ebx, 1284(%rsp)
 	incq	%r10
 Lzkboo_encrypt$1475:
 	cmpq	$31, %r10
@@ -10508,12 +10524,12 @@ Lzkboo_encrypt$1475:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$1473
 Lzkboo_encrypt$1474:
-	movl	1248(%rsp,%r10,4), %r11d
-	movl	1236(%rsp,%r10,4), %ebp
-	movl	1212(%rsp,%r10,4), %ebx
+	movl	1336(%rsp,%r10,4), %r11d
+	movl	1288(%rsp,%r10,4), %ebp
+	movl	1276(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -10522,38 +10538,38 @@ Lzkboo_encrypt$1474:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1212(%rsp,%r10,4), %ebp
+	movl	1276(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$1473:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$1474
 	addq	$4, %rax
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1392(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1396(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1400(%rsp)
-	movl	1304(%rsp), %r10d
-	movl	%r10d, 1140(%rsp)
-	movl	%r10d, 1144(%rsp)
-	movl	%r10d, 1148(%rsp)
-	movl	1140(%rsp), %r10d
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1468(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1472(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1476(%rsp)
+	movl	1380(%rsp), %r10d
+	movl	%r10d, 1204(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	%r10d, 1212(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	1176(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
-	movl	1180(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
-	movl	1184(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
-	movl	$0, 1248(%rsp)
-	movl	$0, 1252(%rsp)
-	movl	$0, 1256(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1276(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1280(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1284(%rsp)
+	movl	1240(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1244(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1248(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$0, 1336(%rsp)
+	movl	$0, 1340(%rsp)
+	movl	$0, 1344(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$1471
 Lzkboo_encrypt$1472:
@@ -10563,7 +10579,7 @@ Lzkboo_encrypt$1472:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1260(%rsp,%r10,4)
+	movl	%r11d, 1300(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$1471:
 	cmpq	$3, %r10
@@ -10577,8 +10593,8 @@ Lzkboo_encrypt$1104:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$1405
 Lzkboo_encrypt$1406:
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1248(%rsp,%rbp,4), %ebx
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1336(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1470
 	shrl	$0, %ebx
@@ -10739,9 +10755,9 @@ Lzkboo_encrypt$1440:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$1439:
-	movl	%ebx, 1272(%rsp,%rbp,4)
-	movl	1176(%rsp,%rbp,4), %ebx
-	xorl	1248(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1360(%rsp,%rbp,4)
+	movl	1240(%rsp,%rbp,4), %ebx
+	xorl	1336(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1438
 	shrl	$0, %ebx
@@ -10902,22 +10918,22 @@ Lzkboo_encrypt$1408:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$1407:
-	movl	%ebx, 1224(%rsp,%rbp,4)
+	movl	%ebx, 1312(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$1405:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$1406
-	movl	1272(%rsp), %ebp
-	andl	1228(%rsp), %ebp
-	movl	1276(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1360(%rsp), %ebp
+	andl	1316(%rsp), %ebp
+	movl	1364(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1272(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1360(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
+	movl	1304(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1404
 	shrl	$0, %ebx
@@ -11079,7 +11095,7 @@ Lzkboo_encrypt$1374:
 	andl	$1, %ebx
 Lzkboo_encrypt$1373:
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1372
 	shrl	$0, %ebx
@@ -11241,7 +11257,7 @@ Lzkboo_encrypt$1342:
 	andl	$1, %ebx
 Lzkboo_encrypt$1341:
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
+	movl	1300(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1340
 	shrl	$0, %ebx
@@ -11403,7 +11419,7 @@ Lzkboo_encrypt$1310:
 	andl	$1, %ebx
 Lzkboo_encrypt$1309:
 	xorl	%ebx, %ebp
-	movl	1248(%rsp), %ebx
+	movl	1336(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$1307
@@ -11422,18 +11438,18 @@ Lzkboo_encrypt$1307:
 Lzkboo_encrypt$1305:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$1306:
-	movl	%ebx, 1248(%rsp)
-	movl	1276(%rsp), %ebp
-	andl	1232(%rsp), %ebp
-	movl	1280(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	%ebx, 1336(%rsp)
+	movl	1364(%rsp), %ebp
+	andl	1320(%rsp), %ebp
+	movl	1368(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1276(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	1364(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
+	movl	1308(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1304
 	shrl	$0, %ebx
@@ -11595,7 +11611,7 @@ Lzkboo_encrypt$1274:
 	andl	$1, %ebx
 Lzkboo_encrypt$1273:
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1272
 	shrl	$0, %ebx
@@ -11757,7 +11773,7 @@ Lzkboo_encrypt$1242:
 	andl	$1, %ebx
 Lzkboo_encrypt$1241:
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
+	movl	1304(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1240
 	shrl	$0, %ebx
@@ -11919,7 +11935,7 @@ Lzkboo_encrypt$1210:
 	andl	$1, %ebx
 Lzkboo_encrypt$1209:
 	xorl	%ebx, %ebp
-	movl	1252(%rsp), %ebx
+	movl	1340(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$1207
@@ -11938,18 +11954,18 @@ Lzkboo_encrypt$1207:
 Lzkboo_encrypt$1205:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$1206:
-	movl	%ebx, 1252(%rsp)
-	movl	1280(%rsp), %ebp
-	andl	1224(%rsp), %ebp
-	movl	1272(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	%ebx, 1340(%rsp)
+	movl	1368(%rsp), %ebp
+	andl	1312(%rsp), %ebp
+	movl	1360(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1280(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	1368(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
+	movl	1300(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1204
 	shrl	$0, %ebx
@@ -12111,7 +12127,7 @@ Lzkboo_encrypt$1174:
 	andl	$1, %ebx
 Lzkboo_encrypt$1173:
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1172
 	shrl	$0, %ebx
@@ -12273,7 +12289,7 @@ Lzkboo_encrypt$1142:
 	andl	$1, %ebx
 Lzkboo_encrypt$1141:
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
+	movl	1308(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1140
 	shrl	$0, %ebx
@@ -12435,7 +12451,7 @@ Lzkboo_encrypt$1110:
 	andl	$1, %ebx
 Lzkboo_encrypt$1109:
 	xorl	%ebx, %ebp
-	movl	1256(%rsp), %ebx
+	movl	1344(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$1107
 Lzkboo_encrypt$1108:
@@ -12453,7 +12469,7 @@ Lzkboo_encrypt$1107:
 Lzkboo_encrypt$1105:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$1106:
-	movl	%ebx, 1256(%rsp)
+	movl	%ebx, 1344(%rsp)
 	incq	%r10
 Lzkboo_encrypt$1103:
 	cmpq	$31, %r10
@@ -12461,12 +12477,12 @@ Lzkboo_encrypt$1103:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$1101
 Lzkboo_encrypt$1102:
-	movl	1212(%rsp,%r10,4), %r11d
-	movl	1236(%rsp,%r10,4), %ebp
-	movl	1248(%rsp,%r10,4), %ebx
+	movl	1276(%rsp,%r10,4), %r11d
+	movl	1288(%rsp,%r10,4), %ebp
+	movl	1336(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -12475,38 +12491,38 @@ Lzkboo_encrypt$1102:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1248(%rsp,%r10,4), %ebp
+	movl	1336(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$1101:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$1102
 	addq	$4, %rax
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1404(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1408(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1412(%rsp)
-	movl	1308(%rsp), %r10d
-	movl	%r10d, 1140(%rsp)
-	movl	%r10d, 1144(%rsp)
-	movl	%r10d, 1148(%rsp)
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1248(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1252(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1256(%rsp)
-	movl	1188(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
-	movl	1192(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
-	movl	1196(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
-	movl	$0, 1212(%rsp)
-	movl	$0, 1216(%rsp)
-	movl	$0, 1220(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1480(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1484(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1488(%rsp)
+	movl	1384(%rsp), %r10d
+	movl	%r10d, 1204(%rsp)
+	movl	%r10d, 1208(%rsp)
+	movl	%r10d, 1212(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1336(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1340(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1344(%rsp)
+	movl	1252(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1256(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1260(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$0, 1276(%rsp)
+	movl	$0, 1280(%rsp)
+	movl	$0, 1284(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$1099
 Lzkboo_encrypt$1100:
@@ -12516,7 +12532,7 @@ Lzkboo_encrypt$1100:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1272(%rsp,%r10,4)
+	movl	%r11d, 1360(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$1099:
 	cmpq	$3, %r10
@@ -12530,8 +12546,8 @@ Lzkboo_encrypt$732:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$1033
 Lzkboo_encrypt$1034:
-	movl	1140(%rsp,%rbp,4), %ebx
-	xorl	1212(%rsp,%rbp,4), %ebx
+	movl	1204(%rsp,%rbp,4), %ebx
+	xorl	1276(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1098
 	shrl	$0, %ebx
@@ -12692,9 +12708,9 @@ Lzkboo_encrypt$1068:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$1067:
-	movl	%ebx, 1260(%rsp,%rbp,4)
-	movl	1188(%rsp,%rbp,4), %ebx
-	xorl	1212(%rsp,%rbp,4), %ebx
+	movl	%ebx, 1300(%rsp,%rbp,4)
+	movl	1252(%rsp,%rbp,4), %ebx
+	xorl	1276(%rsp,%rbp,4), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1066
 	shrl	$0, %ebx
@@ -12855,22 +12871,22 @@ Lzkboo_encrypt$1036:
 	shrl	$31, %ebx
 	andl	$1, %ebx
 Lzkboo_encrypt$1035:
-	movl	%ebx, 1224(%rsp,%rbp,4)
+	movl	%ebx, 1312(%rsp,%rbp,4)
 	incq	%rbp
 Lzkboo_encrypt$1033:
 	cmpq	$3, %rbp
 	jb  	Lzkboo_encrypt$1034
-	movl	1260(%rsp), %ebp
-	andl	1228(%rsp), %ebp
-	movl	1264(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1300(%rsp), %ebp
+	andl	1316(%rsp), %ebp
+	movl	1304(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1260(%rsp), %ebx
-	movl	1224(%rsp), %r12d
+	movl	1300(%rsp), %ebx
+	movl	1312(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1276(%rsp), %ebx
+	movl	1364(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1032
 	shrl	$0, %ebx
@@ -13032,7 +13048,7 @@ Lzkboo_encrypt$1002:
 	andl	$1, %ebx
 Lzkboo_encrypt$1001:
 	xorl	%ebx, %ebp
-	movl	1212(%rsp), %ebx
+	movl	1276(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$1000
 	shrl	$0, %ebx
@@ -13194,7 +13210,7 @@ Lzkboo_encrypt$970:
 	andl	$1, %ebx
 Lzkboo_encrypt$969:
 	xorl	%ebx, %ebp
-	movl	1272(%rsp), %ebx
+	movl	1360(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$968
 	shrl	$0, %ebx
@@ -13356,7 +13372,7 @@ Lzkboo_encrypt$938:
 	andl	$1, %ebx
 Lzkboo_encrypt$937:
 	xorl	%ebx, %ebp
-	movl	1212(%rsp), %ebx
+	movl	1276(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$935
@@ -13375,18 +13391,18 @@ Lzkboo_encrypt$935:
 Lzkboo_encrypt$933:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$934:
-	movl	%ebx, 1212(%rsp)
-	movl	1264(%rsp), %ebp
-	andl	1232(%rsp), %ebp
-	movl	1268(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	%ebx, 1276(%rsp)
+	movl	1304(%rsp), %ebp
+	andl	1320(%rsp), %ebp
+	movl	1308(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1264(%rsp), %ebx
-	movl	1228(%rsp), %r12d
+	movl	1304(%rsp), %ebx
+	movl	1316(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1280(%rsp), %ebx
+	movl	1368(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$932
 	shrl	$0, %ebx
@@ -13548,7 +13564,7 @@ Lzkboo_encrypt$902:
 	andl	$1, %ebx
 Lzkboo_encrypt$901:
 	xorl	%ebx, %ebp
-	movl	1216(%rsp), %ebx
+	movl	1280(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$900
 	shrl	$0, %ebx
@@ -13710,7 +13726,7 @@ Lzkboo_encrypt$870:
 	andl	$1, %ebx
 Lzkboo_encrypt$869:
 	xorl	%ebx, %ebp
-	movl	1276(%rsp), %ebx
+	movl	1364(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$868
 	shrl	$0, %ebx
@@ -13872,7 +13888,7 @@ Lzkboo_encrypt$838:
 	andl	$1, %ebx
 Lzkboo_encrypt$837:
 	xorl	%ebx, %ebp
-	movl	1216(%rsp), %ebx
+	movl	1280(%rsp), %ebx
 	movq	%r11, %r12
 	movl	$1, %r13d
 	jmp 	Lzkboo_encrypt$835
@@ -13891,18 +13907,18 @@ Lzkboo_encrypt$835:
 Lzkboo_encrypt$833:
 	orl 	%r13d, %ebx
 Lzkboo_encrypt$834:
-	movl	%ebx, 1216(%rsp)
-	movl	1268(%rsp), %ebp
-	andl	1224(%rsp), %ebp
-	movl	1260(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	%ebx, 1280(%rsp)
+	movl	1308(%rsp), %ebp
+	andl	1312(%rsp), %ebp
+	movl	1300(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1268(%rsp), %ebx
-	movl	1232(%rsp), %r12d
+	movl	1308(%rsp), %ebx
+	movl	1320(%rsp), %r12d
 	andl	%r12d, %ebx
 	xorl	%ebx, %ebp
-	movl	1272(%rsp), %ebx
+	movl	1360(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$832
 	shrl	$0, %ebx
@@ -14064,7 +14080,7 @@ Lzkboo_encrypt$802:
 	andl	$1, %ebx
 Lzkboo_encrypt$801:
 	xorl	%ebx, %ebp
-	movl	1220(%rsp), %ebx
+	movl	1284(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$800
 	shrl	$0, %ebx
@@ -14226,7 +14242,7 @@ Lzkboo_encrypt$770:
 	andl	$1, %ebx
 Lzkboo_encrypt$769:
 	xorl	%ebx, %ebp
-	movl	1280(%rsp), %ebx
+	movl	1368(%rsp), %ebx
 	cmpq	$0, %r10
 	jne 	Lzkboo_encrypt$768
 	shrl	$0, %ebx
@@ -14388,7 +14404,7 @@ Lzkboo_encrypt$738:
 	andl	$1, %ebx
 Lzkboo_encrypt$737:
 	xorl	%ebx, %ebp
-	movl	1220(%rsp), %ebx
+	movl	1284(%rsp), %ebx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$735
 Lzkboo_encrypt$736:
@@ -14406,7 +14422,7 @@ Lzkboo_encrypt$735:
 Lzkboo_encrypt$733:
 	orl 	%r12d, %ebx
 Lzkboo_encrypt$734:
-	movl	%ebx, 1220(%rsp)
+	movl	%ebx, 1284(%rsp)
 	incq	%r10
 Lzkboo_encrypt$731:
 	cmpq	$31, %r10
@@ -14414,12 +14430,12 @@ Lzkboo_encrypt$731:
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$729
 Lzkboo_encrypt$730:
-	movl	1248(%rsp,%r10,4), %r11d
-	movl	1236(%rsp,%r10,4), %ebp
-	movl	1212(%rsp,%r10,4), %ebx
+	movl	1336(%rsp,%r10,4), %r11d
+	movl	1288(%rsp,%r10,4), %ebp
+	movl	1276(%rsp,%r10,4), %ebx
 	xorl	%ebp, %r11d
 	xorl	%ebx, %r11d
-	movl	%r11d, 1140(%rsp,%r10,4)
+	movl	%r11d, 1204(%rsp,%r10,4)
 	imulq	$64, (%rsp), %r11
 	imulq	$3, %r11, %r11
 	imulq	$1480, (%rsp), %rbp
@@ -14428,38 +14444,38 @@ Lzkboo_encrypt$730:
 	imulq	$1480, %r15, %rbp
 	addq	%rbp, %r11
 	addq	%rax, %r11
-	movl	1212(%rsp,%r10,4), %ebp
+	movl	1276(%rsp,%r10,4), %ebp
 	movl	%ebp, (%r8,%r11)
 	incq	%r10
 Lzkboo_encrypt$729:
 	cmpq	$3, %r10
 	jb  	Lzkboo_encrypt$730
 	addq	$4, %rax
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1416(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1420(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1424(%rsp)
-	movl	1312(%rsp), %r10d
-	movl	%r10d, 1140(%rsp)
-	movl	%r10d, 1144(%rsp)
-	movl	%r10d, 1148(%rsp)
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1212(%rsp)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1216(%rsp)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1220(%rsp)
-	movl	1200(%rsp), %r10d
-	movl	%r10d, 1236(%rsp)
 	movl	1204(%rsp), %r10d
-	movl	%r10d, 1240(%rsp)
+	movl	%r10d, 1492(%rsp)
 	movl	1208(%rsp), %r10d
-	movl	%r10d, 1244(%rsp)
-	movl	$0, 1248(%rsp)
-	movl	$0, 1252(%rsp)
-	movl	$0, 1256(%rsp)
+	movl	%r10d, 1496(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1500(%rsp)
+	movl	1388(%rsp), %r10d
+	movl	%r10d, 1204(%rsp)
+	movl	%r10d, 1208(%rsp)
+	movl	%r10d, 1212(%rsp)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1276(%rsp)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1280(%rsp)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1284(%rsp)
+	movl	1264(%rsp), %r10d
+	movl	%r10d, 1288(%rsp)
+	movl	1268(%rsp), %r10d
+	movl	%r10d, 1292(%rsp)
+	movl	1272(%rsp), %r10d
+	movl	%r10d, 1296(%rsp)
+	movl	$0, 1336(%rsp)
+	movl	$0, 1340(%rsp)
+	movl	$0, 1344(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$727
 Lzkboo_encrypt$728:
@@ -14469,7 +14485,7 @@ Lzkboo_encrypt$728:
 	addq	%r11, %rbp
 	addq	%rcx, %rbp
 	movl	(%rsi,%rbp), %r11d
-	movl	%r11d, 1260(%rsp,%r10,4)
+	movl	%r11d, 1300(%rsp,%r10,4)
 	incq	%r10
 Lzkboo_encrypt$727:
 	cmpq	$3, %r10
@@ -14482,8 +14498,8 @@ Lzkboo_encrypt$360:
 	movq	$0, %r11
 	jmp 	Lzkboo_encrypt$661
 Lzkboo_encrypt$662:
-	movl	1140(%rsp,%r11,4), %ebp
-	xorl	1248(%rsp,%r11,4), %ebp
+	movl	1204(%rsp,%r11,4), %ebp
+	xorl	1336(%rsp,%r11,4), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$726
 	shrl	$0, %ebp
@@ -14644,9 +14660,9 @@ Lzkboo_encrypt$696:
 	shrl	$31, %ebp
 	andl	$1, %ebp
 Lzkboo_encrypt$695:
-	movl	%ebp, 1272(%rsp,%r11,4)
-	movl	1200(%rsp,%r11,4), %ebp
-	xorl	1248(%rsp,%r11,4), %ebp
+	movl	%ebp, 1360(%rsp,%r11,4)
+	movl	1264(%rsp,%r11,4), %ebp
+	xorl	1336(%rsp,%r11,4), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$694
 	shrl	$0, %ebp
@@ -14807,22 +14823,22 @@ Lzkboo_encrypt$664:
 	shrl	$31, %ebp
 	andl	$1, %ebp
 Lzkboo_encrypt$663:
-	movl	%ebp, 1224(%rsp,%r11,4)
+	movl	%ebp, 1312(%rsp,%r11,4)
 	incq	%r11
 Lzkboo_encrypt$661:
 	cmpq	$3, %r11
 	jb  	Lzkboo_encrypt$662
-	movl	1272(%rsp), %r11d
-	andl	1228(%rsp), %r11d
-	movl	1276(%rsp), %ebp
-	movl	1224(%rsp), %ebx
+	movl	1360(%rsp), %r11d
+	andl	1316(%rsp), %r11d
+	movl	1364(%rsp), %ebp
+	movl	1312(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %r11d
-	movl	1272(%rsp), %ebp
-	movl	1224(%rsp), %ebx
+	movl	1360(%rsp), %ebp
+	movl	1312(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %r11d
-	movl	1264(%rsp), %ebp
+	movl	1304(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$660
 	shrl	$0, %ebp
@@ -14984,7 +15000,7 @@ Lzkboo_encrypt$630:
 	andl	$1, %ebp
 Lzkboo_encrypt$629:
 	xorl	%ebp, %r11d
-	movl	1248(%rsp), %ebp
+	movl	1336(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$628
 	shrl	$0, %ebp
@@ -15146,7 +15162,7 @@ Lzkboo_encrypt$598:
 	andl	$1, %ebp
 Lzkboo_encrypt$597:
 	xorl	%ebp, %r11d
-	movl	1260(%rsp), %ebp
+	movl	1300(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$596
 	shrl	$0, %ebp
@@ -15308,7 +15324,7 @@ Lzkboo_encrypt$566:
 	andl	$1, %ebp
 Lzkboo_encrypt$565:
 	xorl	%ebp, %r11d
-	movl	1248(%rsp), %ebp
+	movl	1336(%rsp), %ebp
 	movq	%r10, %rbx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$563
@@ -15327,18 +15343,18 @@ Lzkboo_encrypt$563:
 Lzkboo_encrypt$561:
 	orl 	%r12d, %ebp
 Lzkboo_encrypt$562:
-	movl	%ebp, 1248(%rsp)
-	movl	1276(%rsp), %r11d
-	andl	1232(%rsp), %r11d
-	movl	1280(%rsp), %ebp
-	movl	1228(%rsp), %ebx
+	movl	%ebp, 1336(%rsp)
+	movl	1364(%rsp), %r11d
+	andl	1320(%rsp), %r11d
+	movl	1368(%rsp), %ebp
+	movl	1316(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %r11d
-	movl	1276(%rsp), %ebp
-	movl	1228(%rsp), %ebx
+	movl	1364(%rsp), %ebp
+	movl	1316(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %r11d
-	movl	1268(%rsp), %ebp
+	movl	1308(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$560
 	shrl	$0, %ebp
@@ -15500,7 +15516,7 @@ Lzkboo_encrypt$530:
 	andl	$1, %ebp
 Lzkboo_encrypt$529:
 	xorl	%ebp, %r11d
-	movl	1252(%rsp), %ebp
+	movl	1340(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$528
 	shrl	$0, %ebp
@@ -15662,7 +15678,7 @@ Lzkboo_encrypt$498:
 	andl	$1, %ebp
 Lzkboo_encrypt$497:
 	xorl	%ebp, %r11d
-	movl	1264(%rsp), %ebp
+	movl	1304(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$496
 	shrl	$0, %ebp
@@ -15824,7 +15840,7 @@ Lzkboo_encrypt$466:
 	andl	$1, %ebp
 Lzkboo_encrypt$465:
 	xorl	%ebp, %r11d
-	movl	1252(%rsp), %ebp
+	movl	1340(%rsp), %ebp
 	movq	%r10, %rbx
 	movl	$1, %r12d
 	jmp 	Lzkboo_encrypt$463
@@ -15843,18 +15859,18 @@ Lzkboo_encrypt$463:
 Lzkboo_encrypt$461:
 	orl 	%r12d, %ebp
 Lzkboo_encrypt$462:
-	movl	%ebp, 1252(%rsp)
-	movl	1280(%rsp), %r11d
-	andl	1224(%rsp), %r11d
-	movl	1272(%rsp), %ebp
-	movl	1232(%rsp), %ebx
+	movl	%ebp, 1340(%rsp)
+	movl	1368(%rsp), %r11d
+	andl	1312(%rsp), %r11d
+	movl	1360(%rsp), %ebp
+	movl	1320(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %r11d
-	movl	1280(%rsp), %ebp
-	movl	1232(%rsp), %ebx
+	movl	1368(%rsp), %ebp
+	movl	1320(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %r11d
-	movl	1260(%rsp), %ebp
+	movl	1300(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$460
 	shrl	$0, %ebp
@@ -16016,7 +16032,7 @@ Lzkboo_encrypt$430:
 	andl	$1, %ebp
 Lzkboo_encrypt$429:
 	xorl	%ebp, %r11d
-	movl	1256(%rsp), %ebp
+	movl	1344(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$428
 	shrl	$0, %ebp
@@ -16178,7 +16194,7 @@ Lzkboo_encrypt$398:
 	andl	$1, %ebp
 Lzkboo_encrypt$397:
 	xorl	%ebp, %r11d
-	movl	1268(%rsp), %ebp
+	movl	1308(%rsp), %ebp
 	cmpq	$0, %rcx
 	jne 	Lzkboo_encrypt$396
 	shrl	$0, %ebp
@@ -16340,7 +16356,7 @@ Lzkboo_encrypt$366:
 	andl	$1, %ebp
 Lzkboo_encrypt$365:
 	xorl	%ebp, %r11d
-	movl	1256(%rsp), %ebp
+	movl	1344(%rsp), %ebp
 	movl	$1, %ebx
 	jmp 	Lzkboo_encrypt$363
 Lzkboo_encrypt$364:
@@ -16358,7 +16374,7 @@ Lzkboo_encrypt$363:
 Lzkboo_encrypt$361:
 	orl 	%ebx, %ebp
 Lzkboo_encrypt$362:
-	movl	%ebp, 1256(%rsp)
+	movl	%ebp, 1344(%rsp)
 	incq	%rcx
 Lzkboo_encrypt$359:
 	cmpq	$31, %rcx
@@ -16366,12 +16382,12 @@ Lzkboo_encrypt$359:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$357
 Lzkboo_encrypt$358:
-	movl	1212(%rsp,%rcx,4), %r10d
-	movl	1236(%rsp,%rcx,4), %r11d
-	movl	1248(%rsp,%rcx,4), %ebp
+	movl	1276(%rsp,%rcx,4), %r10d
+	movl	1288(%rsp,%rcx,4), %r11d
+	movl	1336(%rsp,%rcx,4), %ebp
 	xorl	%r11d, %r10d
 	xorl	%ebp, %r10d
-	movl	%r10d, 1140(%rsp,%rcx,4)
+	movl	%r10d, 1204(%rsp,%rcx,4)
 	imulq	$64, (%rsp), %r10
 	imulq	$3, %r10, %r10
 	imulq	$1480, (%rsp), %r11
@@ -16380,39 +16396,39 @@ Lzkboo_encrypt$358:
 	imulq	$1480, %r15, %r11
 	addq	%r11, %r10
 	addq	%rax, %r10
-	movl	1248(%rsp,%rcx,4), %r11d
+	movl	1336(%rsp,%rcx,4), %r11d
 	movl	%r11d, (%r8,%r10)
 	incq	%rcx
 Lzkboo_encrypt$357:
 	cmpq	$3, %rcx
 	jb  	Lzkboo_encrypt$358
 	addq	$4, %rax
-	movl	1140(%rsp), %ecx
-	movl	%ecx, 1428(%rsp)
-	movl	1144(%rsp), %ecx
-	movl	%ecx, 1432(%rsp)
-	movl	1148(%rsp), %ecx
-	movl	%ecx, 1436(%rsp)
+	movl	1204(%rsp), %ecx
+	movl	%ecx, 1504(%rsp)
+	movl	1208(%rsp), %ecx
+	movl	%ecx, 1508(%rsp)
+	movl	1212(%rsp), %ecx
+	movl	%ecx, 1512(%rsp)
 	movq	$0, 24(%rsp)
 	jmp 	Lzkboo_encrypt$355
 Lzkboo_encrypt$356:
 	movq	24(%rsp), %rcx
 	imulq	$3, %rcx, %rcx
-	movl	1380(%rsp,%rcx,4), %r10d
+	movl	1456(%rsp,%rcx,4), %r10d
 	incq	%rcx
-	movl	%r10d, 1140(%rsp)
-	movl	1380(%rsp,%rcx,4), %r10d
-	movl	%r10d, 1144(%rsp)
+	movl	%r10d, 1204(%rsp)
+	movl	1456(%rsp,%rcx,4), %r10d
+	movl	%r10d, 1208(%rsp)
 	incq	%rcx
-	movl	1380(%rsp,%rcx,4), %ecx
-	movl	%ecx, 1148(%rsp)
+	movl	1456(%rsp,%rcx,4), %ecx
+	movl	%ecx, 1212(%rsp)
 	movq	24(%rsp), %rcx
-	movl	1140(%rsp), %r10d
-	movl	%r10d, 1504(%rsp,%rcx,4)
-	movl	1144(%rsp), %r10d
-	movl	%r10d, 1536(%rsp,%rcx,4)
-	movl	1148(%rsp), %r10d
-	movl	%r10d, 1568(%rsp,%rcx,4)
+	movl	1204(%rsp), %r10d
+	movl	%r10d, 1580(%rsp,%rcx,4)
+	movl	1208(%rsp), %r10d
+	movl	%r10d, 1612(%rsp,%rcx,4)
+	movl	1212(%rsp), %r10d
+	movl	%r10d, 1644(%rsp,%rcx,4)
 	incq	24(%rsp)
 Lzkboo_encrypt$355:
 	cmpq	$5, 24(%rsp)
@@ -16433,7 +16449,7 @@ Lzkboo_encrypt$352:
 	movq	$0, %rbp
 	jmp 	Lzkboo_encrypt$353
 Lzkboo_encrypt$354:
-	movl	1504(%rsp,%r11,4), %ebx
+	movl	1580(%rsp,%r11,4), %ebx
 	movl	%ebx, (%r8,%r10)
 	addq	$4, %r10
 	incq	%r11
@@ -16485,14 +16501,14 @@ Lzkboo_encrypt$210:
 	movq	$0, 32(%rsp)
 	movl	$0, 24(%rsp)
 	movl	$0, 28(%rsp)
-	movl	$1779033703, 1316(%rsp)
-	movl	$-1150833019, 1320(%rsp)
-	movl	$1013904242, 1324(%rsp)
-	movl	$-1521486534, 1328(%rsp)
-	movl	$1359893119, 1332(%rsp)
-	movl	$-1694144372, 1336(%rsp)
-	movl	$528734635, 1340(%rsp)
-	movl	$1541459225, 1344(%rsp)
+	movl	$1779033703, 1392(%rsp)
+	movl	$-1150833019, 1396(%rsp)
+	movl	$1013904242, 1400(%rsp)
+	movl	$-1521486534, 1404(%rsp)
+	movl	$1359893119, 1408(%rsp)
+	movl	$-1694144372, 1412(%rsp)
+	movl	$528734635, 1416(%rsp)
+	movl	$1541459225, 1420(%rsp)
 	imulq	$16, %r14, %rax
 	imulq	(%rsp), %rax
 	imulq	$16, %r13, %rcx
@@ -16501,7 +16517,7 @@ Lzkboo_encrypt$210:
 	jmp 	Lzkboo_encrypt$345
 Lzkboo_encrypt$346:
 	movb	(%rdx,%rax), %r10b
-	movb	%r10b, 3072(%rsp,%rcx)
+	movb	%r10b, 3148(%rsp,%rcx)
 	incq	%rax
 	incq	%rcx
 Lzkboo_encrypt$345:
@@ -16517,7 +16533,7 @@ Lzkboo_encrypt$345:
 	jmp 	Lzkboo_encrypt$343
 Lzkboo_encrypt$344:
 	movb	(%r8,%rax), %r10b
-	movb	%r10b, 3120(%rsp,%rcx)
+	movb	%r10b, 3196(%rsp,%rcx)
 	incq	%rax
 	incq	%rcx
 Lzkboo_encrypt$343:
@@ -16536,7 +16552,7 @@ Lzkboo_encrypt$343:
 	jmp 	Lzkboo_encrypt$341
 Lzkboo_encrypt$342:
 	movb	(%r8,%rax), %r10b
-	movb	%r10b, 3376(%rsp,%rcx)
+	movb	%r10b, 3452(%rsp,%rcx)
 	incq	%rax
 	incq	%rcx
 Lzkboo_encrypt$341:
@@ -16552,7 +16568,7 @@ Lzkboo_encrypt$341:
 	jmp 	Lzkboo_encrypt$339
 Lzkboo_encrypt$340:
 	movb	(%rdi,%rax), %r10b
-	movb	%r10b, 1092(%rsp,%rcx)
+	movb	%r10b, 1156(%rsp,%rcx)
 	incq	%rax
 	incq	%rcx
 Lzkboo_encrypt$339:
@@ -16563,84 +16579,84 @@ Lzkboo_encrypt$339:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$318
 Lzkboo_encrypt$319:
-	movb	3072(%rsp,%rcx), %al
+	movb	3148(%rsp,%rcx), %al
 	movq	%rcx, 56(%rsp)
 	movq	32(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 32(%rsp)
 	cmpq	$64, 32(%rsp)
 	jne 	Lzkboo_encrypt$320
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$337
 Lzkboo_encrypt$338:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$337:
 	cmpq	$16, %rax
@@ -16649,26 +16665,26 @@ Lzkboo_encrypt$337:
 Lzkboo_encrypt$332:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %ebx
+	movl	1932(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ecx
 	leaq	Lzkboo_encrypt$336(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$336:
 	movl	%ebx, %ecx
-	leaq	Lzkboo_encrypt$335(%rip), 	%r11
+	leaq	Lzkboo_encrypt$335(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$335:
 	shrl	$10, %ebx
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%ebx, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %ebx
+	movl	1932(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ebp
 	leaq	Lzkboo_encrypt$334(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -16680,138 +16696,138 @@ Lzkboo_encrypt$333:
 	shrl	$3, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$331:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$332
-	movl	1316(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1320(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1324(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1328(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1332(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1336(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1340(%rsp), %eax
-	movl	%eax, 1120(%rsp)
-	movl	1344(%rsp), %eax
-	movl	%eax, 1124(%rsp)
+	movl	1392(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1396(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1400(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1404(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1408(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1412(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1416(%rsp), %eax
+	movl	%eax, 1184(%rsp)
+	movl	1420(%rsp), %eax
+	movl	%eax, 1188(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$323
 Lzkboo_encrypt$324:
-	movl	1124(%rsp), %r11d
-	movl	1112(%rsp), %r12d
+	movl	1188(%rsp), %r11d
+	movl	1176(%rsp), %r12d
 	leaq	Lzkboo_encrypt$330(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$330:
-	movl	1112(%rsp), %ebx
-	leaq	Lzkboo_encrypt$329(%rip), 	%rcx
+	movl	1176(%rsp), %ebx
+	leaq	Lzkboo_encrypt$329(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$329:
-	movl	1112(%rsp), %ecx
-	leaq	Lzkboo_encrypt$328(%rip), 	%rbp
+	movl	1176(%rsp), %ebp
+	leaq	Lzkboo_encrypt$328(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$328:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r11d
-	movl	1112(%rsp), %eax
-	andl	1116(%rsp), %eax
-	movl	1112(%rsp), %ecx
+	movl	1176(%rsp), %eax
+	andl	1180(%rsp), %eax
+	movl	1176(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1120(%rsp), %ecx
+	andl	1184(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r11d
-	movl	1600(%rsp,%r10,4), %eax
+	movl	1676(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1856(%rsp,%r10,4), %eax
+	movl	1932(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1096(%rsp), %ecx
-	leaq	Lzkboo_encrypt$327(%rip), 	%rbp
+	movl	1160(%rsp), %ebp
+	leaq	Lzkboo_encrypt$327(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$327:
-	movl	%ecx, 1128(%rsp)
-	movl	1096(%rsp), %eax
-	leaq	Lzkboo_encrypt$326(%rip), 	%rcx
+	movl	%ebp, 1192(%rsp)
+	movl	1160(%rsp), %eax
+	leaq	Lzkboo_encrypt$326(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$326:
-	movl	%eax, 1132(%rsp)
-	movl	1096(%rsp), %eax
-	leaq	Lzkboo_encrypt$325(%rip), 	%rbp
+	movl	%eax, 1196(%rsp)
+	movl	1160(%rsp), %ebp
+	leaq	Lzkboo_encrypt$325(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$325:
-	movl	%eax, 1136(%rsp)
-	movl	1128(%rsp), %eax
-	movl	1132(%rsp), %ecx
+	movl	%ebp, 1200(%rsp)
+	movl	1192(%rsp), %eax
+	movl	1196(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1136(%rsp), %ecx
+	movl	1200(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1096(%rsp), %ecx
-	movl	1100(%rsp), %ebp
+	movl	1160(%rsp), %ecx
+	movl	1164(%rsp), %ebp
 	andl	%ebp, %ecx
-	movl	1096(%rsp), %ebp
-	movl	1104(%rsp), %ebx
+	movl	1160(%rsp), %ebp
+	movl	1168(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
-	movl	1100(%rsp), %ebp
-	movl	1104(%rsp), %ebx
+	movl	1164(%rsp), %ebp
+	movl	1168(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
 	addl	%ecx, %eax
-	movl	1120(%rsp), %ecx
-	movl	%ecx, 1124(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1120(%rsp)
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
+	movl	1184(%rsp), %ecx
+	movl	%ecx, 1188(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1184(%rsp)
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
 	addl	%r11d, %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
 	addl	%eax, %r11d
-	movl	%r11d, 1096(%rsp)
+	movl	%r11d, 1160(%rsp)
 	incq	%r10
 Lzkboo_encrypt$323:
 	cmpq	$64, %r10
 	jb  	Lzkboo_encrypt$324
-	movl	1316(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1316(%rsp)
-	movl	1320(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1320(%rsp)
-	movl	1324(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1324(%rsp)
-	movl	1328(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1328(%rsp)
-	movl	1332(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1332(%rsp)
-	movl	1336(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1336(%rsp)
-	movl	1340(%rsp), %eax
-	addl	1120(%rsp), %eax
-	movl	%eax, 1340(%rsp)
-	movl	1344(%rsp), %eax
-	addl	1124(%rsp), %eax
-	movl	%eax, 1344(%rsp)
+	movl	1392(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1392(%rsp)
+	movl	1396(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1396(%rsp)
+	movl	1400(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1400(%rsp)
+	movl	1404(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1404(%rsp)
+	movl	1408(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1408(%rsp)
+	movl	1412(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1412(%rsp)
+	movl	1416(%rsp), %eax
+	addl	1184(%rsp), %eax
+	movl	%eax, 1416(%rsp)
+	movl	1420(%rsp), %eax
+	addl	1188(%rsp), %eax
+	movl	%eax, 1420(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %r10d
@@ -16837,83 +16853,83 @@ Lzkboo_encrypt$318:
 	jmp 	Lzkboo_encrypt$297
 Lzkboo_encrypt$298:
 	movq	%rax, 56(%rsp)
-	movb	3120(%rsp,%rax), %al
+	movb	3196(%rsp,%rax), %al
 	movq	32(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 32(%rsp)
 	cmpq	$64, 32(%rsp)
 	jne 	Lzkboo_encrypt$299
-	movl	$1116352408, 1856(%rsp)
-	movl	$1899447441, 1860(%rsp)
-	movl	$-1245643825, 1864(%rsp)
-	movl	$-373957723, 1868(%rsp)
-	movl	$961987163, 1872(%rsp)
-	movl	$1508970993, 1876(%rsp)
-	movl	$-1841331548, 1880(%rsp)
-	movl	$-1424204075, 1884(%rsp)
-	movl	$-670586216, 1888(%rsp)
-	movl	$310598401, 1892(%rsp)
-	movl	$607225278, 1896(%rsp)
-	movl	$1426881987, 1900(%rsp)
-	movl	$1925078388, 1904(%rsp)
-	movl	$-2132889090, 1908(%rsp)
-	movl	$-1680079193, 1912(%rsp)
-	movl	$-1046744716, 1916(%rsp)
-	movl	$-459576895, 1920(%rsp)
-	movl	$-272742522, 1924(%rsp)
-	movl	$264347078, 1928(%rsp)
-	movl	$604807628, 1932(%rsp)
-	movl	$770255983, 1936(%rsp)
-	movl	$1249150122, 1940(%rsp)
-	movl	$1555081692, 1944(%rsp)
-	movl	$1996064986, 1948(%rsp)
-	movl	$-1740746414, 1952(%rsp)
-	movl	$-1473132947, 1956(%rsp)
-	movl	$-1341970488, 1960(%rsp)
-	movl	$-1084653625, 1964(%rsp)
-	movl	$-958395405, 1968(%rsp)
-	movl	$-710438585, 1972(%rsp)
-	movl	$113926993, 1976(%rsp)
-	movl	$338241895, 1980(%rsp)
-	movl	$666307205, 1984(%rsp)
-	movl	$773529912, 1988(%rsp)
-	movl	$1294757372, 1992(%rsp)
-	movl	$1396182291, 1996(%rsp)
-	movl	$1695183700, 2000(%rsp)
-	movl	$1986661051, 2004(%rsp)
-	movl	$-2117940946, 2008(%rsp)
-	movl	$-1838011259, 2012(%rsp)
-	movl	$-1564481375, 2016(%rsp)
-	movl	$-1474664885, 2020(%rsp)
-	movl	$-1035236496, 2024(%rsp)
-	movl	$-949202525, 2028(%rsp)
-	movl	$-778901479, 2032(%rsp)
-	movl	$-694614492, 2036(%rsp)
-	movl	$-200395387, 2040(%rsp)
-	movl	$275423344, 2044(%rsp)
-	movl	$430227734, 2048(%rsp)
-	movl	$506948616, 2052(%rsp)
-	movl	$659060556, 2056(%rsp)
-	movl	$883997877, 2060(%rsp)
-	movl	$958139571, 2064(%rsp)
-	movl	$1322822218, 2068(%rsp)
-	movl	$1537002063, 2072(%rsp)
-	movl	$1747873779, 2076(%rsp)
-	movl	$1955562222, 2080(%rsp)
-	movl	$2024104815, 2084(%rsp)
-	movl	$-2067236844, 2088(%rsp)
-	movl	$-1933114872, 2092(%rsp)
-	movl	$-1866530822, 2096(%rsp)
-	movl	$-1538233109, 2100(%rsp)
-	movl	$-1090935817, 2104(%rsp)
-	movl	$-965641998, 2108(%rsp)
+	movl	$1116352408, 1932(%rsp)
+	movl	$1899447441, 1936(%rsp)
+	movl	$-1245643825, 1940(%rsp)
+	movl	$-373957723, 1944(%rsp)
+	movl	$961987163, 1948(%rsp)
+	movl	$1508970993, 1952(%rsp)
+	movl	$-1841331548, 1956(%rsp)
+	movl	$-1424204075, 1960(%rsp)
+	movl	$-670586216, 1964(%rsp)
+	movl	$310598401, 1968(%rsp)
+	movl	$607225278, 1972(%rsp)
+	movl	$1426881987, 1976(%rsp)
+	movl	$1925078388, 1980(%rsp)
+	movl	$-2132889090, 1984(%rsp)
+	movl	$-1680079193, 1988(%rsp)
+	movl	$-1046744716, 1992(%rsp)
+	movl	$-459576895, 1996(%rsp)
+	movl	$-272742522, 2000(%rsp)
+	movl	$264347078, 2004(%rsp)
+	movl	$604807628, 2008(%rsp)
+	movl	$770255983, 2012(%rsp)
+	movl	$1249150122, 2016(%rsp)
+	movl	$1555081692, 2020(%rsp)
+	movl	$1996064986, 2024(%rsp)
+	movl	$-1740746414, 2028(%rsp)
+	movl	$-1473132947, 2032(%rsp)
+	movl	$-1341970488, 2036(%rsp)
+	movl	$-1084653625, 2040(%rsp)
+	movl	$-958395405, 2044(%rsp)
+	movl	$-710438585, 2048(%rsp)
+	movl	$113926993, 2052(%rsp)
+	movl	$338241895, 2056(%rsp)
+	movl	$666307205, 2060(%rsp)
+	movl	$773529912, 2064(%rsp)
+	movl	$1294757372, 2068(%rsp)
+	movl	$1396182291, 2072(%rsp)
+	movl	$1695183700, 2076(%rsp)
+	movl	$1986661051, 2080(%rsp)
+	movl	$-2117940946, 2084(%rsp)
+	movl	$-1838011259, 2088(%rsp)
+	movl	$-1564481375, 2092(%rsp)
+	movl	$-1474664885, 2096(%rsp)
+	movl	$-1035236496, 2100(%rsp)
+	movl	$-949202525, 2104(%rsp)
+	movl	$-778901479, 2108(%rsp)
+	movl	$-694614492, 2112(%rsp)
+	movl	$-200395387, 2116(%rsp)
+	movl	$275423344, 2120(%rsp)
+	movl	$430227734, 2124(%rsp)
+	movl	$506948616, 2128(%rsp)
+	movl	$659060556, 2132(%rsp)
+	movl	$883997877, 2136(%rsp)
+	movl	$958139571, 2140(%rsp)
+	movl	$1322822218, 2144(%rsp)
+	movl	$1537002063, 2148(%rsp)
+	movl	$1747873779, 2152(%rsp)
+	movl	$1955562222, 2156(%rsp)
+	movl	$2024104815, 2160(%rsp)
+	movl	$-2067236844, 2164(%rsp)
+	movl	$-1933114872, 2168(%rsp)
+	movl	$-1866530822, 2172(%rsp)
+	movl	$-1538233109, 2176(%rsp)
+	movl	$-1090935817, 2180(%rsp)
+	movl	$-965641998, 2184(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$316
 Lzkboo_encrypt$317:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1600(%rsp,%rax,4)
+	movl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$316:
 	cmpq	$16, %rax
@@ -16922,26 +16938,26 @@ Lzkboo_encrypt$316:
 Lzkboo_encrypt$311:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1600(%rsp,%rcx,4), %ebx
+	movl	1676(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ecx
 	leaq	Lzkboo_encrypt$315(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$315:
 	movl	%ebx, %ecx
-	leaq	Lzkboo_encrypt$314(%rip), 	%r11
+	leaq	Lzkboo_encrypt$314(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$314:
 	shrl	$10, %ebx
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%ebx, %ebp
-	movl	%ebp, 1600(%rsp,%rax,4)
+	movl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1600(%rsp,%rcx,4), %ebx
+	movl	1676(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ebp
 	leaq	Lzkboo_encrypt$313(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -16953,138 +16969,138 @@ Lzkboo_encrypt$312:
 	shrl	$3, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	addl	%ebp, 1600(%rsp,%rax,4)
+	addl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$310:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$311
-	movl	1316(%rsp), %eax
-	movl	%eax, 1124(%rsp)
-	movl	1320(%rsp), %eax
-	movl	%eax, 1120(%rsp)
-	movl	1324(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1328(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1332(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1336(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1340(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1344(%rsp), %eax
-	movl	%eax, 1096(%rsp)
+	movl	1392(%rsp), %eax
+	movl	%eax, 1188(%rsp)
+	movl	1396(%rsp), %eax
+	movl	%eax, 1184(%rsp)
+	movl	1400(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1404(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1408(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1412(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1416(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1420(%rsp), %eax
+	movl	%eax, 1160(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$302
 Lzkboo_encrypt$303:
-	movl	1096(%rsp), %r11d
-	movl	1108(%rsp), %r12d
+	movl	1160(%rsp), %r11d
+	movl	1172(%rsp), %r12d
 	leaq	Lzkboo_encrypt$309(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$309:
-	movl	1108(%rsp), %ebx
-	leaq	Lzkboo_encrypt$308(%rip), 	%rcx
+	movl	1172(%rsp), %ebx
+	leaq	Lzkboo_encrypt$308(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$308:
-	movl	1108(%rsp), %ecx
-	leaq	Lzkboo_encrypt$307(%rip), 	%rbp
+	movl	1172(%rsp), %ebp
+	leaq	Lzkboo_encrypt$307(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$307:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r11d
-	movl	1108(%rsp), %eax
-	andl	1104(%rsp), %eax
-	movl	1108(%rsp), %ecx
+	movl	1172(%rsp), %eax
+	andl	1168(%rsp), %eax
+	movl	1172(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1100(%rsp), %ecx
+	andl	1164(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r11d
-	movl	1856(%rsp,%r10,4), %eax
+	movl	1932(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1600(%rsp,%r10,4), %eax
+	movl	1676(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1124(%rsp), %ecx
-	leaq	Lzkboo_encrypt$306(%rip), 	%rbp
+	movl	1188(%rsp), %ebp
+	leaq	Lzkboo_encrypt$306(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$306:
-	movl	%ecx, 1136(%rsp)
-	movl	1124(%rsp), %eax
-	leaq	Lzkboo_encrypt$305(%rip), 	%rcx
+	movl	%ebp, 1200(%rsp)
+	movl	1188(%rsp), %eax
+	leaq	Lzkboo_encrypt$305(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$305:
-	movl	%eax, 1132(%rsp)
-	movl	1124(%rsp), %eax
-	leaq	Lzkboo_encrypt$304(%rip), 	%rbp
+	movl	%eax, 1196(%rsp)
+	movl	1188(%rsp), %ebp
+	leaq	Lzkboo_encrypt$304(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$304:
-	movl	%eax, 1128(%rsp)
-	movl	1136(%rsp), %eax
-	movl	1132(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1200(%rsp), %eax
+	movl	1196(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1124(%rsp), %ecx
-	movl	1120(%rsp), %ebp
+	movl	1188(%rsp), %ecx
+	movl	1184(%rsp), %ebp
 	andl	%ebp, %ecx
-	movl	1124(%rsp), %ebp
-	movl	1116(%rsp), %ebx
+	movl	1188(%rsp), %ebp
+	movl	1180(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
-	movl	1120(%rsp), %ebp
-	movl	1116(%rsp), %ebx
+	movl	1184(%rsp), %ebp
+	movl	1180(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
 	addl	%ecx, %eax
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1112(%rsp), %ecx
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1176(%rsp), %ecx
 	addl	%r11d, %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1120(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1124(%rsp), %ecx
-	movl	%ecx, 1120(%rsp)
+	movl	%ecx, 1172(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1184(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1188(%rsp), %ecx
+	movl	%ecx, 1184(%rsp)
 	addl	%eax, %r11d
-	movl	%r11d, 1124(%rsp)
+	movl	%r11d, 1188(%rsp)
 	incq	%r10
 Lzkboo_encrypt$302:
 	cmpq	$64, %r10
 	jb  	Lzkboo_encrypt$303
-	movl	1316(%rsp), %eax
-	addl	1124(%rsp), %eax
-	movl	%eax, 1316(%rsp)
-	movl	1320(%rsp), %eax
-	addl	1120(%rsp), %eax
-	movl	%eax, 1320(%rsp)
-	movl	1324(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1324(%rsp)
-	movl	1328(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1328(%rsp)
-	movl	1332(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1332(%rsp)
-	movl	1336(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1336(%rsp)
-	movl	1340(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1340(%rsp)
-	movl	1344(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1344(%rsp)
+	movl	1392(%rsp), %eax
+	addl	1188(%rsp), %eax
+	movl	%eax, 1392(%rsp)
+	movl	1396(%rsp), %eax
+	addl	1184(%rsp), %eax
+	movl	%eax, 1396(%rsp)
+	movl	1400(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1400(%rsp)
+	movl	1404(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1404(%rsp)
+	movl	1408(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1408(%rsp)
+	movl	1412(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1412(%rsp)
+	movl	1416(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1416(%rsp)
+	movl	1420(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1420(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %r10d
@@ -17109,83 +17125,83 @@ Lzkboo_encrypt$297:
 	movq	$0, %r13
 	jmp 	Lzkboo_encrypt$276
 Lzkboo_encrypt$277:
-	movb	3376(%rsp,%r13), %al
+	movb	3452(%rsp,%r13), %al
 	movq	32(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 32(%rsp)
 	cmpq	$64, 32(%rsp)
 	jne 	Lzkboo_encrypt$278
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$295
 Lzkboo_encrypt$296:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$295:
 	cmpq	$16, %rax
@@ -17194,26 +17210,26 @@ Lzkboo_encrypt$295:
 Lzkboo_encrypt$290:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %ebx
+	movl	1932(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ecx
 	leaq	Lzkboo_encrypt$294(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$294:
 	movl	%ebx, %ecx
-	leaq	Lzkboo_encrypt$293(%rip), 	%r11
+	leaq	Lzkboo_encrypt$293(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$293:
 	shrl	$10, %ebx
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%ebx, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %ebx
+	movl	1932(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ebp
 	leaq	Lzkboo_encrypt$292(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -17225,138 +17241,138 @@ Lzkboo_encrypt$291:
 	shrl	$3, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$289:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$290
-	movl	1316(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1320(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1324(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1328(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1332(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1336(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1340(%rsp), %eax
-	movl	%eax, 1120(%rsp)
-	movl	1344(%rsp), %eax
-	movl	%eax, 1124(%rsp)
+	movl	1392(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1396(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1400(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1404(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1408(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1412(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1416(%rsp), %eax
+	movl	%eax, 1184(%rsp)
+	movl	1420(%rsp), %eax
+	movl	%eax, 1188(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$281
 Lzkboo_encrypt$282:
-	movl	1124(%rsp), %r11d
-	movl	1112(%rsp), %r12d
+	movl	1188(%rsp), %r11d
+	movl	1176(%rsp), %r12d
 	leaq	Lzkboo_encrypt$288(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$288:
-	movl	1112(%rsp), %ebx
-	leaq	Lzkboo_encrypt$287(%rip), 	%rcx
+	movl	1176(%rsp), %ebx
+	leaq	Lzkboo_encrypt$287(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$287:
-	movl	1112(%rsp), %ecx
-	leaq	Lzkboo_encrypt$286(%rip), 	%rbp
+	movl	1176(%rsp), %ebp
+	leaq	Lzkboo_encrypt$286(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$286:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r11d
-	movl	1112(%rsp), %eax
-	andl	1116(%rsp), %eax
-	movl	1112(%rsp), %ecx
+	movl	1176(%rsp), %eax
+	andl	1180(%rsp), %eax
+	movl	1176(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1120(%rsp), %ecx
+	andl	1184(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r11d
-	movl	1600(%rsp,%r10,4), %eax
+	movl	1676(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1856(%rsp,%r10,4), %eax
+	movl	1932(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1096(%rsp), %ecx
-	leaq	Lzkboo_encrypt$285(%rip), 	%rbp
+	movl	1160(%rsp), %ebp
+	leaq	Lzkboo_encrypt$285(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$285:
-	movl	%ecx, 1128(%rsp)
-	movl	1096(%rsp), %eax
-	leaq	Lzkboo_encrypt$284(%rip), 	%rcx
+	movl	%ebp, 1192(%rsp)
+	movl	1160(%rsp), %eax
+	leaq	Lzkboo_encrypt$284(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$284:
-	movl	%eax, 1132(%rsp)
-	movl	1096(%rsp), %eax
-	leaq	Lzkboo_encrypt$283(%rip), 	%rbp
+	movl	%eax, 1196(%rsp)
+	movl	1160(%rsp), %ebp
+	leaq	Lzkboo_encrypt$283(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$283:
-	movl	%eax, 1136(%rsp)
-	movl	1128(%rsp), %eax
-	movl	1132(%rsp), %ecx
+	movl	%ebp, 1200(%rsp)
+	movl	1192(%rsp), %eax
+	movl	1196(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1136(%rsp), %ecx
+	movl	1200(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1096(%rsp), %ecx
-	movl	1100(%rsp), %ebp
+	movl	1160(%rsp), %ecx
+	movl	1164(%rsp), %ebp
 	andl	%ebp, %ecx
-	movl	1096(%rsp), %ebp
-	movl	1104(%rsp), %ebx
+	movl	1160(%rsp), %ebp
+	movl	1168(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
-	movl	1100(%rsp), %ebp
-	movl	1104(%rsp), %ebx
+	movl	1164(%rsp), %ebp
+	movl	1168(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
 	addl	%ecx, %eax
-	movl	1120(%rsp), %ecx
-	movl	%ecx, 1124(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1120(%rsp)
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
+	movl	1184(%rsp), %ecx
+	movl	%ecx, 1188(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1184(%rsp)
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
 	addl	%r11d, %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
 	addl	%eax, %r11d
-	movl	%r11d, 1096(%rsp)
+	movl	%r11d, 1160(%rsp)
 	incq	%r10
 Lzkboo_encrypt$281:
 	cmpq	$64, %r10
 	jb  	Lzkboo_encrypt$282
-	movl	1316(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1316(%rsp)
-	movl	1320(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1320(%rsp)
-	movl	1324(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1324(%rsp)
-	movl	1328(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1328(%rsp)
-	movl	1332(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1332(%rsp)
-	movl	1336(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1336(%rsp)
-	movl	1340(%rsp), %eax
-	addl	1120(%rsp), %eax
-	movl	%eax, 1340(%rsp)
-	movl	1344(%rsp), %eax
-	addl	1124(%rsp), %eax
-	movl	%eax, 1344(%rsp)
+	movl	1392(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1392(%rsp)
+	movl	1396(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1396(%rsp)
+	movl	1400(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1400(%rsp)
+	movl	1404(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1404(%rsp)
+	movl	1408(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1408(%rsp)
+	movl	1412(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1412(%rsp)
+	movl	1416(%rsp), %eax
+	addl	1184(%rsp), %eax
+	movl	%eax, 1416(%rsp)
+	movl	1420(%rsp), %eax
+	addl	1188(%rsp), %eax
+	movl	%eax, 1420(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %r10d
@@ -17380,84 +17396,84 @@ Lzkboo_encrypt$276:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$255
 Lzkboo_encrypt$256:
-	movb	1092(%rsp,%rcx), %al
+	movb	1156(%rsp,%rcx), %al
 	movq	%rcx, 56(%rsp)
 	movq	32(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 32(%rsp)
 	cmpq	$64, %rcx
 	jne 	Lzkboo_encrypt$257
-	movl	$1116352408, 1856(%rsp)
-	movl	$1899447441, 1860(%rsp)
-	movl	$-1245643825, 1864(%rsp)
-	movl	$-373957723, 1868(%rsp)
-	movl	$961987163, 1872(%rsp)
-	movl	$1508970993, 1876(%rsp)
-	movl	$-1841331548, 1880(%rsp)
-	movl	$-1424204075, 1884(%rsp)
-	movl	$-670586216, 1888(%rsp)
-	movl	$310598401, 1892(%rsp)
-	movl	$607225278, 1896(%rsp)
-	movl	$1426881987, 1900(%rsp)
-	movl	$1925078388, 1904(%rsp)
-	movl	$-2132889090, 1908(%rsp)
-	movl	$-1680079193, 1912(%rsp)
-	movl	$-1046744716, 1916(%rsp)
-	movl	$-459576895, 1920(%rsp)
-	movl	$-272742522, 1924(%rsp)
-	movl	$264347078, 1928(%rsp)
-	movl	$604807628, 1932(%rsp)
-	movl	$770255983, 1936(%rsp)
-	movl	$1249150122, 1940(%rsp)
-	movl	$1555081692, 1944(%rsp)
-	movl	$1996064986, 1948(%rsp)
-	movl	$-1740746414, 1952(%rsp)
-	movl	$-1473132947, 1956(%rsp)
-	movl	$-1341970488, 1960(%rsp)
-	movl	$-1084653625, 1964(%rsp)
-	movl	$-958395405, 1968(%rsp)
-	movl	$-710438585, 1972(%rsp)
-	movl	$113926993, 1976(%rsp)
-	movl	$338241895, 1980(%rsp)
-	movl	$666307205, 1984(%rsp)
-	movl	$773529912, 1988(%rsp)
-	movl	$1294757372, 1992(%rsp)
-	movl	$1396182291, 1996(%rsp)
-	movl	$1695183700, 2000(%rsp)
-	movl	$1986661051, 2004(%rsp)
-	movl	$-2117940946, 2008(%rsp)
-	movl	$-1838011259, 2012(%rsp)
-	movl	$-1564481375, 2016(%rsp)
-	movl	$-1474664885, 2020(%rsp)
-	movl	$-1035236496, 2024(%rsp)
-	movl	$-949202525, 2028(%rsp)
-	movl	$-778901479, 2032(%rsp)
-	movl	$-694614492, 2036(%rsp)
-	movl	$-200395387, 2040(%rsp)
-	movl	$275423344, 2044(%rsp)
-	movl	$430227734, 2048(%rsp)
-	movl	$506948616, 2052(%rsp)
-	movl	$659060556, 2056(%rsp)
-	movl	$883997877, 2060(%rsp)
-	movl	$958139571, 2064(%rsp)
-	movl	$1322822218, 2068(%rsp)
-	movl	$1537002063, 2072(%rsp)
-	movl	$1747873779, 2076(%rsp)
-	movl	$1955562222, 2080(%rsp)
-	movl	$2024104815, 2084(%rsp)
-	movl	$-2067236844, 2088(%rsp)
-	movl	$-1933114872, 2092(%rsp)
-	movl	$-1866530822, 2096(%rsp)
-	movl	$-1538233109, 2100(%rsp)
-	movl	$-1090935817, 2104(%rsp)
-	movl	$-965641998, 2108(%rsp)
+	movl	$1116352408, 1932(%rsp)
+	movl	$1899447441, 1936(%rsp)
+	movl	$-1245643825, 1940(%rsp)
+	movl	$-373957723, 1944(%rsp)
+	movl	$961987163, 1948(%rsp)
+	movl	$1508970993, 1952(%rsp)
+	movl	$-1841331548, 1956(%rsp)
+	movl	$-1424204075, 1960(%rsp)
+	movl	$-670586216, 1964(%rsp)
+	movl	$310598401, 1968(%rsp)
+	movl	$607225278, 1972(%rsp)
+	movl	$1426881987, 1976(%rsp)
+	movl	$1925078388, 1980(%rsp)
+	movl	$-2132889090, 1984(%rsp)
+	movl	$-1680079193, 1988(%rsp)
+	movl	$-1046744716, 1992(%rsp)
+	movl	$-459576895, 1996(%rsp)
+	movl	$-272742522, 2000(%rsp)
+	movl	$264347078, 2004(%rsp)
+	movl	$604807628, 2008(%rsp)
+	movl	$770255983, 2012(%rsp)
+	movl	$1249150122, 2016(%rsp)
+	movl	$1555081692, 2020(%rsp)
+	movl	$1996064986, 2024(%rsp)
+	movl	$-1740746414, 2028(%rsp)
+	movl	$-1473132947, 2032(%rsp)
+	movl	$-1341970488, 2036(%rsp)
+	movl	$-1084653625, 2040(%rsp)
+	movl	$-958395405, 2044(%rsp)
+	movl	$-710438585, 2048(%rsp)
+	movl	$113926993, 2052(%rsp)
+	movl	$338241895, 2056(%rsp)
+	movl	$666307205, 2060(%rsp)
+	movl	$773529912, 2064(%rsp)
+	movl	$1294757372, 2068(%rsp)
+	movl	$1396182291, 2072(%rsp)
+	movl	$1695183700, 2076(%rsp)
+	movl	$1986661051, 2080(%rsp)
+	movl	$-2117940946, 2084(%rsp)
+	movl	$-1838011259, 2088(%rsp)
+	movl	$-1564481375, 2092(%rsp)
+	movl	$-1474664885, 2096(%rsp)
+	movl	$-1035236496, 2100(%rsp)
+	movl	$-949202525, 2104(%rsp)
+	movl	$-778901479, 2108(%rsp)
+	movl	$-694614492, 2112(%rsp)
+	movl	$-200395387, 2116(%rsp)
+	movl	$275423344, 2120(%rsp)
+	movl	$430227734, 2124(%rsp)
+	movl	$506948616, 2128(%rsp)
+	movl	$659060556, 2132(%rsp)
+	movl	$883997877, 2136(%rsp)
+	movl	$958139571, 2140(%rsp)
+	movl	$1322822218, 2144(%rsp)
+	movl	$1537002063, 2148(%rsp)
+	movl	$1747873779, 2152(%rsp)
+	movl	$1955562222, 2156(%rsp)
+	movl	$2024104815, 2160(%rsp)
+	movl	$-2067236844, 2164(%rsp)
+	movl	$-1933114872, 2168(%rsp)
+	movl	$-1866530822, 2172(%rsp)
+	movl	$-1538233109, 2176(%rsp)
+	movl	$-1090935817, 2180(%rsp)
+	movl	$-965641998, 2184(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$274
 Lzkboo_encrypt$275:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1600(%rsp,%rax,4)
+	movl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$274:
 	cmpq	$16, %rax
@@ -17466,26 +17482,26 @@ Lzkboo_encrypt$274:
 Lzkboo_encrypt$269:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1600(%rsp,%rcx,4), %ebx
+	movl	1676(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ecx
 	leaq	Lzkboo_encrypt$273(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$273:
 	movl	%ebx, %ecx
-	leaq	Lzkboo_encrypt$272(%rip), 	%r11
+	leaq	Lzkboo_encrypt$272(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$272:
 	shrl	$10, %ebx
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%ebx, %ebp
-	movl	%ebp, 1600(%rsp,%rax,4)
+	movl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1600(%rsp,%rcx,4), %ebx
+	movl	1676(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ebp
 	leaq	Lzkboo_encrypt$271(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -17497,138 +17513,138 @@ Lzkboo_encrypt$270:
 	shrl	$3, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	addl	%ebp, 1600(%rsp,%rax,4)
+	addl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$268:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$269
-	movl	1316(%rsp), %eax
-	movl	%eax, 1124(%rsp)
-	movl	1320(%rsp), %eax
-	movl	%eax, 1120(%rsp)
-	movl	1324(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1328(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1332(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1336(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1340(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1344(%rsp), %eax
-	movl	%eax, 1096(%rsp)
+	movl	1392(%rsp), %eax
+	movl	%eax, 1188(%rsp)
+	movl	1396(%rsp), %eax
+	movl	%eax, 1184(%rsp)
+	movl	1400(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1404(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1408(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1412(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1416(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1420(%rsp), %eax
+	movl	%eax, 1160(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$260
 Lzkboo_encrypt$261:
-	movl	1096(%rsp), %r11d
-	movl	1108(%rsp), %r12d
+	movl	1160(%rsp), %r11d
+	movl	1172(%rsp), %r12d
 	leaq	Lzkboo_encrypt$267(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$267:
-	movl	1108(%rsp), %ebx
-	leaq	Lzkboo_encrypt$266(%rip), 	%rcx
+	movl	1172(%rsp), %ebx
+	leaq	Lzkboo_encrypt$266(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$266:
-	movl	1108(%rsp), %ecx
-	leaq	Lzkboo_encrypt$265(%rip), 	%rbp
+	movl	1172(%rsp), %ebp
+	leaq	Lzkboo_encrypt$265(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$265:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r11d
-	movl	1108(%rsp), %eax
-	andl	1104(%rsp), %eax
-	movl	1108(%rsp), %ecx
+	movl	1172(%rsp), %eax
+	andl	1168(%rsp), %eax
+	movl	1172(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1100(%rsp), %ecx
+	andl	1164(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r11d
-	movl	1856(%rsp,%r10,4), %eax
+	movl	1932(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1600(%rsp,%r10,4), %eax
+	movl	1676(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1124(%rsp), %ecx
-	leaq	Lzkboo_encrypt$264(%rip), 	%rbp
+	movl	1188(%rsp), %ebp
+	leaq	Lzkboo_encrypt$264(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$264:
-	movl	%ecx, 1136(%rsp)
-	movl	1124(%rsp), %eax
-	leaq	Lzkboo_encrypt$263(%rip), 	%rcx
+	movl	%ebp, 1200(%rsp)
+	movl	1188(%rsp), %eax
+	leaq	Lzkboo_encrypt$263(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$263:
-	movl	%eax, 1132(%rsp)
-	movl	1124(%rsp), %eax
-	leaq	Lzkboo_encrypt$262(%rip), 	%rbp
+	movl	%eax, 1196(%rsp)
+	movl	1188(%rsp), %ebp
+	leaq	Lzkboo_encrypt$262(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$262:
-	movl	%eax, 1128(%rsp)
-	movl	1136(%rsp), %eax
-	movl	1132(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1200(%rsp), %eax
+	movl	1196(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1124(%rsp), %ecx
-	movl	1120(%rsp), %ebp
+	movl	1188(%rsp), %ecx
+	movl	1184(%rsp), %ebp
 	andl	%ebp, %ecx
-	movl	1124(%rsp), %ebp
-	movl	1116(%rsp), %ebx
+	movl	1188(%rsp), %ebp
+	movl	1180(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
-	movl	1120(%rsp), %ebp
-	movl	1116(%rsp), %ebx
+	movl	1184(%rsp), %ebp
+	movl	1180(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
 	addl	%ecx, %eax
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1112(%rsp), %ecx
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1176(%rsp), %ecx
 	addl	%r11d, %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1120(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1124(%rsp), %ecx
-	movl	%ecx, 1120(%rsp)
+	movl	%ecx, 1172(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1184(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1188(%rsp), %ecx
+	movl	%ecx, 1184(%rsp)
 	addl	%eax, %r11d
-	movl	%r11d, 1124(%rsp)
+	movl	%r11d, 1188(%rsp)
 	incq	%r10
 Lzkboo_encrypt$260:
 	cmpq	$64, %r10
 	jb  	Lzkboo_encrypt$261
-	movl	1316(%rsp), %eax
-	addl	1124(%rsp), %eax
-	movl	%eax, 1316(%rsp)
-	movl	1320(%rsp), %eax
-	addl	1120(%rsp), %eax
-	movl	%eax, 1320(%rsp)
-	movl	1324(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1324(%rsp)
-	movl	1328(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1328(%rsp)
-	movl	1332(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1332(%rsp)
-	movl	1336(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1336(%rsp)
-	movl	1340(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1340(%rsp)
-	movl	1344(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1344(%rsp)
+	movl	1392(%rsp), %eax
+	addl	1188(%rsp), %eax
+	movl	%eax, 1392(%rsp)
+	movl	1396(%rsp), %eax
+	addl	1184(%rsp), %eax
+	movl	%eax, 1396(%rsp)
+	movl	1400(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1400(%rsp)
+	movl	1404(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1404(%rsp)
+	movl	1408(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1408(%rsp)
+	movl	1412(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1412(%rsp)
+	movl	1416(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1416(%rsp)
+	movl	1420(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1420(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %r10d
@@ -17655,85 +17671,85 @@ Lzkboo_encrypt$255:
 	movq	32(%rsp), %rax
 	cmpq	$56, %rax
 	jb  	Lzkboo_encrypt$231
-	movb	$-128, 1440(%rsp,%rax)
+	movb	$-128, 1516(%rsp,%rax)
 	incq	%rax
 	jmp 	Lzkboo_encrypt$253
 Lzkboo_encrypt$254:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$253:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$254
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$251
 Lzkboo_encrypt$252:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$251:
 	cmpq	$16, %rax
@@ -17742,26 +17758,26 @@ Lzkboo_encrypt$251:
 Lzkboo_encrypt$246:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %ebx
+	movl	1932(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ecx
 	leaq	Lzkboo_encrypt$250(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$250:
 	movl	%ebx, %ecx
-	leaq	Lzkboo_encrypt$249(%rip), 	%r11
+	leaq	Lzkboo_encrypt$249(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$249:
 	shrl	$10, %ebx
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%ebx, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %ebx
+	movl	1932(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ebp
 	leaq	Lzkboo_encrypt$248(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -17773,153 +17789,153 @@ Lzkboo_encrypt$247:
 	shrl	$3, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$245:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$246
-	movl	1316(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1320(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1324(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1328(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1332(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1336(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1340(%rsp), %eax
-	movl	%eax, 1120(%rsp)
-	movl	1344(%rsp), %eax
-	movl	%eax, 1124(%rsp)
+	movl	1392(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1396(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1400(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1404(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1408(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1412(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1416(%rsp), %eax
+	movl	%eax, 1184(%rsp)
+	movl	1420(%rsp), %eax
+	movl	%eax, 1188(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$237
 Lzkboo_encrypt$238:
-	movl	1124(%rsp), %r11d
-	movl	1112(%rsp), %r12d
+	movl	1188(%rsp), %r11d
+	movl	1176(%rsp), %r12d
 	leaq	Lzkboo_encrypt$244(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$244:
-	movl	1112(%rsp), %ebx
-	leaq	Lzkboo_encrypt$243(%rip), 	%rcx
+	movl	1176(%rsp), %ebx
+	leaq	Lzkboo_encrypt$243(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$243:
-	movl	1112(%rsp), %ecx
-	leaq	Lzkboo_encrypt$242(%rip), 	%rbp
+	movl	1176(%rsp), %ebp
+	leaq	Lzkboo_encrypt$242(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$242:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r11d
-	movl	1112(%rsp), %eax
-	andl	1116(%rsp), %eax
-	movl	1112(%rsp), %ecx
+	movl	1176(%rsp), %eax
+	andl	1180(%rsp), %eax
+	movl	1176(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1120(%rsp), %ecx
+	andl	1184(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r11d
-	movl	1600(%rsp,%r10,4), %eax
+	movl	1676(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1856(%rsp,%r10,4), %eax
+	movl	1932(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1096(%rsp), %ecx
-	leaq	Lzkboo_encrypt$241(%rip), 	%rbp
+	movl	1160(%rsp), %ebp
+	leaq	Lzkboo_encrypt$241(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$241:
-	movl	%ecx, 1128(%rsp)
-	movl	1096(%rsp), %eax
-	leaq	Lzkboo_encrypt$240(%rip), 	%rcx
+	movl	%ebp, 1192(%rsp)
+	movl	1160(%rsp), %eax
+	leaq	Lzkboo_encrypt$240(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$240:
-	movl	%eax, 1132(%rsp)
-	movl	1096(%rsp), %eax
-	leaq	Lzkboo_encrypt$239(%rip), 	%rbp
+	movl	%eax, 1196(%rsp)
+	movl	1160(%rsp), %ebp
+	leaq	Lzkboo_encrypt$239(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$239:
-	movl	%eax, 1136(%rsp)
-	movl	1128(%rsp), %eax
-	movl	1132(%rsp), %ecx
+	movl	%ebp, 1200(%rsp)
+	movl	1192(%rsp), %eax
+	movl	1196(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1136(%rsp), %ecx
+	movl	1200(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1096(%rsp), %ecx
-	movl	1100(%rsp), %ebp
+	movl	1160(%rsp), %ecx
+	movl	1164(%rsp), %ebp
 	andl	%ebp, %ecx
-	movl	1096(%rsp), %ebp
-	movl	1104(%rsp), %ebx
+	movl	1160(%rsp), %ebp
+	movl	1168(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
-	movl	1100(%rsp), %ebp
-	movl	1104(%rsp), %ebx
+	movl	1164(%rsp), %ebp
+	movl	1168(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
 	addl	%ecx, %eax
-	movl	1120(%rsp), %ecx
-	movl	%ecx, 1124(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1120(%rsp)
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
+	movl	1184(%rsp), %ecx
+	movl	%ecx, 1188(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1184(%rsp)
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
 	addl	%r11d, %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
 	addl	%eax, %r11d
-	movl	%r11d, 1096(%rsp)
+	movl	%r11d, 1160(%rsp)
 	incq	%r10
 Lzkboo_encrypt$237:
 	cmpq	$64, %r10
 	jb  	Lzkboo_encrypt$238
-	movl	1316(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1316(%rsp)
-	movl	1320(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1320(%rsp)
-	movl	1324(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1324(%rsp)
-	movl	1328(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1328(%rsp)
-	movl	1332(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1332(%rsp)
-	movl	1336(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1336(%rsp)
-	movl	1340(%rsp), %eax
-	addl	1120(%rsp), %eax
-	movl	%eax, 1340(%rsp)
-	movl	1344(%rsp), %eax
-	addl	1124(%rsp), %eax
-	movl	%eax, 1344(%rsp)
+	movl	1392(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1392(%rsp)
+	movl	1396(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1396(%rsp)
+	movl	1400(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1400(%rsp)
+	movl	1404(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1404(%rsp)
+	movl	1408(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1408(%rsp)
+	movl	1412(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1412(%rsp)
+	movl	1416(%rsp), %eax
+	addl	1184(%rsp), %eax
+	movl	%eax, 1416(%rsp)
+	movl	1420(%rsp), %eax
+	addl	1188(%rsp), %eax
+	movl	%eax, 1420(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$235
 Lzkboo_encrypt$236:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$235:
 	cmpq	$56, %rax
 	jb  	Lzkboo_encrypt$236
 	jmp 	Lzkboo_encrypt$232
 Lzkboo_encrypt$231:
-	movb	$-128, 1440(%rsp,%rax)
+	movb	$-128, 1516(%rsp,%rax)
 	incq	%rax
 	jmp 	Lzkboo_encrypt$233
 Lzkboo_encrypt$234:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$233:
 	cmpq	$56, %rax
@@ -17942,80 +17958,80 @@ Lzkboo_encrypt$229:
 Lzkboo_encrypt$230:
 	movl	24(%rsp), %eax
 	bswapl	%eax
-	movl	%eax, 1500(%rsp)
+	movl	%eax, 1576(%rsp)
 	movl	28(%rsp), %eax
 	bswapl	%eax
-	movl	%eax, 1496(%rsp)
-	movl	$1116352408, 1856(%rsp)
-	movl	$1899447441, 1860(%rsp)
-	movl	$-1245643825, 1864(%rsp)
-	movl	$-373957723, 1868(%rsp)
-	movl	$961987163, 1872(%rsp)
-	movl	$1508970993, 1876(%rsp)
-	movl	$-1841331548, 1880(%rsp)
-	movl	$-1424204075, 1884(%rsp)
-	movl	$-670586216, 1888(%rsp)
-	movl	$310598401, 1892(%rsp)
-	movl	$607225278, 1896(%rsp)
-	movl	$1426881987, 1900(%rsp)
-	movl	$1925078388, 1904(%rsp)
-	movl	$-2132889090, 1908(%rsp)
-	movl	$-1680079193, 1912(%rsp)
-	movl	$-1046744716, 1916(%rsp)
-	movl	$-459576895, 1920(%rsp)
-	movl	$-272742522, 1924(%rsp)
-	movl	$264347078, 1928(%rsp)
-	movl	$604807628, 1932(%rsp)
-	movl	$770255983, 1936(%rsp)
-	movl	$1249150122, 1940(%rsp)
-	movl	$1555081692, 1944(%rsp)
-	movl	$1996064986, 1948(%rsp)
-	movl	$-1740746414, 1952(%rsp)
-	movl	$-1473132947, 1956(%rsp)
-	movl	$-1341970488, 1960(%rsp)
-	movl	$-1084653625, 1964(%rsp)
-	movl	$-958395405, 1968(%rsp)
-	movl	$-710438585, 1972(%rsp)
-	movl	$113926993, 1976(%rsp)
-	movl	$338241895, 1980(%rsp)
-	movl	$666307205, 1984(%rsp)
-	movl	$773529912, 1988(%rsp)
-	movl	$1294757372, 1992(%rsp)
-	movl	$1396182291, 1996(%rsp)
-	movl	$1695183700, 2000(%rsp)
-	movl	$1986661051, 2004(%rsp)
-	movl	$-2117940946, 2008(%rsp)
-	movl	$-1838011259, 2012(%rsp)
-	movl	$-1564481375, 2016(%rsp)
-	movl	$-1474664885, 2020(%rsp)
-	movl	$-1035236496, 2024(%rsp)
-	movl	$-949202525, 2028(%rsp)
-	movl	$-778901479, 2032(%rsp)
-	movl	$-694614492, 2036(%rsp)
-	movl	$-200395387, 2040(%rsp)
-	movl	$275423344, 2044(%rsp)
-	movl	$430227734, 2048(%rsp)
-	movl	$506948616, 2052(%rsp)
-	movl	$659060556, 2056(%rsp)
-	movl	$883997877, 2060(%rsp)
-	movl	$958139571, 2064(%rsp)
-	movl	$1322822218, 2068(%rsp)
-	movl	$1537002063, 2072(%rsp)
-	movl	$1747873779, 2076(%rsp)
-	movl	$1955562222, 2080(%rsp)
-	movl	$2024104815, 2084(%rsp)
-	movl	$-2067236844, 2088(%rsp)
-	movl	$-1933114872, 2092(%rsp)
-	movl	$-1866530822, 2096(%rsp)
-	movl	$-1538233109, 2100(%rsp)
-	movl	$-1090935817, 2104(%rsp)
-	movl	$-965641998, 2108(%rsp)
+	movl	%eax, 1572(%rsp)
+	movl	$1116352408, 1932(%rsp)
+	movl	$1899447441, 1936(%rsp)
+	movl	$-1245643825, 1940(%rsp)
+	movl	$-373957723, 1944(%rsp)
+	movl	$961987163, 1948(%rsp)
+	movl	$1508970993, 1952(%rsp)
+	movl	$-1841331548, 1956(%rsp)
+	movl	$-1424204075, 1960(%rsp)
+	movl	$-670586216, 1964(%rsp)
+	movl	$310598401, 1968(%rsp)
+	movl	$607225278, 1972(%rsp)
+	movl	$1426881987, 1976(%rsp)
+	movl	$1925078388, 1980(%rsp)
+	movl	$-2132889090, 1984(%rsp)
+	movl	$-1680079193, 1988(%rsp)
+	movl	$-1046744716, 1992(%rsp)
+	movl	$-459576895, 1996(%rsp)
+	movl	$-272742522, 2000(%rsp)
+	movl	$264347078, 2004(%rsp)
+	movl	$604807628, 2008(%rsp)
+	movl	$770255983, 2012(%rsp)
+	movl	$1249150122, 2016(%rsp)
+	movl	$1555081692, 2020(%rsp)
+	movl	$1996064986, 2024(%rsp)
+	movl	$-1740746414, 2028(%rsp)
+	movl	$-1473132947, 2032(%rsp)
+	movl	$-1341970488, 2036(%rsp)
+	movl	$-1084653625, 2040(%rsp)
+	movl	$-958395405, 2044(%rsp)
+	movl	$-710438585, 2048(%rsp)
+	movl	$113926993, 2052(%rsp)
+	movl	$338241895, 2056(%rsp)
+	movl	$666307205, 2060(%rsp)
+	movl	$773529912, 2064(%rsp)
+	movl	$1294757372, 2068(%rsp)
+	movl	$1396182291, 2072(%rsp)
+	movl	$1695183700, 2076(%rsp)
+	movl	$1986661051, 2080(%rsp)
+	movl	$-2117940946, 2084(%rsp)
+	movl	$-1838011259, 2088(%rsp)
+	movl	$-1564481375, 2092(%rsp)
+	movl	$-1474664885, 2096(%rsp)
+	movl	$-1035236496, 2100(%rsp)
+	movl	$-949202525, 2104(%rsp)
+	movl	$-778901479, 2108(%rsp)
+	movl	$-694614492, 2112(%rsp)
+	movl	$-200395387, 2116(%rsp)
+	movl	$275423344, 2120(%rsp)
+	movl	$430227734, 2124(%rsp)
+	movl	$506948616, 2128(%rsp)
+	movl	$659060556, 2132(%rsp)
+	movl	$883997877, 2136(%rsp)
+	movl	$958139571, 2140(%rsp)
+	movl	$1322822218, 2144(%rsp)
+	movl	$1537002063, 2148(%rsp)
+	movl	$1747873779, 2152(%rsp)
+	movl	$1955562222, 2156(%rsp)
+	movl	$2024104815, 2160(%rsp)
+	movl	$-2067236844, 2164(%rsp)
+	movl	$-1933114872, 2168(%rsp)
+	movl	$-1866530822, 2172(%rsp)
+	movl	$-1538233109, 2176(%rsp)
+	movl	$-1090935817, 2180(%rsp)
+	movl	$-965641998, 2184(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$227
 Lzkboo_encrypt$228:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1600(%rsp,%rax,4)
+	movl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$227:
 	cmpq	$16, %rax
@@ -18024,26 +18040,26 @@ Lzkboo_encrypt$227:
 Lzkboo_encrypt$222:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1600(%rsp,%rcx,4), %ebx
+	movl	1676(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ecx
 	leaq	Lzkboo_encrypt$226(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$226:
 	movl	%ebx, %ecx
-	leaq	Lzkboo_encrypt$225(%rip), 	%r11
+	leaq	Lzkboo_encrypt$225(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$225:
 	shrl	$10, %ebx
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%ebx, %ebp
-	movl	%ebp, 1600(%rsp,%rax,4)
+	movl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1600(%rsp,%rcx,4), %ebx
+	movl	1676(%rsp,%rcx,4), %ebx
 	movl	%ebx, %ebp
 	leaq	Lzkboo_encrypt$224(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -18055,138 +18071,138 @@ Lzkboo_encrypt$223:
 	shrl	$3, %ebx
 	xorl	%r10d, %ebp
 	xorl	%ebx, %ebp
-	addl	%ebp, 1600(%rsp,%rax,4)
+	addl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$221:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$222
-	movl	1316(%rsp), %eax
-	movl	%eax, 1124(%rsp)
-	movl	1320(%rsp), %eax
-	movl	%eax, 1120(%rsp)
-	movl	1324(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1328(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1332(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1336(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1340(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1344(%rsp), %eax
-	movl	%eax, 1096(%rsp)
+	movl	1392(%rsp), %eax
+	movl	%eax, 1188(%rsp)
+	movl	1396(%rsp), %eax
+	movl	%eax, 1184(%rsp)
+	movl	1400(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1404(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1408(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1412(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1416(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1420(%rsp), %eax
+	movl	%eax, 1160(%rsp)
 	movq	$0, %r10
 	jmp 	Lzkboo_encrypt$213
 Lzkboo_encrypt$214:
-	movl	1096(%rsp), %r11d
-	movl	1108(%rsp), %r12d
+	movl	1160(%rsp), %r11d
+	movl	1172(%rsp), %r12d
 	leaq	Lzkboo_encrypt$220(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$220:
-	movl	1108(%rsp), %ebx
-	leaq	Lzkboo_encrypt$219(%rip), 	%rcx
+	movl	1172(%rsp), %ebx
+	leaq	Lzkboo_encrypt$219(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$219:
-	movl	1108(%rsp), %ecx
-	leaq	Lzkboo_encrypt$218(%rip), 	%rbp
+	movl	1172(%rsp), %ebp
+	leaq	Lzkboo_encrypt$218(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$218:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r11d
-	movl	1108(%rsp), %eax
-	andl	1104(%rsp), %eax
-	movl	1108(%rsp), %ecx
+	movl	1172(%rsp), %eax
+	andl	1168(%rsp), %eax
+	movl	1172(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1100(%rsp), %ecx
+	andl	1164(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r11d
-	movl	1856(%rsp,%r10,4), %eax
+	movl	1932(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1600(%rsp,%r10,4), %eax
+	movl	1676(%rsp,%r10,4), %eax
 	addl	%eax, %r11d
-	movl	1124(%rsp), %ecx
-	leaq	Lzkboo_encrypt$217(%rip), 	%rbp
+	movl	1188(%rsp), %ebp
+	leaq	Lzkboo_encrypt$217(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$217:
-	movl	%ecx, 1136(%rsp)
-	movl	1124(%rsp), %eax
-	leaq	Lzkboo_encrypt$216(%rip), 	%rcx
+	movl	%ebp, 1200(%rsp)
+	movl	1188(%rsp), %eax
+	leaq	Lzkboo_encrypt$216(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$216:
-	movl	%eax, 1132(%rsp)
-	movl	1124(%rsp), %eax
-	leaq	Lzkboo_encrypt$215(%rip), 	%rbp
+	movl	%eax, 1196(%rsp)
+	movl	1188(%rsp), %ebp
+	leaq	Lzkboo_encrypt$215(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$215:
-	movl	%eax, 1128(%rsp)
-	movl	1136(%rsp), %eax
-	movl	1132(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1200(%rsp), %eax
+	movl	1196(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1124(%rsp), %ecx
-	movl	1120(%rsp), %ebp
+	movl	1188(%rsp), %ecx
+	movl	1184(%rsp), %ebp
 	andl	%ebp, %ecx
-	movl	1124(%rsp), %ebp
-	movl	1116(%rsp), %ebx
+	movl	1188(%rsp), %ebp
+	movl	1180(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
-	movl	1120(%rsp), %ebp
-	movl	1116(%rsp), %ebx
+	movl	1184(%rsp), %ebp
+	movl	1180(%rsp), %ebx
 	andl	%ebx, %ebp
 	xorl	%ebp, %ecx
 	addl	%ecx, %eax
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1112(%rsp), %ecx
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1176(%rsp), %ecx
 	addl	%r11d, %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1120(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1124(%rsp), %ecx
-	movl	%ecx, 1120(%rsp)
+	movl	%ecx, 1172(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1184(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1188(%rsp), %ecx
+	movl	%ecx, 1184(%rsp)
 	addl	%eax, %r11d
-	movl	%r11d, 1124(%rsp)
+	movl	%r11d, 1188(%rsp)
 	incq	%r10
 Lzkboo_encrypt$213:
 	cmpq	$64, %r10
 	jb  	Lzkboo_encrypt$214
-	movl	1316(%rsp), %eax
-	addl	1124(%rsp), %eax
-	movl	%eax, 1316(%rsp)
-	movl	1320(%rsp), %eax
-	addl	1120(%rsp), %eax
-	movl	%eax, 1320(%rsp)
-	movl	1324(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1324(%rsp)
-	movl	1328(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1328(%rsp)
-	movl	1332(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1332(%rsp)
-	movl	1336(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1336(%rsp)
-	movl	1340(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1340(%rsp)
-	movl	1344(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1344(%rsp)
+	movl	1392(%rsp), %eax
+	addl	1188(%rsp), %eax
+	movl	%eax, 1392(%rsp)
+	movl	1396(%rsp), %eax
+	addl	1184(%rsp), %eax
+	movl	%eax, 1396(%rsp)
+	movl	1400(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1400(%rsp)
+	movl	1404(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1404(%rsp)
+	movl	1408(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1408(%rsp)
+	movl	1412(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1412(%rsp)
+	movl	1416(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1416(%rsp)
+	movl	1420(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1420(%rsp)
 	imulq	$32, (%rsp), %rax
 	imulq	$3, %rax, %rax
 	movq	%r14, %rcx
@@ -18198,7 +18214,7 @@ Lzkboo_encrypt$213:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$211
 Lzkboo_encrypt$212:
-	movl	1316(%rsp,%rcx,4), %r10d
+	movl	1392(%rsp,%rcx,4), %r10d
 	bswapl	%r10d
 	movl	%r10d, (%r9,%rax)
 	addq	$4, %rax
@@ -18229,7 +18245,7 @@ Lzkboo_encrypt$204:
 	xorl	(%r9,%rsi), %r10d
 	addq	%rax, %rsi
 	xorl	(%r9,%rsi), %r10d
-	movl	%r10d, 1316(%rsp,%rcx,4)
+	movl	%r10d, 1392(%rsp,%rcx,4)
 	incq	%rcx
 Lzkboo_encrypt$203:
 	cmpq	$8, %rcx
@@ -18237,19 +18253,19 @@ Lzkboo_encrypt$203:
 	movq	$0, 8(%rsp)
 	movl	$0, 24(%rsp)
 	movl	$0, 28(%rsp)
-	movl	$1779033703, 1348(%rsp)
-	movl	$-1150833019, 1352(%rsp)
-	movl	$1013904242, 1356(%rsp)
-	movl	$-1521486534, 1360(%rsp)
-	movl	$1359893119, 1364(%rsp)
-	movl	$-1694144372, 1368(%rsp)
-	movl	$528734635, 1372(%rsp)
-	movl	$1541459225, 1376(%rsp)
+	movl	$1779033703, 1424(%rsp)
+	movl	$-1150833019, 1428(%rsp)
+	movl	$1013904242, 1432(%rsp)
+	movl	$-1521486534, 1436(%rsp)
+	movl	$1359893119, 1440(%rsp)
+	movl	$-1694144372, 1444(%rsp)
+	movl	$528734635, 1448(%rsp)
+	movl	$1541459225, 1452(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$201
 Lzkboo_encrypt$202:
-	movb	1316(%rsp,%rax), %cl
-	movb	%cl, 3088(%rsp,%rax)
+	movb	1392(%rsp,%rax), %cl
+	movb	%cl, 3164(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$201:
 	cmpq	$20, %rax
@@ -18257,7 +18273,7 @@ Lzkboo_encrypt$201:
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$199
 Lzkboo_encrypt$200:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$199:
 	cmpq	$64, %rax
@@ -18265,84 +18281,84 @@ Lzkboo_encrypt$199:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$178
 Lzkboo_encrypt$179:
-	movb	3088(%rsp,%rcx), %al
+	movb	3164(%rsp,%rcx), %al
 	movq	%rcx, 32(%rsp)
 	movq	8(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 8(%rsp)
 	cmpq	$64, 8(%rsp)
 	jne 	Lzkboo_encrypt$180
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$197
 Lzkboo_encrypt$198:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$197:
 	cmpq	$16, %rax
@@ -18351,26 +18367,26 @@ Lzkboo_encrypt$197:
 Lzkboo_encrypt$192:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$196(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$196:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$195(%rip), 	%r11
+	leaq	Lzkboo_encrypt$195(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$195:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$194(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -18382,138 +18398,138 @@ Lzkboo_encrypt$193:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$191:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$192
-	movl	1348(%rsp), %eax
-	movl	%eax, 1088(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1116(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1152(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1180(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$183
 Lzkboo_encrypt$184:
-	movl	1116(%rsp), %r10d
-	movl	1104(%rsp), %r12d
+	movl	1180(%rsp), %r10d
+	movl	1168(%rsp), %r12d
 	leaq	Lzkboo_encrypt$190(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$190:
-	movl	1104(%rsp), %ebx
-	leaq	Lzkboo_encrypt$189(%rip), 	%rcx
+	movl	1168(%rsp), %ebx
+	leaq	Lzkboo_encrypt$189(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$189:
-	movl	1104(%rsp), %ecx
-	leaq	Lzkboo_encrypt$188(%rip), 	%rbp
+	movl	1168(%rsp), %ebp
+	leaq	Lzkboo_encrypt$188(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$188:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r10d
-	movl	1104(%rsp), %eax
-	andl	1108(%rsp), %eax
-	movl	1104(%rsp), %ecx
+	movl	1168(%rsp), %eax
+	andl	1172(%rsp), %eax
+	movl	1168(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1112(%rsp), %ecx
+	andl	1176(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r10d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r10d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r10d
-	movl	1088(%rsp), %ecx
-	leaq	Lzkboo_encrypt$187(%rip), 	%rbp
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$187(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$187:
-	movl	%ecx, 1120(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$186(%rip), 	%rcx
+	movl	%ebp, 1184(%rsp)
+	movl	1152(%rsp), %eax
+	leaq	Lzkboo_encrypt$186(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$186:
-	movl	%eax, 1124(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$185(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$185(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$185:
-	movl	%eax, 1128(%rsp)
-	movl	1120(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1184(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1088(%rsp), %ecx
-	movl	1092(%rsp), %r11d
+	movl	1152(%rsp), %ecx
+	movl	1156(%rsp), %r11d
 	andl	%r11d, %ecx
-	movl	1088(%rsp), %r11d
-	movl	1096(%rsp), %ebp
+	movl	1152(%rsp), %r11d
+	movl	1160(%rsp), %ebp
 	andl	%ebp, %r11d
 	xorl	%r11d, %ecx
-	movl	1092(%rsp), %r11d
-	movl	1096(%rsp), %ebp
+	movl	1156(%rsp), %r11d
+	movl	1160(%rsp), %ebp
 	andl	%ebp, %r11d
 	xorl	%r11d, %ecx
 	addl	%ecx, %eax
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
 	addl	%r10d, %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1088(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1152(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
 	addl	%eax, %r10d
-	movl	%r10d, 1088(%rsp)
+	movl	%r10d, 1152(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$183:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$184
-	movl	1348(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %esi
@@ -18552,7 +18568,7 @@ Lzkboo_encrypt$173:
 	jmp 	Lzkboo_encrypt$176
 Lzkboo_encrypt$177:
 	movb	(%r9,%r10), %bpl
-	movb	%bpl, 4856(%rsp,%rsi)
+	movb	%bpl, 4932(%rsp,%rsi)
 	incq	%rsi
 	incq	%r10
 	incq	%r11
@@ -18575,7 +18591,7 @@ Lzkboo_encrypt$176:
 	jmp 	Lzkboo_encrypt$174
 Lzkboo_encrypt$175:
 	movb	(%r9,%r10), %bpl
-	movb	%bpl, 4856(%rsp,%rsi)
+	movb	%bpl, 4932(%rsp,%rsi)
 	incq	%rsi
 	incq	%r10
 	incq	%r11
@@ -18593,84 +18609,84 @@ Lzkboo_encrypt$170:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$149
 Lzkboo_encrypt$150:
-	movb	4856(%rsp,%rcx), %al
+	movb	4932(%rsp,%rcx), %al
 	movq	%rcx, 32(%rsp)
 	movq	8(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 8(%rsp)
 	cmpq	$64, %rcx
 	jne 	Lzkboo_encrypt$151
-	movl	$1116352408, 1856(%rsp)
-	movl	$1899447441, 1860(%rsp)
-	movl	$-1245643825, 1864(%rsp)
-	movl	$-373957723, 1868(%rsp)
-	movl	$961987163, 1872(%rsp)
-	movl	$1508970993, 1876(%rsp)
-	movl	$-1841331548, 1880(%rsp)
-	movl	$-1424204075, 1884(%rsp)
-	movl	$-670586216, 1888(%rsp)
-	movl	$310598401, 1892(%rsp)
-	movl	$607225278, 1896(%rsp)
-	movl	$1426881987, 1900(%rsp)
-	movl	$1925078388, 1904(%rsp)
-	movl	$-2132889090, 1908(%rsp)
-	movl	$-1680079193, 1912(%rsp)
-	movl	$-1046744716, 1916(%rsp)
-	movl	$-459576895, 1920(%rsp)
-	movl	$-272742522, 1924(%rsp)
-	movl	$264347078, 1928(%rsp)
-	movl	$604807628, 1932(%rsp)
-	movl	$770255983, 1936(%rsp)
-	movl	$1249150122, 1940(%rsp)
-	movl	$1555081692, 1944(%rsp)
-	movl	$1996064986, 1948(%rsp)
-	movl	$-1740746414, 1952(%rsp)
-	movl	$-1473132947, 1956(%rsp)
-	movl	$-1341970488, 1960(%rsp)
-	movl	$-1084653625, 1964(%rsp)
-	movl	$-958395405, 1968(%rsp)
-	movl	$-710438585, 1972(%rsp)
-	movl	$113926993, 1976(%rsp)
-	movl	$338241895, 1980(%rsp)
-	movl	$666307205, 1984(%rsp)
-	movl	$773529912, 1988(%rsp)
-	movl	$1294757372, 1992(%rsp)
-	movl	$1396182291, 1996(%rsp)
-	movl	$1695183700, 2000(%rsp)
-	movl	$1986661051, 2004(%rsp)
-	movl	$-2117940946, 2008(%rsp)
-	movl	$-1838011259, 2012(%rsp)
-	movl	$-1564481375, 2016(%rsp)
-	movl	$-1474664885, 2020(%rsp)
-	movl	$-1035236496, 2024(%rsp)
-	movl	$-949202525, 2028(%rsp)
-	movl	$-778901479, 2032(%rsp)
-	movl	$-694614492, 2036(%rsp)
-	movl	$-200395387, 2040(%rsp)
-	movl	$275423344, 2044(%rsp)
-	movl	$430227734, 2048(%rsp)
-	movl	$506948616, 2052(%rsp)
-	movl	$659060556, 2056(%rsp)
-	movl	$883997877, 2060(%rsp)
-	movl	$958139571, 2064(%rsp)
-	movl	$1322822218, 2068(%rsp)
-	movl	$1537002063, 2072(%rsp)
-	movl	$1747873779, 2076(%rsp)
-	movl	$1955562222, 2080(%rsp)
-	movl	$2024104815, 2084(%rsp)
-	movl	$-2067236844, 2088(%rsp)
-	movl	$-1933114872, 2092(%rsp)
-	movl	$-1866530822, 2096(%rsp)
-	movl	$-1538233109, 2100(%rsp)
-	movl	$-1090935817, 2104(%rsp)
-	movl	$-965641998, 2108(%rsp)
+	movl	$1116352408, 1932(%rsp)
+	movl	$1899447441, 1936(%rsp)
+	movl	$-1245643825, 1940(%rsp)
+	movl	$-373957723, 1944(%rsp)
+	movl	$961987163, 1948(%rsp)
+	movl	$1508970993, 1952(%rsp)
+	movl	$-1841331548, 1956(%rsp)
+	movl	$-1424204075, 1960(%rsp)
+	movl	$-670586216, 1964(%rsp)
+	movl	$310598401, 1968(%rsp)
+	movl	$607225278, 1972(%rsp)
+	movl	$1426881987, 1976(%rsp)
+	movl	$1925078388, 1980(%rsp)
+	movl	$-2132889090, 1984(%rsp)
+	movl	$-1680079193, 1988(%rsp)
+	movl	$-1046744716, 1992(%rsp)
+	movl	$-459576895, 1996(%rsp)
+	movl	$-272742522, 2000(%rsp)
+	movl	$264347078, 2004(%rsp)
+	movl	$604807628, 2008(%rsp)
+	movl	$770255983, 2012(%rsp)
+	movl	$1249150122, 2016(%rsp)
+	movl	$1555081692, 2020(%rsp)
+	movl	$1996064986, 2024(%rsp)
+	movl	$-1740746414, 2028(%rsp)
+	movl	$-1473132947, 2032(%rsp)
+	movl	$-1341970488, 2036(%rsp)
+	movl	$-1084653625, 2040(%rsp)
+	movl	$-958395405, 2044(%rsp)
+	movl	$-710438585, 2048(%rsp)
+	movl	$113926993, 2052(%rsp)
+	movl	$338241895, 2056(%rsp)
+	movl	$666307205, 2060(%rsp)
+	movl	$773529912, 2064(%rsp)
+	movl	$1294757372, 2068(%rsp)
+	movl	$1396182291, 2072(%rsp)
+	movl	$1695183700, 2076(%rsp)
+	movl	$1986661051, 2080(%rsp)
+	movl	$-2117940946, 2084(%rsp)
+	movl	$-1838011259, 2088(%rsp)
+	movl	$-1564481375, 2092(%rsp)
+	movl	$-1474664885, 2096(%rsp)
+	movl	$-1035236496, 2100(%rsp)
+	movl	$-949202525, 2104(%rsp)
+	movl	$-778901479, 2108(%rsp)
+	movl	$-694614492, 2112(%rsp)
+	movl	$-200395387, 2116(%rsp)
+	movl	$275423344, 2120(%rsp)
+	movl	$430227734, 2124(%rsp)
+	movl	$506948616, 2128(%rsp)
+	movl	$659060556, 2132(%rsp)
+	movl	$883997877, 2136(%rsp)
+	movl	$958139571, 2140(%rsp)
+	movl	$1322822218, 2144(%rsp)
+	movl	$1537002063, 2148(%rsp)
+	movl	$1747873779, 2152(%rsp)
+	movl	$1955562222, 2156(%rsp)
+	movl	$2024104815, 2160(%rsp)
+	movl	$-2067236844, 2164(%rsp)
+	movl	$-1933114872, 2168(%rsp)
+	movl	$-1866530822, 2172(%rsp)
+	movl	$-1538233109, 2176(%rsp)
+	movl	$-1090935817, 2180(%rsp)
+	movl	$-965641998, 2184(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$168
 Lzkboo_encrypt$169:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1600(%rsp,%rax,4)
+	movl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$168:
 	cmpq	$16, %rax
@@ -18679,26 +18695,26 @@ Lzkboo_encrypt$168:
 Lzkboo_encrypt$163:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1600(%rsp,%rcx,4), %esi
+	movl	1676(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$167(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$167:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$166(%rip), 	%r11
+	leaq	Lzkboo_encrypt$166(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$166:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1600(%rsp,%rax,4)
+	movl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1600(%rsp,%rcx,4), %esi
+	movl	1676(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$165(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -18710,138 +18726,138 @@ Lzkboo_encrypt$164:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1600(%rsp,%rax,4)
+	addl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$162:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$163
-	movl	1348(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1088(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1152(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$154
 Lzkboo_encrypt$155:
-	movl	1088(%rsp), %r9d
-	movl	1100(%rsp), %r12d
+	movl	1152(%rsp), %r9d
+	movl	1164(%rsp), %r12d
 	leaq	Lzkboo_encrypt$161(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$161:
-	movl	1100(%rsp), %ebx
-	leaq	Lzkboo_encrypt$160(%rip), 	%rcx
+	movl	1164(%rsp), %ebx
+	leaq	Lzkboo_encrypt$160(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$160:
-	movl	1100(%rsp), %ecx
-	leaq	Lzkboo_encrypt$159(%rip), 	%rbp
+	movl	1164(%rsp), %ebp
+	leaq	Lzkboo_encrypt$159(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$159:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r9d
-	movl	1100(%rsp), %eax
-	andl	1096(%rsp), %eax
-	movl	1100(%rsp), %ecx
+	movl	1164(%rsp), %eax
+	andl	1160(%rsp), %eax
+	movl	1164(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1092(%rsp), %ecx
+	andl	1156(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r9d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1116(%rsp), %ecx
-	leaq	Lzkboo_encrypt$158(%rip), 	%rbp
+	movl	1180(%rsp), %ebp
+	leaq	Lzkboo_encrypt$158(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$158:
-	movl	%ecx, 1128(%rsp)
-	movl	1116(%rsp), %eax
-	leaq	Lzkboo_encrypt$157(%rip), 	%rcx
+	movl	%ebp, 1192(%rsp)
+	movl	1180(%rsp), %eax
+	leaq	Lzkboo_encrypt$157(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$157:
-	movl	%eax, 1124(%rsp)
-	movl	1116(%rsp), %eax
-	leaq	Lzkboo_encrypt$156(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1180(%rsp), %ebp
+	leaq	Lzkboo_encrypt$156(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$156:
-	movl	%eax, 1120(%rsp)
-	movl	1128(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1184(%rsp)
+	movl	1192(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1120(%rsp), %ecx
+	movl	1184(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1116(%rsp), %ecx
-	movl	1112(%rsp), %r10d
+	movl	1180(%rsp), %ecx
+	movl	1176(%rsp), %r10d
 	andl	%r10d, %ecx
-	movl	1116(%rsp), %r10d
-	movl	1108(%rsp), %r11d
+	movl	1180(%rsp), %r10d
+	movl	1172(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
-	movl	1112(%rsp), %r10d
-	movl	1108(%rsp), %r11d
+	movl	1176(%rsp), %r10d
+	movl	1172(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
 	addl	%ecx, %eax
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1088(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1104(%rsp), %ecx
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1152(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1168(%rsp), %ecx
 	addl	%r9d, %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
+	movl	%ecx, 1164(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
 	addl	%eax, %r9d
-	movl	%r9d, 1116(%rsp)
+	movl	%r9d, 1180(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$154:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$155
-	movl	1348(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %esi
@@ -18861,12 +18877,12 @@ Lzkboo_encrypt$151:
 	movq	32(%rsp), %rcx
 	incq	%rcx
 Lzkboo_encrypt$149:
-	cmpq	$1920, %rcx
+	cmpq	$26112, %rcx
 	jb  	Lzkboo_encrypt$150
 	movq	8(%rsp), %rax
 	jmp 	Lzkboo_encrypt$147
 Lzkboo_encrypt$148:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$147:
 	cmpq	$64, %rax
@@ -18874,85 +18890,85 @@ Lzkboo_encrypt$147:
 	movq	8(%rsp), %rax
 	cmpq	$56, %rax
 	jb  	Lzkboo_encrypt$123
-	movb	$-128, 1440(%rsp,%rax)
+	movb	$-128, 1516(%rsp,%rax)
 	incq	%rax
 	jmp 	Lzkboo_encrypt$145
 Lzkboo_encrypt$146:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$145:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$146
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$143
 Lzkboo_encrypt$144:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$143:
 	cmpq	$16, %rax
@@ -18961,26 +18977,26 @@ Lzkboo_encrypt$143:
 Lzkboo_encrypt$138:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$142(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$142:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$141(%rip), 	%r11
+	leaq	Lzkboo_encrypt$141(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$141:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$140(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -18992,153 +19008,153 @@ Lzkboo_encrypt$139:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$137:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$138
-	movl	1348(%rsp), %eax
-	movl	%eax, 1088(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1116(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1152(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1180(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$129
 Lzkboo_encrypt$130:
-	movl	1116(%rsp), %r9d
-	movl	1104(%rsp), %r12d
+	movl	1180(%rsp), %r9d
+	movl	1168(%rsp), %r12d
 	leaq	Lzkboo_encrypt$136(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$136:
-	movl	1104(%rsp), %ebx
-	leaq	Lzkboo_encrypt$135(%rip), 	%rcx
+	movl	1168(%rsp), %ebx
+	leaq	Lzkboo_encrypt$135(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$135:
-	movl	1104(%rsp), %ecx
-	leaq	Lzkboo_encrypt$134(%rip), 	%rbp
+	movl	1168(%rsp), %ebp
+	leaq	Lzkboo_encrypt$134(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$134:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r9d
-	movl	1104(%rsp), %eax
-	andl	1108(%rsp), %eax
-	movl	1104(%rsp), %ecx
+	movl	1168(%rsp), %eax
+	andl	1172(%rsp), %eax
+	movl	1168(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1112(%rsp), %ecx
+	andl	1176(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r9d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1088(%rsp), %ecx
-	leaq	Lzkboo_encrypt$133(%rip), 	%rbp
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$133(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$133:
-	movl	%ecx, 1120(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$132(%rip), 	%rcx
+	movl	%ebp, 1184(%rsp)
+	movl	1152(%rsp), %eax
+	leaq	Lzkboo_encrypt$132(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$132:
-	movl	%eax, 1124(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$131(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$131(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$131:
-	movl	%eax, 1128(%rsp)
-	movl	1120(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1184(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1088(%rsp), %ecx
-	movl	1092(%rsp), %r10d
+	movl	1152(%rsp), %ecx
+	movl	1156(%rsp), %r10d
 	andl	%r10d, %ecx
-	movl	1088(%rsp), %r10d
-	movl	1096(%rsp), %r11d
+	movl	1152(%rsp), %r10d
+	movl	1160(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
-	movl	1092(%rsp), %r10d
-	movl	1096(%rsp), %r11d
+	movl	1156(%rsp), %r10d
+	movl	1160(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
 	addl	%ecx, %eax
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
 	addl	%r9d, %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1088(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1152(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
 	addl	%eax, %r9d
-	movl	%r9d, 1088(%rsp)
+	movl	%r9d, 1152(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$129:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$130
-	movl	1348(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$127
 Lzkboo_encrypt$128:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$127:
 	cmpq	$56, %rax
 	jb  	Lzkboo_encrypt$128
 	jmp 	Lzkboo_encrypt$124
 Lzkboo_encrypt$123:
-	movb	$-128, 1440(%rsp,%rax)
+	movb	$-128, 1516(%rsp,%rax)
 	incq	%rax
 	jmp 	Lzkboo_encrypt$125
 Lzkboo_encrypt$126:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$125:
 	cmpq	$56, %rax
@@ -19161,80 +19177,80 @@ Lzkboo_encrypt$121:
 Lzkboo_encrypt$122:
 	movl	24(%rsp), %eax
 	bswapl	%eax
-	movl	%eax, 1500(%rsp)
+	movl	%eax, 1576(%rsp)
 	movl	28(%rsp), %eax
 	bswapl	%eax
-	movl	%eax, 1496(%rsp)
-	movl	$1116352408, 1856(%rsp)
-	movl	$1899447441, 1860(%rsp)
-	movl	$-1245643825, 1864(%rsp)
-	movl	$-373957723, 1868(%rsp)
-	movl	$961987163, 1872(%rsp)
-	movl	$1508970993, 1876(%rsp)
-	movl	$-1841331548, 1880(%rsp)
-	movl	$-1424204075, 1884(%rsp)
-	movl	$-670586216, 1888(%rsp)
-	movl	$310598401, 1892(%rsp)
-	movl	$607225278, 1896(%rsp)
-	movl	$1426881987, 1900(%rsp)
-	movl	$1925078388, 1904(%rsp)
-	movl	$-2132889090, 1908(%rsp)
-	movl	$-1680079193, 1912(%rsp)
-	movl	$-1046744716, 1916(%rsp)
-	movl	$-459576895, 1920(%rsp)
-	movl	$-272742522, 1924(%rsp)
-	movl	$264347078, 1928(%rsp)
-	movl	$604807628, 1932(%rsp)
-	movl	$770255983, 1936(%rsp)
-	movl	$1249150122, 1940(%rsp)
-	movl	$1555081692, 1944(%rsp)
-	movl	$1996064986, 1948(%rsp)
-	movl	$-1740746414, 1952(%rsp)
-	movl	$-1473132947, 1956(%rsp)
-	movl	$-1341970488, 1960(%rsp)
-	movl	$-1084653625, 1964(%rsp)
-	movl	$-958395405, 1968(%rsp)
-	movl	$-710438585, 1972(%rsp)
-	movl	$113926993, 1976(%rsp)
-	movl	$338241895, 1980(%rsp)
-	movl	$666307205, 1984(%rsp)
-	movl	$773529912, 1988(%rsp)
-	movl	$1294757372, 1992(%rsp)
-	movl	$1396182291, 1996(%rsp)
-	movl	$1695183700, 2000(%rsp)
-	movl	$1986661051, 2004(%rsp)
-	movl	$-2117940946, 2008(%rsp)
-	movl	$-1838011259, 2012(%rsp)
-	movl	$-1564481375, 2016(%rsp)
-	movl	$-1474664885, 2020(%rsp)
-	movl	$-1035236496, 2024(%rsp)
-	movl	$-949202525, 2028(%rsp)
-	movl	$-778901479, 2032(%rsp)
-	movl	$-694614492, 2036(%rsp)
-	movl	$-200395387, 2040(%rsp)
-	movl	$275423344, 2044(%rsp)
-	movl	$430227734, 2048(%rsp)
-	movl	$506948616, 2052(%rsp)
-	movl	$659060556, 2056(%rsp)
-	movl	$883997877, 2060(%rsp)
-	movl	$958139571, 2064(%rsp)
-	movl	$1322822218, 2068(%rsp)
-	movl	$1537002063, 2072(%rsp)
-	movl	$1747873779, 2076(%rsp)
-	movl	$1955562222, 2080(%rsp)
-	movl	$2024104815, 2084(%rsp)
-	movl	$-2067236844, 2088(%rsp)
-	movl	$-1933114872, 2092(%rsp)
-	movl	$-1866530822, 2096(%rsp)
-	movl	$-1538233109, 2100(%rsp)
-	movl	$-1090935817, 2104(%rsp)
-	movl	$-965641998, 2108(%rsp)
+	movl	%eax, 1572(%rsp)
+	movl	$1116352408, 1932(%rsp)
+	movl	$1899447441, 1936(%rsp)
+	movl	$-1245643825, 1940(%rsp)
+	movl	$-373957723, 1944(%rsp)
+	movl	$961987163, 1948(%rsp)
+	movl	$1508970993, 1952(%rsp)
+	movl	$-1841331548, 1956(%rsp)
+	movl	$-1424204075, 1960(%rsp)
+	movl	$-670586216, 1964(%rsp)
+	movl	$310598401, 1968(%rsp)
+	movl	$607225278, 1972(%rsp)
+	movl	$1426881987, 1976(%rsp)
+	movl	$1925078388, 1980(%rsp)
+	movl	$-2132889090, 1984(%rsp)
+	movl	$-1680079193, 1988(%rsp)
+	movl	$-1046744716, 1992(%rsp)
+	movl	$-459576895, 1996(%rsp)
+	movl	$-272742522, 2000(%rsp)
+	movl	$264347078, 2004(%rsp)
+	movl	$604807628, 2008(%rsp)
+	movl	$770255983, 2012(%rsp)
+	movl	$1249150122, 2016(%rsp)
+	movl	$1555081692, 2020(%rsp)
+	movl	$1996064986, 2024(%rsp)
+	movl	$-1740746414, 2028(%rsp)
+	movl	$-1473132947, 2032(%rsp)
+	movl	$-1341970488, 2036(%rsp)
+	movl	$-1084653625, 2040(%rsp)
+	movl	$-958395405, 2044(%rsp)
+	movl	$-710438585, 2048(%rsp)
+	movl	$113926993, 2052(%rsp)
+	movl	$338241895, 2056(%rsp)
+	movl	$666307205, 2060(%rsp)
+	movl	$773529912, 2064(%rsp)
+	movl	$1294757372, 2068(%rsp)
+	movl	$1396182291, 2072(%rsp)
+	movl	$1695183700, 2076(%rsp)
+	movl	$1986661051, 2080(%rsp)
+	movl	$-2117940946, 2084(%rsp)
+	movl	$-1838011259, 2088(%rsp)
+	movl	$-1564481375, 2092(%rsp)
+	movl	$-1474664885, 2096(%rsp)
+	movl	$-1035236496, 2100(%rsp)
+	movl	$-949202525, 2104(%rsp)
+	movl	$-778901479, 2108(%rsp)
+	movl	$-694614492, 2112(%rsp)
+	movl	$-200395387, 2116(%rsp)
+	movl	$275423344, 2120(%rsp)
+	movl	$430227734, 2124(%rsp)
+	movl	$506948616, 2128(%rsp)
+	movl	$659060556, 2132(%rsp)
+	movl	$883997877, 2136(%rsp)
+	movl	$958139571, 2140(%rsp)
+	movl	$1322822218, 2144(%rsp)
+	movl	$1537002063, 2148(%rsp)
+	movl	$1747873779, 2152(%rsp)
+	movl	$1955562222, 2156(%rsp)
+	movl	$2024104815, 2160(%rsp)
+	movl	$-2067236844, 2164(%rsp)
+	movl	$-1933114872, 2168(%rsp)
+	movl	$-1866530822, 2172(%rsp)
+	movl	$-1538233109, 2176(%rsp)
+	movl	$-1090935817, 2180(%rsp)
+	movl	$-965641998, 2184(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$119
 Lzkboo_encrypt$120:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1600(%rsp,%rax,4)
+	movl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$119:
 	cmpq	$16, %rax
@@ -19243,26 +19259,26 @@ Lzkboo_encrypt$119:
 Lzkboo_encrypt$114:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1600(%rsp,%rcx,4), %esi
+	movl	1676(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$118(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$118:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$117(%rip), 	%r11
+	leaq	Lzkboo_encrypt$117(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$117:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1600(%rsp,%rax,4)
+	movl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1600(%rsp,%rcx,4), %esi
+	movl	1676(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$116(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -19274,144 +19290,144 @@ Lzkboo_encrypt$115:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1600(%rsp,%rax,4)
+	addl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$113:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$114
-	movl	1348(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1088(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1152(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$105
 Lzkboo_encrypt$106:
-	movl	1088(%rsp), %r9d
-	movl	1100(%rsp), %r12d
+	movl	1152(%rsp), %r9d
+	movl	1164(%rsp), %r12d
 	leaq	Lzkboo_encrypt$112(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$112:
-	movl	1100(%rsp), %ebx
-	leaq	Lzkboo_encrypt$111(%rip), 	%rcx
+	movl	1164(%rsp), %ebx
+	leaq	Lzkboo_encrypt$111(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$111:
-	movl	1100(%rsp), %ecx
-	leaq	Lzkboo_encrypt$110(%rip), 	%rbp
+	movl	1164(%rsp), %ebp
+	leaq	Lzkboo_encrypt$110(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$110:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r9d
-	movl	1100(%rsp), %eax
-	andl	1096(%rsp), %eax
-	movl	1100(%rsp), %ecx
+	movl	1164(%rsp), %eax
+	andl	1160(%rsp), %eax
+	movl	1164(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1092(%rsp), %ecx
+	andl	1156(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r9d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1116(%rsp), %ecx
-	leaq	Lzkboo_encrypt$109(%rip), 	%rbp
+	movl	1180(%rsp), %ebp
+	leaq	Lzkboo_encrypt$109(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$109:
-	movl	%ecx, 1128(%rsp)
-	movl	1116(%rsp), %eax
-	leaq	Lzkboo_encrypt$108(%rip), 	%rcx
+	movl	%ebp, 1192(%rsp)
+	movl	1180(%rsp), %eax
+	leaq	Lzkboo_encrypt$108(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$108:
-	movl	%eax, 1124(%rsp)
-	movl	1116(%rsp), %eax
-	leaq	Lzkboo_encrypt$107(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1180(%rsp), %ebp
+	leaq	Lzkboo_encrypt$107(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$107:
-	movl	%eax, 1120(%rsp)
-	movl	1128(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1184(%rsp)
+	movl	1192(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1120(%rsp), %ecx
+	movl	1184(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1116(%rsp), %ecx
-	movl	1112(%rsp), %r10d
+	movl	1180(%rsp), %ecx
+	movl	1176(%rsp), %r10d
 	andl	%r10d, %ecx
-	movl	1116(%rsp), %r10d
-	movl	1108(%rsp), %r11d
+	movl	1180(%rsp), %r10d
+	movl	1172(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
-	movl	1112(%rsp), %r10d
-	movl	1108(%rsp), %r11d
+	movl	1176(%rsp), %r10d
+	movl	1172(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
 	addl	%ecx, %eax
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1088(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1104(%rsp), %ecx
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1152(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1168(%rsp), %ecx
 	addl	%r9d, %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
+	movl	%ecx, 1164(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
 	addl	%eax, %r9d
-	movl	%r9d, 1116(%rsp)
+	movl	%r9d, 1180(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$105:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$106
-	movl	1348(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$103
 Lzkboo_encrypt$104:
-	movl	1348(%rsp,%rax,4), %ecx
+	movl	1424(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1316(%rsp,%rax,4)
+	movl	%ecx, 1392(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$103:
 	cmpq	$8, %rax
@@ -19426,19 +19442,19 @@ Lzkboo_encrypt$21:
 	movq	$0, 32(%rsp)
 	movl	$0, 24(%rsp)
 	movl	$0, 28(%rsp)
-	movl	$1779033703, 1348(%rsp)
-	movl	$-1150833019, 1352(%rsp)
-	movl	$1013904242, 1356(%rsp)
-	movl	$-1521486534, 1360(%rsp)
-	movl	$1359893119, 1364(%rsp)
-	movl	$-1694144372, 1368(%rsp)
-	movl	$528734635, 1372(%rsp)
-	movl	$1541459225, 1376(%rsp)
+	movl	$1779033703, 1424(%rsp)
+	movl	$-1150833019, 1428(%rsp)
+	movl	$1013904242, 1432(%rsp)
+	movl	$-1521486534, 1436(%rsp)
+	movl	$1359893119, 1440(%rsp)
+	movl	$-1694144372, 1444(%rsp)
+	movl	$528734635, 1448(%rsp)
+	movl	$1541459225, 1452(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$101
 Lzkboo_encrypt$102:
-	movb	1316(%rsp,%rax), %cl
-	movb	%cl, 3088(%rsp,%rax)
+	movb	1392(%rsp,%rax), %cl
+	movb	%cl, 3164(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$101:
 	cmpq	$32, %rax
@@ -19446,84 +19462,84 @@ Lzkboo_encrypt$101:
 	movq	$0, %rcx
 	jmp 	Lzkboo_encrypt$80
 Lzkboo_encrypt$81:
-	movb	3088(%rsp,%rcx), %al
+	movb	3164(%rsp,%rcx), %al
 	movq	%rcx, 48(%rsp)
 	movq	32(%rsp), %rcx
-	movb	%al, 1440(%rsp,%rcx)
+	movb	%al, 1516(%rsp,%rcx)
 	incq	%rcx
 	movq	%rcx, 32(%rsp)
 	cmpq	$64, 32(%rsp)
 	jne 	Lzkboo_encrypt$82
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$99
 Lzkboo_encrypt$100:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$99:
 	cmpq	$16, %rax
@@ -19532,26 +19548,26 @@ Lzkboo_encrypt$99:
 Lzkboo_encrypt$94:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$98(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$98:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$97(%rip), 	%r11
+	leaq	Lzkboo_encrypt$97(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$97:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$96(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -19563,138 +19579,138 @@ Lzkboo_encrypt$95:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$93:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$94
-	movl	1348(%rsp), %eax
-	movl	%eax, 1088(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1116(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1152(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1180(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$85
 Lzkboo_encrypt$86:
-	movl	1116(%rsp), %r9d
-	movl	1104(%rsp), %r12d
+	movl	1180(%rsp), %r9d
+	movl	1168(%rsp), %r12d
 	leaq	Lzkboo_encrypt$92(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$92:
-	movl	1104(%rsp), %ebx
-	leaq	Lzkboo_encrypt$91(%rip), 	%rcx
+	movl	1168(%rsp), %ebx
+	leaq	Lzkboo_encrypt$91(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$91:
-	movl	1104(%rsp), %ecx
-	leaq	Lzkboo_encrypt$90(%rip), 	%rbp
+	movl	1168(%rsp), %ebp
+	leaq	Lzkboo_encrypt$90(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$90:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r9d
-	movl	1104(%rsp), %eax
-	andl	1108(%rsp), %eax
-	movl	1104(%rsp), %ecx
+	movl	1168(%rsp), %eax
+	andl	1172(%rsp), %eax
+	movl	1168(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1112(%rsp), %ecx
+	andl	1176(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r9d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1088(%rsp), %ecx
-	leaq	Lzkboo_encrypt$89(%rip), 	%rbp
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$89(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$89:
-	movl	%ecx, 1120(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$88(%rip), 	%rcx
+	movl	%ebp, 1184(%rsp)
+	movl	1152(%rsp), %eax
+	leaq	Lzkboo_encrypt$88(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$88:
-	movl	%eax, 1124(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$87(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$87(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$87:
-	movl	%eax, 1128(%rsp)
-	movl	1120(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1184(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1088(%rsp), %ecx
-	movl	1092(%rsp), %r10d
+	movl	1152(%rsp), %ecx
+	movl	1156(%rsp), %r10d
 	andl	%r10d, %ecx
-	movl	1088(%rsp), %r10d
-	movl	1096(%rsp), %r11d
+	movl	1152(%rsp), %r10d
+	movl	1160(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
-	movl	1092(%rsp), %r10d
-	movl	1096(%rsp), %r11d
+	movl	1156(%rsp), %r10d
+	movl	1160(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
 	addl	%ecx, %eax
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
 	addl	%r9d, %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1088(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1152(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
 	addl	%eax, %r9d
-	movl	%r9d, 1088(%rsp)
+	movl	%r9d, 1152(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$85:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$86
-	movl	1348(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$512, %rax
 	movl	24(%rsp), %ecx
 	movl	$-1, %esi
@@ -19719,85 +19735,85 @@ Lzkboo_encrypt$80:
 	movq	32(%rsp), %rax
 	cmpq	$56, %rax
 	jb  	Lzkboo_encrypt$56
-	movb	$-128, 1440(%rsp,%rax)
+	movb	$-128, 1516(%rsp,%rax)
 	incq	%rax
 	jmp 	Lzkboo_encrypt$78
 Lzkboo_encrypt$79:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$78:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$79
-	movl	$1116352408, 1856(%rsp)
-	movl	$1899447441, 1860(%rsp)
-	movl	$-1245643825, 1864(%rsp)
-	movl	$-373957723, 1868(%rsp)
-	movl	$961987163, 1872(%rsp)
-	movl	$1508970993, 1876(%rsp)
-	movl	$-1841331548, 1880(%rsp)
-	movl	$-1424204075, 1884(%rsp)
-	movl	$-670586216, 1888(%rsp)
-	movl	$310598401, 1892(%rsp)
-	movl	$607225278, 1896(%rsp)
-	movl	$1426881987, 1900(%rsp)
-	movl	$1925078388, 1904(%rsp)
-	movl	$-2132889090, 1908(%rsp)
-	movl	$-1680079193, 1912(%rsp)
-	movl	$-1046744716, 1916(%rsp)
-	movl	$-459576895, 1920(%rsp)
-	movl	$-272742522, 1924(%rsp)
-	movl	$264347078, 1928(%rsp)
-	movl	$604807628, 1932(%rsp)
-	movl	$770255983, 1936(%rsp)
-	movl	$1249150122, 1940(%rsp)
-	movl	$1555081692, 1944(%rsp)
-	movl	$1996064986, 1948(%rsp)
-	movl	$-1740746414, 1952(%rsp)
-	movl	$-1473132947, 1956(%rsp)
-	movl	$-1341970488, 1960(%rsp)
-	movl	$-1084653625, 1964(%rsp)
-	movl	$-958395405, 1968(%rsp)
-	movl	$-710438585, 1972(%rsp)
-	movl	$113926993, 1976(%rsp)
-	movl	$338241895, 1980(%rsp)
-	movl	$666307205, 1984(%rsp)
-	movl	$773529912, 1988(%rsp)
-	movl	$1294757372, 1992(%rsp)
-	movl	$1396182291, 1996(%rsp)
-	movl	$1695183700, 2000(%rsp)
-	movl	$1986661051, 2004(%rsp)
-	movl	$-2117940946, 2008(%rsp)
-	movl	$-1838011259, 2012(%rsp)
-	movl	$-1564481375, 2016(%rsp)
-	movl	$-1474664885, 2020(%rsp)
-	movl	$-1035236496, 2024(%rsp)
-	movl	$-949202525, 2028(%rsp)
-	movl	$-778901479, 2032(%rsp)
-	movl	$-694614492, 2036(%rsp)
-	movl	$-200395387, 2040(%rsp)
-	movl	$275423344, 2044(%rsp)
-	movl	$430227734, 2048(%rsp)
-	movl	$506948616, 2052(%rsp)
-	movl	$659060556, 2056(%rsp)
-	movl	$883997877, 2060(%rsp)
-	movl	$958139571, 2064(%rsp)
-	movl	$1322822218, 2068(%rsp)
-	movl	$1537002063, 2072(%rsp)
-	movl	$1747873779, 2076(%rsp)
-	movl	$1955562222, 2080(%rsp)
-	movl	$2024104815, 2084(%rsp)
-	movl	$-2067236844, 2088(%rsp)
-	movl	$-1933114872, 2092(%rsp)
-	movl	$-1866530822, 2096(%rsp)
-	movl	$-1538233109, 2100(%rsp)
-	movl	$-1090935817, 2104(%rsp)
-	movl	$-965641998, 2108(%rsp)
+	movl	$1116352408, 1932(%rsp)
+	movl	$1899447441, 1936(%rsp)
+	movl	$-1245643825, 1940(%rsp)
+	movl	$-373957723, 1944(%rsp)
+	movl	$961987163, 1948(%rsp)
+	movl	$1508970993, 1952(%rsp)
+	movl	$-1841331548, 1956(%rsp)
+	movl	$-1424204075, 1960(%rsp)
+	movl	$-670586216, 1964(%rsp)
+	movl	$310598401, 1968(%rsp)
+	movl	$607225278, 1972(%rsp)
+	movl	$1426881987, 1976(%rsp)
+	movl	$1925078388, 1980(%rsp)
+	movl	$-2132889090, 1984(%rsp)
+	movl	$-1680079193, 1988(%rsp)
+	movl	$-1046744716, 1992(%rsp)
+	movl	$-459576895, 1996(%rsp)
+	movl	$-272742522, 2000(%rsp)
+	movl	$264347078, 2004(%rsp)
+	movl	$604807628, 2008(%rsp)
+	movl	$770255983, 2012(%rsp)
+	movl	$1249150122, 2016(%rsp)
+	movl	$1555081692, 2020(%rsp)
+	movl	$1996064986, 2024(%rsp)
+	movl	$-1740746414, 2028(%rsp)
+	movl	$-1473132947, 2032(%rsp)
+	movl	$-1341970488, 2036(%rsp)
+	movl	$-1084653625, 2040(%rsp)
+	movl	$-958395405, 2044(%rsp)
+	movl	$-710438585, 2048(%rsp)
+	movl	$113926993, 2052(%rsp)
+	movl	$338241895, 2056(%rsp)
+	movl	$666307205, 2060(%rsp)
+	movl	$773529912, 2064(%rsp)
+	movl	$1294757372, 2068(%rsp)
+	movl	$1396182291, 2072(%rsp)
+	movl	$1695183700, 2076(%rsp)
+	movl	$1986661051, 2080(%rsp)
+	movl	$-2117940946, 2084(%rsp)
+	movl	$-1838011259, 2088(%rsp)
+	movl	$-1564481375, 2092(%rsp)
+	movl	$-1474664885, 2096(%rsp)
+	movl	$-1035236496, 2100(%rsp)
+	movl	$-949202525, 2104(%rsp)
+	movl	$-778901479, 2108(%rsp)
+	movl	$-694614492, 2112(%rsp)
+	movl	$-200395387, 2116(%rsp)
+	movl	$275423344, 2120(%rsp)
+	movl	$430227734, 2124(%rsp)
+	movl	$506948616, 2128(%rsp)
+	movl	$659060556, 2132(%rsp)
+	movl	$883997877, 2136(%rsp)
+	movl	$958139571, 2140(%rsp)
+	movl	$1322822218, 2144(%rsp)
+	movl	$1537002063, 2148(%rsp)
+	movl	$1747873779, 2152(%rsp)
+	movl	$1955562222, 2156(%rsp)
+	movl	$2024104815, 2160(%rsp)
+	movl	$-2067236844, 2164(%rsp)
+	movl	$-1933114872, 2168(%rsp)
+	movl	$-1866530822, 2172(%rsp)
+	movl	$-1538233109, 2176(%rsp)
+	movl	$-1090935817, 2180(%rsp)
+	movl	$-965641998, 2184(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$76
 Lzkboo_encrypt$77:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1600(%rsp,%rax,4)
+	movl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$76:
 	cmpq	$16, %rax
@@ -19806,26 +19822,26 @@ Lzkboo_encrypt$76:
 Lzkboo_encrypt$71:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1600(%rsp,%rcx,4), %esi
+	movl	1676(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$75(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$75:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$74(%rip), 	%r11
+	leaq	Lzkboo_encrypt$74(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$74:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1600(%rsp,%rax,4)
+	movl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1600(%rsp,%rcx,4), %esi
+	movl	1676(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$73(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -19837,153 +19853,153 @@ Lzkboo_encrypt$72:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1600(%rsp,%rax,4)
+	addl	%ebp, 1676(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1600(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1600(%rsp,%rax,4)
+	movl	1676(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1676(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$70:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$71
-	movl	1348(%rsp), %eax
-	movl	%eax, 1116(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1088(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1180(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1152(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$62
 Lzkboo_encrypt$63:
-	movl	1088(%rsp), %r9d
-	movl	1100(%rsp), %r12d
+	movl	1152(%rsp), %r9d
+	movl	1164(%rsp), %r12d
 	leaq	Lzkboo_encrypt$69(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$69:
-	movl	1100(%rsp), %ebx
-	leaq	Lzkboo_encrypt$68(%rip), 	%rcx
+	movl	1164(%rsp), %ebx
+	leaq	Lzkboo_encrypt$68(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$68:
-	movl	1100(%rsp), %ecx
-	leaq	Lzkboo_encrypt$67(%rip), 	%rbp
+	movl	1164(%rsp), %ebp
+	leaq	Lzkboo_encrypt$67(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$67:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r9d
-	movl	1100(%rsp), %eax
-	andl	1096(%rsp), %eax
-	movl	1100(%rsp), %ecx
+	movl	1164(%rsp), %eax
+	andl	1160(%rsp), %eax
+	movl	1164(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1092(%rsp), %ecx
+	andl	1156(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r9d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1116(%rsp), %ecx
-	leaq	Lzkboo_encrypt$66(%rip), 	%rbp
+	movl	1180(%rsp), %ebp
+	leaq	Lzkboo_encrypt$66(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$66:
-	movl	%ecx, 1128(%rsp)
-	movl	1116(%rsp), %eax
-	leaq	Lzkboo_encrypt$65(%rip), 	%rcx
+	movl	%ebp, 1192(%rsp)
+	movl	1180(%rsp), %eax
+	leaq	Lzkboo_encrypt$65(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$65:
-	movl	%eax, 1124(%rsp)
-	movl	1116(%rsp), %eax
-	leaq	Lzkboo_encrypt$64(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1180(%rsp), %ebp
+	leaq	Lzkboo_encrypt$64(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$64:
-	movl	%eax, 1120(%rsp)
-	movl	1128(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1184(%rsp)
+	movl	1192(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1120(%rsp), %ecx
+	movl	1184(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1116(%rsp), %ecx
-	movl	1112(%rsp), %r10d
+	movl	1180(%rsp), %ecx
+	movl	1176(%rsp), %r10d
 	andl	%r10d, %ecx
-	movl	1116(%rsp), %r10d
-	movl	1108(%rsp), %r11d
+	movl	1180(%rsp), %r10d
+	movl	1172(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
-	movl	1112(%rsp), %r10d
-	movl	1108(%rsp), %r11d
+	movl	1176(%rsp), %r10d
+	movl	1172(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
 	addl	%ecx, %eax
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1088(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
-	movl	1100(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1104(%rsp), %ecx
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1152(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
+	movl	1164(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1168(%rsp), %ecx
 	addl	%r9d, %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1116(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
+	movl	%ecx, 1164(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1168(%rsp)
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1180(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
 	addl	%eax, %r9d
-	movl	%r9d, 1116(%rsp)
+	movl	%r9d, 1180(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$62:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$63
-	movl	1348(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$60
 Lzkboo_encrypt$61:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$60:
 	cmpq	$56, %rax
 	jb  	Lzkboo_encrypt$61
 	jmp 	Lzkboo_encrypt$57
 Lzkboo_encrypt$56:
-	movb	$-128, 1440(%rsp,%rax)
+	movb	$-128, 1516(%rsp,%rax)
 	incq	%rax
 	jmp 	Lzkboo_encrypt$58
 Lzkboo_encrypt$59:
-	movb	$0, 1440(%rsp,%rax)
+	movb	$0, 1516(%rsp,%rax)
 	incq	%rax
 Lzkboo_encrypt$58:
 	cmpq	$56, %rax
@@ -20006,80 +20022,80 @@ Lzkboo_encrypt$54:
 Lzkboo_encrypt$55:
 	movl	24(%rsp), %eax
 	bswapl	%eax
-	movl	%eax, 1500(%rsp)
+	movl	%eax, 1576(%rsp)
 	movl	28(%rsp), %eax
 	bswapl	%eax
-	movl	%eax, 1496(%rsp)
-	movl	$1116352408, 1600(%rsp)
-	movl	$1899447441, 1604(%rsp)
-	movl	$-1245643825, 1608(%rsp)
-	movl	$-373957723, 1612(%rsp)
-	movl	$961987163, 1616(%rsp)
-	movl	$1508970993, 1620(%rsp)
-	movl	$-1841331548, 1624(%rsp)
-	movl	$-1424204075, 1628(%rsp)
-	movl	$-670586216, 1632(%rsp)
-	movl	$310598401, 1636(%rsp)
-	movl	$607225278, 1640(%rsp)
-	movl	$1426881987, 1644(%rsp)
-	movl	$1925078388, 1648(%rsp)
-	movl	$-2132889090, 1652(%rsp)
-	movl	$-1680079193, 1656(%rsp)
-	movl	$-1046744716, 1660(%rsp)
-	movl	$-459576895, 1664(%rsp)
-	movl	$-272742522, 1668(%rsp)
-	movl	$264347078, 1672(%rsp)
-	movl	$604807628, 1676(%rsp)
-	movl	$770255983, 1680(%rsp)
-	movl	$1249150122, 1684(%rsp)
-	movl	$1555081692, 1688(%rsp)
-	movl	$1996064986, 1692(%rsp)
-	movl	$-1740746414, 1696(%rsp)
-	movl	$-1473132947, 1700(%rsp)
-	movl	$-1341970488, 1704(%rsp)
-	movl	$-1084653625, 1708(%rsp)
-	movl	$-958395405, 1712(%rsp)
-	movl	$-710438585, 1716(%rsp)
-	movl	$113926993, 1720(%rsp)
-	movl	$338241895, 1724(%rsp)
-	movl	$666307205, 1728(%rsp)
-	movl	$773529912, 1732(%rsp)
-	movl	$1294757372, 1736(%rsp)
-	movl	$1396182291, 1740(%rsp)
-	movl	$1695183700, 1744(%rsp)
-	movl	$1986661051, 1748(%rsp)
-	movl	$-2117940946, 1752(%rsp)
-	movl	$-1838011259, 1756(%rsp)
-	movl	$-1564481375, 1760(%rsp)
-	movl	$-1474664885, 1764(%rsp)
-	movl	$-1035236496, 1768(%rsp)
-	movl	$-949202525, 1772(%rsp)
-	movl	$-778901479, 1776(%rsp)
-	movl	$-694614492, 1780(%rsp)
-	movl	$-200395387, 1784(%rsp)
-	movl	$275423344, 1788(%rsp)
-	movl	$430227734, 1792(%rsp)
-	movl	$506948616, 1796(%rsp)
-	movl	$659060556, 1800(%rsp)
-	movl	$883997877, 1804(%rsp)
-	movl	$958139571, 1808(%rsp)
-	movl	$1322822218, 1812(%rsp)
-	movl	$1537002063, 1816(%rsp)
-	movl	$1747873779, 1820(%rsp)
-	movl	$1955562222, 1824(%rsp)
-	movl	$2024104815, 1828(%rsp)
-	movl	$-2067236844, 1832(%rsp)
-	movl	$-1933114872, 1836(%rsp)
-	movl	$-1866530822, 1840(%rsp)
-	movl	$-1538233109, 1844(%rsp)
-	movl	$-1090935817, 1848(%rsp)
-	movl	$-965641998, 1852(%rsp)
+	movl	%eax, 1572(%rsp)
+	movl	$1116352408, 1676(%rsp)
+	movl	$1899447441, 1680(%rsp)
+	movl	$-1245643825, 1684(%rsp)
+	movl	$-373957723, 1688(%rsp)
+	movl	$961987163, 1692(%rsp)
+	movl	$1508970993, 1696(%rsp)
+	movl	$-1841331548, 1700(%rsp)
+	movl	$-1424204075, 1704(%rsp)
+	movl	$-670586216, 1708(%rsp)
+	movl	$310598401, 1712(%rsp)
+	movl	$607225278, 1716(%rsp)
+	movl	$1426881987, 1720(%rsp)
+	movl	$1925078388, 1724(%rsp)
+	movl	$-2132889090, 1728(%rsp)
+	movl	$-1680079193, 1732(%rsp)
+	movl	$-1046744716, 1736(%rsp)
+	movl	$-459576895, 1740(%rsp)
+	movl	$-272742522, 1744(%rsp)
+	movl	$264347078, 1748(%rsp)
+	movl	$604807628, 1752(%rsp)
+	movl	$770255983, 1756(%rsp)
+	movl	$1249150122, 1760(%rsp)
+	movl	$1555081692, 1764(%rsp)
+	movl	$1996064986, 1768(%rsp)
+	movl	$-1740746414, 1772(%rsp)
+	movl	$-1473132947, 1776(%rsp)
+	movl	$-1341970488, 1780(%rsp)
+	movl	$-1084653625, 1784(%rsp)
+	movl	$-958395405, 1788(%rsp)
+	movl	$-710438585, 1792(%rsp)
+	movl	$113926993, 1796(%rsp)
+	movl	$338241895, 1800(%rsp)
+	movl	$666307205, 1804(%rsp)
+	movl	$773529912, 1808(%rsp)
+	movl	$1294757372, 1812(%rsp)
+	movl	$1396182291, 1816(%rsp)
+	movl	$1695183700, 1820(%rsp)
+	movl	$1986661051, 1824(%rsp)
+	movl	$-2117940946, 1828(%rsp)
+	movl	$-1838011259, 1832(%rsp)
+	movl	$-1564481375, 1836(%rsp)
+	movl	$-1474664885, 1840(%rsp)
+	movl	$-1035236496, 1844(%rsp)
+	movl	$-949202525, 1848(%rsp)
+	movl	$-778901479, 1852(%rsp)
+	movl	$-694614492, 1856(%rsp)
+	movl	$-200395387, 1860(%rsp)
+	movl	$275423344, 1864(%rsp)
+	movl	$430227734, 1868(%rsp)
+	movl	$506948616, 1872(%rsp)
+	movl	$659060556, 1876(%rsp)
+	movl	$883997877, 1880(%rsp)
+	movl	$958139571, 1884(%rsp)
+	movl	$1322822218, 1888(%rsp)
+	movl	$1537002063, 1892(%rsp)
+	movl	$1747873779, 1896(%rsp)
+	movl	$1955562222, 1900(%rsp)
+	movl	$2024104815, 1904(%rsp)
+	movl	$-2067236844, 1908(%rsp)
+	movl	$-1933114872, 1912(%rsp)
+	movl	$-1866530822, 1916(%rsp)
+	movl	$-1538233109, 1920(%rsp)
+	movl	$-1090935817, 1924(%rsp)
+	movl	$-965641998, 1928(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$52
 Lzkboo_encrypt$53:
-	movl	1440(%rsp,%rax,4), %ecx
+	movl	1516(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1856(%rsp,%rax,4)
+	movl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$52:
 	cmpq	$16, %rax
@@ -20088,26 +20104,26 @@ Lzkboo_encrypt$52:
 Lzkboo_encrypt$47:
 	movq	%rax, %rcx
 	addq	$-2, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ecx
 	leaq	Lzkboo_encrypt$51(%rip), 	%r10
 	jmp 	LROTRIGHT_17$1
 Lzkboo_encrypt$51:
 	movl	%esi, %ecx
-	leaq	Lzkboo_encrypt$50(%rip), 	%r11
+	leaq	Lzkboo_encrypt$50(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_encrypt$50:
 	shrl	$10, %esi
-	xorl	%r10d, %ebp
+	xorl	%r11d, %ebp
 	xorl	%esi, %ebp
-	movl	%ebp, 1856(%rsp,%rax,4)
+	movl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-7, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-15, %rcx
-	movl	1856(%rsp,%rcx,4), %esi
+	movl	1932(%rsp,%rcx,4), %esi
 	movl	%esi, %ebp
 	leaq	Lzkboo_encrypt$49(%rip), 	%r10
 	jmp 	LROTRIGHT_7$1
@@ -20119,144 +20135,144 @@ Lzkboo_encrypt$48:
 	shrl	$3, %esi
 	xorl	%r10d, %ebp
 	xorl	%esi, %ebp
-	addl	%ebp, 1856(%rsp,%rax,4)
+	addl	%ebp, 1932(%rsp,%rax,4)
 	movq	%rax, %rcx
 	addq	$-16, %rcx
-	movl	1856(%rsp,%rcx,4), %ecx
-	addl	%ecx, 1856(%rsp,%rax,4)
+	movl	1932(%rsp,%rcx,4), %ecx
+	addl	%ecx, 1932(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$46:
 	cmpq	$64, %rax
 	jb  	Lzkboo_encrypt$47
-	movl	1348(%rsp), %eax
-	movl	%eax, 1088(%rsp)
-	movl	1352(%rsp), %eax
-	movl	%eax, 1092(%rsp)
-	movl	1356(%rsp), %eax
-	movl	%eax, 1096(%rsp)
-	movl	1360(%rsp), %eax
-	movl	%eax, 1100(%rsp)
-	movl	1364(%rsp), %eax
-	movl	%eax, 1104(%rsp)
-	movl	1368(%rsp), %eax
-	movl	%eax, 1108(%rsp)
-	movl	1372(%rsp), %eax
-	movl	%eax, 1112(%rsp)
-	movl	1376(%rsp), %eax
-	movl	%eax, 1116(%rsp)
+	movl	1424(%rsp), %eax
+	movl	%eax, 1152(%rsp)
+	movl	1428(%rsp), %eax
+	movl	%eax, 1156(%rsp)
+	movl	1432(%rsp), %eax
+	movl	%eax, 1160(%rsp)
+	movl	1436(%rsp), %eax
+	movl	%eax, 1164(%rsp)
+	movl	1440(%rsp), %eax
+	movl	%eax, 1168(%rsp)
+	movl	1444(%rsp), %eax
+	movl	%eax, 1172(%rsp)
+	movl	1448(%rsp), %eax
+	movl	%eax, 1176(%rsp)
+	movl	1452(%rsp), %eax
+	movl	%eax, 1180(%rsp)
 	movq	$0, %rsi
 	jmp 	Lzkboo_encrypt$38
 Lzkboo_encrypt$39:
-	movl	1116(%rsp), %r9d
-	movl	1104(%rsp), %r12d
+	movl	1180(%rsp), %r9d
+	movl	1168(%rsp), %r12d
 	leaq	Lzkboo_encrypt$45(%rip), 	%rcx
 	jmp 	LROTRIGHT_6$1
 Lzkboo_encrypt$45:
-	movl	1104(%rsp), %ebx
-	leaq	Lzkboo_encrypt$44(%rip), 	%rcx
+	movl	1168(%rsp), %ebx
+	leaq	Lzkboo_encrypt$44(%rip), 	%rax
 	jmp 	LROTRIGHT_11$1
 Lzkboo_encrypt$44:
-	movl	1104(%rsp), %ecx
-	leaq	Lzkboo_encrypt$43(%rip), 	%rbp
+	movl	1168(%rsp), %ebp
+	leaq	Lzkboo_encrypt$43(%rip), 	%rax
 	jmp 	LROTRIGHT_25$1
 Lzkboo_encrypt$43:
 	xorl	%ebx, %r12d
-	xorl	%ecx, %r12d
+	xorl	%ebp, %r12d
 	addl	%r12d, %r9d
-	movl	1104(%rsp), %eax
-	andl	1108(%rsp), %eax
-	movl	1104(%rsp), %ecx
+	movl	1168(%rsp), %eax
+	andl	1172(%rsp), %eax
+	movl	1168(%rsp), %ecx
 	xorl	$-1, %ecx
-	andl	1112(%rsp), %ecx
+	andl	1176(%rsp), %ecx
 	xorl	%ecx, %eax
 	addl	%eax, %r9d
-	movl	1600(%rsp,%rsi,4), %eax
+	movl	1676(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1856(%rsp,%rsi,4), %eax
+	movl	1932(%rsp,%rsi,4), %eax
 	addl	%eax, %r9d
-	movl	1088(%rsp), %ecx
-	leaq	Lzkboo_encrypt$42(%rip), 	%rbp
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$42(%rip), 	%rcx
 	jmp 	LROTRIGHT_2$1
 Lzkboo_encrypt$42:
-	movl	%ecx, 1120(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$41(%rip), 	%rcx
+	movl	%ebp, 1184(%rsp)
+	movl	1152(%rsp), %eax
+	leaq	Lzkboo_encrypt$41(%rip), 	%rbp
 	jmp 	LROTRIGHT_13$1
 Lzkboo_encrypt$41:
-	movl	%eax, 1124(%rsp)
-	movl	1088(%rsp), %eax
-	leaq	Lzkboo_encrypt$40(%rip), 	%rbp
+	movl	%eax, 1188(%rsp)
+	movl	1152(%rsp), %ebp
+	leaq	Lzkboo_encrypt$40(%rip), 	%rcx
 	jmp 	LROTRIGHT_22$1
 Lzkboo_encrypt$40:
-	movl	%eax, 1128(%rsp)
-	movl	1120(%rsp), %eax
-	movl	1124(%rsp), %ecx
+	movl	%ebp, 1192(%rsp)
+	movl	1184(%rsp), %eax
+	movl	1188(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1128(%rsp), %ecx
+	movl	1192(%rsp), %ecx
 	xorl	%ecx, %eax
-	movl	1088(%rsp), %ecx
-	movl	1092(%rsp), %r10d
+	movl	1152(%rsp), %ecx
+	movl	1156(%rsp), %r10d
 	andl	%r10d, %ecx
-	movl	1088(%rsp), %r10d
-	movl	1096(%rsp), %r11d
+	movl	1152(%rsp), %r10d
+	movl	1160(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
-	movl	1092(%rsp), %r10d
-	movl	1096(%rsp), %r11d
+	movl	1156(%rsp), %r10d
+	movl	1160(%rsp), %r11d
 	andl	%r11d, %r10d
 	xorl	%r10d, %ecx
 	addl	%ecx, %eax
-	movl	1112(%rsp), %ecx
-	movl	%ecx, 1116(%rsp)
-	movl	1108(%rsp), %ecx
-	movl	%ecx, 1112(%rsp)
-	movl	1104(%rsp), %ecx
-	movl	%ecx, 1108(%rsp)
-	movl	1100(%rsp), %ecx
+	movl	1176(%rsp), %ecx
+	movl	%ecx, 1180(%rsp)
+	movl	1172(%rsp), %ecx
+	movl	%ecx, 1176(%rsp)
+	movl	1168(%rsp), %ecx
+	movl	%ecx, 1172(%rsp)
+	movl	1164(%rsp), %ecx
 	addl	%r9d, %ecx
-	movl	%ecx, 1104(%rsp)
-	movl	1096(%rsp), %ecx
-	movl	%ecx, 1100(%rsp)
-	movl	1092(%rsp), %ecx
-	movl	%ecx, 1096(%rsp)
-	movl	1088(%rsp), %ecx
-	movl	%ecx, 1092(%rsp)
+	movl	%ecx, 1168(%rsp)
+	movl	1160(%rsp), %ecx
+	movl	%ecx, 1164(%rsp)
+	movl	1156(%rsp), %ecx
+	movl	%ecx, 1160(%rsp)
+	movl	1152(%rsp), %ecx
+	movl	%ecx, 1156(%rsp)
 	addl	%eax, %r9d
-	movl	%r9d, 1088(%rsp)
+	movl	%r9d, 1152(%rsp)
 	incq	%rsi
 Lzkboo_encrypt$38:
 	cmpq	$64, %rsi
 	jb  	Lzkboo_encrypt$39
-	movl	1348(%rsp), %eax
-	addl	1088(%rsp), %eax
-	movl	%eax, 1348(%rsp)
-	movl	1352(%rsp), %eax
-	addl	1092(%rsp), %eax
-	movl	%eax, 1352(%rsp)
-	movl	1356(%rsp), %eax
-	addl	1096(%rsp), %eax
-	movl	%eax, 1356(%rsp)
-	movl	1360(%rsp), %eax
-	addl	1100(%rsp), %eax
-	movl	%eax, 1360(%rsp)
-	movl	1364(%rsp), %eax
-	addl	1104(%rsp), %eax
-	movl	%eax, 1364(%rsp)
-	movl	1368(%rsp), %eax
-	addl	1108(%rsp), %eax
-	movl	%eax, 1368(%rsp)
-	movl	1372(%rsp), %eax
-	addl	1112(%rsp), %eax
-	movl	%eax, 1372(%rsp)
-	movl	1376(%rsp), %eax
-	addl	1116(%rsp), %eax
-	movl	%eax, 1376(%rsp)
+	movl	1424(%rsp), %eax
+	addl	1152(%rsp), %eax
+	movl	%eax, 1424(%rsp)
+	movl	1428(%rsp), %eax
+	addl	1156(%rsp), %eax
+	movl	%eax, 1428(%rsp)
+	movl	1432(%rsp), %eax
+	addl	1160(%rsp), %eax
+	movl	%eax, 1432(%rsp)
+	movl	1436(%rsp), %eax
+	addl	1164(%rsp), %eax
+	movl	%eax, 1436(%rsp)
+	movl	1440(%rsp), %eax
+	addl	1168(%rsp), %eax
+	movl	%eax, 1440(%rsp)
+	movl	1444(%rsp), %eax
+	addl	1172(%rsp), %eax
+	movl	%eax, 1444(%rsp)
+	movl	1448(%rsp), %eax
+	addl	1176(%rsp), %eax
+	movl	%eax, 1448(%rsp)
+	movl	1452(%rsp), %eax
+	addl	1180(%rsp), %eax
+	movl	%eax, 1452(%rsp)
 	movq	$0, %rax
 	jmp 	Lzkboo_encrypt$36
 Lzkboo_encrypt$37:
-	movl	1348(%rsp,%rax,4), %ecx
+	movl	1424(%rsp,%rax,4), %ecx
 	bswapl	%ecx
-	movl	%ecx, 1316(%rsp,%rax,4)
+	movl	%ecx, 1392(%rsp,%rax,4)
 	incq	%rax
 Lzkboo_encrypt$36:
 	cmpq	$8, %rax
@@ -20273,7 +20289,7 @@ Lzkboo_encrypt$34:
 Lzkboo_encrypt$33:
 	cmpq	$8, %rax
 	jnb 	Lzkboo_encrypt$34
-	movb	1316(%rsp,%rcx), %cl
+	movb	1392(%rsp,%rcx), %cl
 	jmp 	Lzkboo_encrypt$31
 Lzkboo_encrypt$32:
 	shrb	$1, %cl
@@ -20294,7 +20310,7 @@ Lzkboo_encrypt$30:
 Lzkboo_encrypt$29:
 	cmpq	$8, %rax
 	jnb 	Lzkboo_encrypt$30
-	movb	1316(%rsp,%rsi), %sil
+	movb	1392(%rsp,%rsi), %sil
 	jmp 	Lzkboo_encrypt$27
 Lzkboo_encrypt$28:
 	shrb	$1, %sil
@@ -20468,20 +20484,20 @@ Lzkboo_encrypt$3:
 Lzkboo_encrypt$1:
 	cmpq	(%rsp), %rcx
 	jb  	Lzkboo_encrypt$2
-	movq	6784(%rsp), %rbx
-	movq	6792(%rsp), %rbp
-	movq	6800(%rsp), %r12
-	movq	6808(%rsp), %r13
-	movq	6816(%rsp), %r14
-	movq	6824(%rsp), %r15
-	movq	6776(%rsp), %rsp
+	movq	31056(%rsp), %rbx
+	movq	31064(%rsp), %rbp
+	movq	31072(%rsp), %r12
+	movq	31080(%rsp), %r13
+	movq	31088(%rsp), %r14
+	movq	31096(%rsp), %r15
+	movq	31048(%rsp), %rsp
 	ret 
 LROTRIGHT_19$1:
-	movl	%ecx, %r10d
-	shrl	$19, %r10d
+	movl	%ecx, %r11d
+	shrl	$19, %r11d
 	shll	$13, %ecx
-	orl 	%ecx, %r10d
-	jmp 	*%r11
+	orl 	%ecx, %r11d
+	jmp 	*%r10
 LROTRIGHT_17$1:
 	movl	%ecx, %ebp
 	shrl	$17, %ebp
@@ -20501,17 +20517,17 @@ LROTRIGHT_7$1:
 	xorl	%ecx, %ebp
 	jmp 	*%r10
 LROTRIGHT_25$1:
-	movl	%ecx, %eax
-	shrl	$25, %ecx
-	shll	$7, %eax
-	orl 	%eax, %ecx
-	jmp 	*%rbp
+	movl	%ebp, %ecx
+	shrl	$25, %ebp
+	shll	$7, %ecx
+	orl 	%ecx, %ebp
+	jmp 	*%rax
 LROTRIGHT_11$1:
-	movl	%ebx, %eax
+	movl	%ebx, %ecx
 	shrl	$11, %ebx
-	shll	$21, %eax
-	orl 	%eax, %ebx
-	jmp 	*%rcx
+	shll	$21, %ecx
+	orl 	%ecx, %ebx
+	jmp 	*%rax
 LROTRIGHT_6$1:
 	movl	%r12d, %eax
 	shrl	$6, %r12d
@@ -20519,23 +20535,23 @@ LROTRIGHT_6$1:
 	orl 	%eax, %r12d
 	jmp 	*%rcx
 LROTRIGHT_22$1:
+	movl	%ebp, %eax
+	shrl	$22, %ebp
+	shll	$10, %eax
+	orl 	%eax, %ebp
+	jmp 	*%rcx
+LROTRIGHT_13$1:
 	movl	%eax, %ecx
-	shrl	$22, %eax
-	shll	$10, %ecx
+	shrl	$13, %eax
+	shll	$19, %ecx
 	orl 	%ecx, %eax
 	jmp 	*%rbp
-LROTRIGHT_13$1:
-	movl	%eax, %ebp
-	shrl	$13, %eax
-	shll	$19, %ebp
-	orl 	%ebp, %eax
-	jmp 	*%rcx
 LROTRIGHT_2$1:
-	movl	%ecx, %eax
-	shrl	$2, %ecx
+	movl	%ebp, %eax
+	shrl	$2, %ebp
 	shll	$30, %eax
-	orl 	%eax, %ecx
-	jmp 	*%rbp
+	orl 	%eax, %ebp
+	jmp 	*%rcx
 LROTRIGHT$1:
 	jmp 	*%rcx
 LROTLEFT$1:

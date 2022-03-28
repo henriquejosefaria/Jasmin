@@ -18,7 +18,7 @@
 #endif
 #include <openssl/rand.h>
 #include "omp.h"
-const int NUM_ROUNDS = 10;
+const int NUM_ROUNDS = 136;
 #define VERBOSE FALSE
 
 

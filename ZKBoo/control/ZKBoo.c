@@ -717,25 +717,6 @@ int main(void) {
 	}
 	//printf("}\n\n\n");
 
-	printf("\n\n\na.yp[0] = { ");
-	for (int j = 0; j < 8; j++) {
-		hash_aux = &as[0].yp[0][j];
-		printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	printf("}\n\n\n");
-	printf("\n\n\na.yp[1] = { ");
-	for (int j = 0; j < 8; j++) {
-		hash_aux = &as[0].yp[1][j];
-		printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	printf("}\n\n\n");
-	printf("\n\n\na.yp[2] = { ");
-	for (int j = 0; j < 8; j++) {
-		hash_aux = &as[0].yp[2][j];
-		printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	printf("}\n\n\n");
-
 	H3(finalHash, as, NUM_ROUNDS, es);
 	deltaE = clock() - beginE;
 	int inMilliE = deltaE * 1000 / CLOCKS_PER_SEC;
@@ -748,49 +729,7 @@ int main(void) {
 	//printf("\n\n\nes = {");
 	#pragma omp parallel for
 	for(int i = 0; i<NUM_ROUNDS; i++) {
-		//printf("%d, ", es[i]);
 		zs[i] = prove(es[i],keys[i],rs[i], localViews[i]);
-		/*
-		printf("zs[0] = {\n\n");
-		printf("key1 = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ke[j]);
-		}
-		printf("}\n\nkey2 = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ke1[j]);
-		}
-		
-		printf("}\n\nview1.x = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ve.x[j]);
-		}
-		
-		printf("}\n\nview1.y = {");
-		views_u8 = &zs[i].ve.y[0];
-		for(int j=0;j<16;j++){
-			printf("%u, ",views_u8[j]);
-		}
-		
-		printf("}\n\nview2.x = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",zs[i].ve1.x[j]);
-		}
-		views_u8 = &zs[i].ve1.y[0];
-		printf("}\n\nview2.y = {");
-		for(int j=0;j<16;j++){
-			printf("%u, ",views_u8[j]);
-		}
-		printf("}\n\nre1 = {");
-		for(int j=0;j<4;j++){
-			printf("%u, ",zs[i].re[j]);
-		}
-		printf("}\n\nre2 = {");
-		for(int j=0;j<4;j++){
-			printf("%u, ",zs[i].re1[j]);
-		}
-		printf("}\n\n}\n\n");
-		*/
 	}
 		
 		
