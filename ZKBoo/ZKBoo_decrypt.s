@@ -172,11 +172,11 @@ Lzkboo_decrypt$665:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$669:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$668(%rip), 	%r9
+	leaq	Lzkboo_decrypt$668(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$668:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -234,12 +234,12 @@ Lzkboo_decrypt$663:
 	leaq	Lzkboo_decrypt$662(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$662:
-	movl	1184(%rsp), %r10d
-	leaq	Lzkboo_decrypt$661(%rip), 	%r11
+	movl	1184(%rsp), %r11d
+	leaq	Lzkboo_decrypt$661(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$661:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1184(%rsp), %edx
 	andl	1188(%rsp), %edx
@@ -253,7 +253,7 @@ Lzkboo_decrypt$661:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1168(%rsp), %r9d
-	leaq	Lzkboo_decrypt$660(%rip), 	%r11
+	leaq	Lzkboo_decrypt$660(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$660:
 	movl	%r9d, 1200(%rsp)
@@ -262,11 +262,11 @@ Lzkboo_decrypt$660:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$659:
 	movl	%r9d, 1204(%rsp)
-	movl	1168(%rsp), %r11d
-	leaq	Lzkboo_decrypt$658(%rip), 	%r10
+	movl	1168(%rsp), %r10d
+	leaq	Lzkboo_decrypt$658(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$658:
-	movl	%r11d, 1208(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	1200(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -405,11 +405,13 @@ Lzkboo_decrypt$645:
 Lzkboo_decrypt$643:
 	cmpq	(%rsp), %rax
 	jb  	Lzkboo_decrypt$644
+	imulq	$192, (%rsp), %rax
+	movq	%rax, 24(%rsp)
 	movq	$0, %rcx
 	jmp 	Lzkboo_decrypt$622
 Lzkboo_decrypt$623:
 	movb	1607264(%rsp,%rcx), %al
-	movq	%rcx, 24(%rsp)
+	movq	%rcx, 32(%rsp)
 	movq	8(%rsp), %rcx
 	movb	%al, 1392(%rsp,%rcx)
 	incq	%rcx
@@ -500,11 +502,11 @@ Lzkboo_decrypt$636:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$640:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$639(%rip), 	%r9
+	leaq	Lzkboo_decrypt$639(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$639:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -562,12 +564,12 @@ Lzkboo_decrypt$634:
 	leaq	Lzkboo_decrypt$633(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$633:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$632(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$632(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$632:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1176(%rsp), %edx
@@ -581,7 +583,7 @@ Lzkboo_decrypt$632:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1196(%rsp), %r9d
-	leaq	Lzkboo_decrypt$631(%rip), 	%r11
+	leaq	Lzkboo_decrypt$631(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$631:
 	movl	%r9d, 1208(%rsp)
@@ -590,11 +592,11 @@ Lzkboo_decrypt$631:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$630:
 	movl	%r9d, 1204(%rsp)
-	movl	1196(%rsp), %r11d
-	leaq	Lzkboo_decrypt$629(%rip), 	%r10
+	movl	1196(%rsp), %r10d
+	leaq	Lzkboo_decrypt$629(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$629:
-	movl	%r11d, 1200(%rsp)
+	movl	%r10d, 1200(%rsp)
 	movl	1208(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -673,10 +675,10 @@ Lzkboo_decrypt$625:
 Lzkboo_decrypt$626:
 	movq	$0, 8(%rsp)
 Lzkboo_decrypt$624:
-	movq	24(%rsp), %rcx
+	movq	32(%rsp), %rcx
 	incq	%rcx
 Lzkboo_decrypt$622:
-	cmpq	$26112, %rcx
+	cmpq	24(%rsp), %rcx
 	jb  	Lzkboo_decrypt$623
 	movq	8(%rsp), %rax
 	jmp 	Lzkboo_decrypt$620
@@ -782,11 +784,11 @@ Lzkboo_decrypt$611:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$615:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$614(%rip), 	%r9
+	leaq	Lzkboo_decrypt$614(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$614:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -844,12 +846,12 @@ Lzkboo_decrypt$609:
 	leaq	Lzkboo_decrypt$608(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$608:
-	movl	1184(%rsp), %r10d
-	leaq	Lzkboo_decrypt$607(%rip), 	%r11
+	movl	1184(%rsp), %r11d
+	leaq	Lzkboo_decrypt$607(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$607:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1184(%rsp), %edx
 	andl	1188(%rsp), %edx
@@ -863,7 +865,7 @@ Lzkboo_decrypt$607:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1168(%rsp), %r9d
-	leaq	Lzkboo_decrypt$606(%rip), 	%r11
+	leaq	Lzkboo_decrypt$606(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$606:
 	movl	%r9d, 1200(%rsp)
@@ -872,11 +874,11 @@ Lzkboo_decrypt$606:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$605:
 	movl	%r9d, 1204(%rsp)
-	movl	1168(%rsp), %r11d
-	leaq	Lzkboo_decrypt$604(%rip), 	%r10
+	movl	1168(%rsp), %r10d
+	leaq	Lzkboo_decrypt$604(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$604:
-	movl	%r11d, 1208(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	1200(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -1064,11 +1066,11 @@ Lzkboo_decrypt$587:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$591:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$590(%rip), 	%r9
+	leaq	Lzkboo_decrypt$590(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$590:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -1126,12 +1128,12 @@ Lzkboo_decrypt$585:
 	leaq	Lzkboo_decrypt$584(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$584:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$583(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$583(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$583:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1176(%rsp), %edx
@@ -1145,7 +1147,7 @@ Lzkboo_decrypt$583:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1196(%rsp), %r9d
-	leaq	Lzkboo_decrypt$582(%rip), 	%r11
+	leaq	Lzkboo_decrypt$582(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$582:
 	movl	%r9d, 1208(%rsp)
@@ -1154,11 +1156,11 @@ Lzkboo_decrypt$582:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$581:
 	movl	%r9d, 1204(%rsp)
-	movl	1196(%rsp), %r11d
-	leaq	Lzkboo_decrypt$580(%rip), 	%r10
+	movl	1196(%rsp), %r10d
+	leaq	Lzkboo_decrypt$580(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$580:
-	movl	%r11d, 1200(%rsp)
+	movl	%r10d, 1200(%rsp)
 	movl	1208(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -1353,11 +1355,11 @@ Lzkboo_decrypt$567:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$571:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$570(%rip), 	%r9
+	leaq	Lzkboo_decrypt$570(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$570:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -1415,12 +1417,12 @@ Lzkboo_decrypt$565:
 	leaq	Lzkboo_decrypt$564(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$564:
-	movl	1184(%rsp), %r10d
-	leaq	Lzkboo_decrypt$563(%rip), 	%r11
+	movl	1184(%rsp), %r11d
+	leaq	Lzkboo_decrypt$563(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$563:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1184(%rsp), %edx
 	andl	1188(%rsp), %edx
@@ -1434,7 +1436,7 @@ Lzkboo_decrypt$563:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1168(%rsp), %r9d
-	leaq	Lzkboo_decrypt$562(%rip), 	%r11
+	leaq	Lzkboo_decrypt$562(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$562:
 	movl	%r9d, 1200(%rsp)
@@ -1443,11 +1445,11 @@ Lzkboo_decrypt$562:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$561:
 	movl	%r9d, 1204(%rsp)
-	movl	1168(%rsp), %r11d
-	leaq	Lzkboo_decrypt$560(%rip), 	%r10
+	movl	1168(%rsp), %r10d
+	leaq	Lzkboo_decrypt$560(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$560:
-	movl	%r11d, 1208(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	1200(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -1627,11 +1629,11 @@ Lzkboo_decrypt$544:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$548:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$547(%rip), 	%r9
+	leaq	Lzkboo_decrypt$547(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$547:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -1689,12 +1691,12 @@ Lzkboo_decrypt$542:
 	leaq	Lzkboo_decrypt$541(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$541:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$540(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$540(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$540:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1176(%rsp), %edx
@@ -1708,7 +1710,7 @@ Lzkboo_decrypt$540:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1196(%rsp), %r9d
-	leaq	Lzkboo_decrypt$539(%rip), 	%r11
+	leaq	Lzkboo_decrypt$539(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$539:
 	movl	%r9d, 1208(%rsp)
@@ -1717,11 +1719,11 @@ Lzkboo_decrypt$539:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$538:
 	movl	%r9d, 1204(%rsp)
-	movl	1196(%rsp), %r11d
-	leaq	Lzkboo_decrypt$537(%rip), 	%r10
+	movl	1196(%rsp), %r10d
+	leaq	Lzkboo_decrypt$537(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$537:
-	movl	%r11d, 1200(%rsp)
+	movl	%r10d, 1200(%rsp)
 	movl	1208(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -1909,11 +1911,11 @@ Lzkboo_decrypt$520:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$524:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$523(%rip), 	%r9
+	leaq	Lzkboo_decrypt$523(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$523:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -1971,12 +1973,12 @@ Lzkboo_decrypt$518:
 	leaq	Lzkboo_decrypt$517(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$517:
-	movl	1184(%rsp), %r10d
-	leaq	Lzkboo_decrypt$516(%rip), 	%r11
+	movl	1184(%rsp), %r11d
+	leaq	Lzkboo_decrypt$516(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$516:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1184(%rsp), %edx
 	andl	1188(%rsp), %edx
@@ -1990,7 +1992,7 @@ Lzkboo_decrypt$516:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1168(%rsp), %r9d
-	leaq	Lzkboo_decrypt$515(%rip), 	%r11
+	leaq	Lzkboo_decrypt$515(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$515:
 	movl	%r9d, 1200(%rsp)
@@ -1999,11 +2001,11 @@ Lzkboo_decrypt$515:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$514:
 	movl	%r9d, 1204(%rsp)
-	movl	1168(%rsp), %r11d
-	leaq	Lzkboo_decrypt$513(%rip), 	%r10
+	movl	1168(%rsp), %r10d
+	leaq	Lzkboo_decrypt$513(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$513:
-	movl	%r11d, 1208(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	1200(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -2338,11 +2340,11 @@ Lzkboo_decrypt$470:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$474:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$473(%rip), 	%r9
+	leaq	Lzkboo_decrypt$473(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$473:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -2400,12 +2402,12 @@ Lzkboo_decrypt$468:
 	leaq	Lzkboo_decrypt$467(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$467:
-	movl	1172(%rsp), %r10d
-	leaq	Lzkboo_decrypt$466(%rip), 	%r11
+	movl	1172(%rsp), %r11d
+	leaq	Lzkboo_decrypt$466(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$466:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1172(%rsp), %edx
 	andl	1168(%rsp), %edx
@@ -2419,7 +2421,7 @@ Lzkboo_decrypt$466:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1188(%rsp), %r9d
-	leaq	Lzkboo_decrypt$465(%rip), 	%r11
+	leaq	Lzkboo_decrypt$465(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$465:
 	movl	%r9d, 1200(%rsp)
@@ -2428,11 +2430,11 @@ Lzkboo_decrypt$465:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$464:
 	movl	%r9d, 1212(%rsp)
-	movl	1188(%rsp), %r11d
-	leaq	Lzkboo_decrypt$463(%rip), 	%r10
+	movl	1188(%rsp), %r10d
+	leaq	Lzkboo_decrypt$463(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$463:
-	movl	%r11d, 1216(%rsp)
+	movl	%r10d, 1216(%rsp)
 	movl	1200(%rsp), %edx
 	movl	1212(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -2611,11 +2613,11 @@ Lzkboo_decrypt$449:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$453:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$452(%rip), 	%r9
+	leaq	Lzkboo_decrypt$452(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$452:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -2673,12 +2675,12 @@ Lzkboo_decrypt$447:
 	leaq	Lzkboo_decrypt$446(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$446:
-	movl	1176(%rsp), %r10d
-	leaq	Lzkboo_decrypt$445(%rip), 	%r11
+	movl	1176(%rsp), %r11d
+	leaq	Lzkboo_decrypt$445(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$445:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1176(%rsp), %edx
 	andl	1180(%rsp), %edx
@@ -2692,7 +2694,7 @@ Lzkboo_decrypt$445:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1204(%rsp), %r9d
-	leaq	Lzkboo_decrypt$444(%rip), 	%r11
+	leaq	Lzkboo_decrypt$444(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$444:
 	movl	%r9d, 1216(%rsp)
@@ -2701,11 +2703,11 @@ Lzkboo_decrypt$444:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$443:
 	movl	%r9d, 1212(%rsp)
-	movl	1204(%rsp), %r11d
-	leaq	Lzkboo_decrypt$442(%rip), 	%r10
+	movl	1204(%rsp), %r10d
+	leaq	Lzkboo_decrypt$442(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$442:
-	movl	%r11d, 1200(%rsp)
+	movl	%r10d, 1200(%rsp)
 	movl	1216(%rsp), %edx
 	movl	1212(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -2883,11 +2885,11 @@ Lzkboo_decrypt$428:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$432:
 	movl	%ebx, %edx
-	leaq	Lzkboo_decrypt$431(%rip), 	%r9
+	leaq	Lzkboo_decrypt$431(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$431:
 	shrl	$10, %ebx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ebx, %r11d
 	movl	%r11d, 1520(%rsp,%rcx,4)
 	movq	%rcx, %rdx
@@ -2945,12 +2947,12 @@ Lzkboo_decrypt$426:
 	leaq	Lzkboo_decrypt$425(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$425:
-	movl	1172(%rsp), %r10d
-	leaq	Lzkboo_decrypt$424(%rip), 	%r11
+	movl	1172(%rsp), %r11d
+	leaq	Lzkboo_decrypt$424(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$424:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %edx
 	movl	1172(%rsp), %r9d
 	andl	1168(%rsp), %r9d
@@ -2964,7 +2966,7 @@ Lzkboo_decrypt$424:
 	movl	1520(%rsp,%rcx,4), %r9d
 	addl	%r9d, %edx
 	movl	1188(%rsp), %r9d
-	leaq	Lzkboo_decrypt$423(%rip), 	%r11
+	leaq	Lzkboo_decrypt$423(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$423:
 	movl	%r9d, 1200(%rsp)
@@ -2973,11 +2975,11 @@ Lzkboo_decrypt$423:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$422:
 	movl	%r9d, 1212(%rsp)
-	movl	1188(%rsp), %r11d
-	leaq	Lzkboo_decrypt$421(%rip), 	%r10
+	movl	1188(%rsp), %r10d
+	leaq	Lzkboo_decrypt$421(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$421:
-	movl	%r11d, 1216(%rsp)
+	movl	%r10d, 1216(%rsp)
 	movl	1200(%rsp), %r9d
 	movl	1212(%rsp), %r10d
 	xorl	%r10d, %r9d
@@ -3155,11 +3157,11 @@ Lzkboo_decrypt$407:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$411:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$410(%rip), 	%r9
+	leaq	Lzkboo_decrypt$410(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$410:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -3217,12 +3219,12 @@ Lzkboo_decrypt$405:
 	leaq	Lzkboo_decrypt$404(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$404:
-	movl	1176(%rsp), %r10d
-	leaq	Lzkboo_decrypt$403(%rip), 	%r11
+	movl	1176(%rsp), %r11d
+	leaq	Lzkboo_decrypt$403(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$403:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1176(%rsp), %edx
 	andl	1180(%rsp), %edx
@@ -3236,7 +3238,7 @@ Lzkboo_decrypt$403:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1204(%rsp), %r9d
-	leaq	Lzkboo_decrypt$402(%rip), 	%r11
+	leaq	Lzkboo_decrypt$402(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$402:
 	movl	%r9d, 1216(%rsp)
@@ -3245,11 +3247,11 @@ Lzkboo_decrypt$402:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$401:
 	movl	%r9d, 1212(%rsp)
-	movl	1204(%rsp), %r11d
-	leaq	Lzkboo_decrypt$400(%rip), 	%r10
+	movl	1204(%rsp), %r10d
+	leaq	Lzkboo_decrypt$400(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$400:
-	movl	%r11d, 1200(%rsp)
+	movl	%r10d, 1200(%rsp)
 	movl	1216(%rsp), %edx
 	movl	1212(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -3429,11 +3431,11 @@ Lzkboo_decrypt$384:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$388:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$387(%rip), 	%r9
+	leaq	Lzkboo_decrypt$387(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$387:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -3491,12 +3493,12 @@ Lzkboo_decrypt$382:
 	leaq	Lzkboo_decrypt$381(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$381:
-	movl	1176(%rsp), %r10d
-	leaq	Lzkboo_decrypt$380(%rip), 	%r11
+	movl	1176(%rsp), %r11d
+	leaq	Lzkboo_decrypt$380(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$380:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1176(%rsp), %edx
 	andl	1172(%rsp), %edx
@@ -3510,7 +3512,7 @@ Lzkboo_decrypt$380:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1196(%rsp), %r9d
-	leaq	Lzkboo_decrypt$379(%rip), 	%r11
+	leaq	Lzkboo_decrypt$379(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$379:
 	movl	%r9d, 1204(%rsp)
@@ -3519,11 +3521,11 @@ Lzkboo_decrypt$379:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$378:
 	movl	%r9d, 1200(%rsp)
-	movl	1196(%rsp), %r11d
-	leaq	Lzkboo_decrypt$377(%rip), 	%r10
+	movl	1196(%rsp), %r10d
+	leaq	Lzkboo_decrypt$377(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$377:
-	movl	%r11d, 1212(%rsp)
+	movl	%r10d, 1212(%rsp)
 	movl	1204(%rsp), %edx
 	movl	1200(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -3711,11 +3713,11 @@ Lzkboo_decrypt$360:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$364:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$363(%rip), 	%r9
+	leaq	Lzkboo_decrypt$363(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$363:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -3773,12 +3775,12 @@ Lzkboo_decrypt$358:
 	leaq	Lzkboo_decrypt$357(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$357:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$356(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$356(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$356:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1184(%rsp), %edx
@@ -3792,7 +3794,7 @@ Lzkboo_decrypt$356:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1208(%rsp), %r9d
-	leaq	Lzkboo_decrypt$355(%rip), 	%r11
+	leaq	Lzkboo_decrypt$355(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$355:
 	movl	%r9d, 1212(%rsp)
@@ -3801,11 +3803,11 @@ Lzkboo_decrypt$355:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$354:
 	movl	%r9d, 1200(%rsp)
-	movl	1208(%rsp), %r11d
-	leaq	Lzkboo_decrypt$353(%rip), 	%r10
+	movl	1208(%rsp), %r10d
+	leaq	Lzkboo_decrypt$353(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$353:
-	movl	%r11d, 1204(%rsp)
+	movl	%r10d, 1204(%rsp)
 	movl	1212(%rsp), %edx
 	movl	1200(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -3984,11 +3986,11 @@ Lzkboo_decrypt$342:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$346:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$345(%rip), 	%r9
+	leaq	Lzkboo_decrypt$345(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$345:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -4046,12 +4048,12 @@ Lzkboo_decrypt$340:
 	leaq	Lzkboo_decrypt$339(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$339:
-	movl	1176(%rsp), %r10d
-	leaq	Lzkboo_decrypt$338(%rip), 	%r11
+	movl	1176(%rsp), %r11d
+	leaq	Lzkboo_decrypt$338(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$338:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1176(%rsp), %edx
 	andl	1172(%rsp), %edx
@@ -4065,7 +4067,7 @@ Lzkboo_decrypt$338:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1196(%rsp), %r9d
-	leaq	Lzkboo_decrypt$337(%rip), 	%r11
+	leaq	Lzkboo_decrypt$337(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$337:
 	movl	%r9d, 1204(%rsp)
@@ -4074,11 +4076,11 @@ Lzkboo_decrypt$337:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$336:
 	movl	%r9d, 1200(%rsp)
-	movl	1196(%rsp), %r11d
-	leaq	Lzkboo_decrypt$335(%rip), 	%r10
+	movl	1196(%rsp), %r10d
+	leaq	Lzkboo_decrypt$335(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$335:
-	movl	%r11d, 1212(%rsp)
+	movl	%r10d, 1212(%rsp)
 	movl	1204(%rsp), %edx
 	movl	1200(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -4257,11 +4259,11 @@ Lzkboo_decrypt$321:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$325:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$324(%rip), 	%r9
+	leaq	Lzkboo_decrypt$324(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$324:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -4319,12 +4321,12 @@ Lzkboo_decrypt$319:
 	leaq	Lzkboo_decrypt$318(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$318:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$317(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$317(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$317:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1184(%rsp), %edx
@@ -4338,7 +4340,7 @@ Lzkboo_decrypt$317:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1208(%rsp), %r9d
-	leaq	Lzkboo_decrypt$316(%rip), 	%r11
+	leaq	Lzkboo_decrypt$316(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$316:
 	movl	%r9d, 1212(%rsp)
@@ -4347,11 +4349,11 @@ Lzkboo_decrypt$316:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$315:
 	movl	%r9d, 1200(%rsp)
-	movl	1208(%rsp), %r11d
-	leaq	Lzkboo_decrypt$314(%rip), 	%r10
+	movl	1208(%rsp), %r10d
+	leaq	Lzkboo_decrypt$314(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$314:
-	movl	%r11d, 1204(%rsp)
+	movl	%r10d, 1204(%rsp)
 	movl	1212(%rsp), %edx
 	movl	1200(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -4529,11 +4531,11 @@ Lzkboo_decrypt$300:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$304:
 	movl	%ebx, %edx
-	leaq	Lzkboo_decrypt$303(%rip), 	%r9
+	leaq	Lzkboo_decrypt$303(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$303:
 	shrl	$10, %ebx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ebx, %r11d
 	movl	%r11d, 1520(%rsp,%rcx,4)
 	movq	%rcx, %rdx
@@ -4591,12 +4593,12 @@ Lzkboo_decrypt$298:
 	leaq	Lzkboo_decrypt$297(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$297:
-	movl	1176(%rsp), %r10d
-	leaq	Lzkboo_decrypt$296(%rip), 	%r11
+	movl	1176(%rsp), %r11d
+	leaq	Lzkboo_decrypt$296(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$296:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %edx
 	movl	1176(%rsp), %r9d
 	andl	1172(%rsp), %r9d
@@ -4610,7 +4612,7 @@ Lzkboo_decrypt$296:
 	movl	1520(%rsp,%rcx,4), %r9d
 	addl	%r9d, %edx
 	movl	1196(%rsp), %r9d
-	leaq	Lzkboo_decrypt$295(%rip), 	%r11
+	leaq	Lzkboo_decrypt$295(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$295:
 	movl	%r9d, 1204(%rsp)
@@ -4619,11 +4621,11 @@ Lzkboo_decrypt$295:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$294:
 	movl	%r9d, 1200(%rsp)
-	movl	1196(%rsp), %r11d
-	leaq	Lzkboo_decrypt$293(%rip), 	%r10
+	movl	1196(%rsp), %r10d
+	leaq	Lzkboo_decrypt$293(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$293:
-	movl	%r11d, 1212(%rsp)
+	movl	%r10d, 1212(%rsp)
 	movl	1204(%rsp), %r9d
 	movl	1200(%rsp), %r10d
 	xorl	%r10d, %r9d
@@ -4801,11 +4803,11 @@ Lzkboo_decrypt$279:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$283:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$282(%rip), 	%r9
+	leaq	Lzkboo_decrypt$282(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$282:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -4863,12 +4865,12 @@ Lzkboo_decrypt$277:
 	leaq	Lzkboo_decrypt$276(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$276:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$275(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$275(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$275:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1184(%rsp), %edx
@@ -4882,7 +4884,7 @@ Lzkboo_decrypt$275:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1208(%rsp), %r9d
-	leaq	Lzkboo_decrypt$274(%rip), 	%r11
+	leaq	Lzkboo_decrypt$274(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$274:
 	movl	%r9d, 1212(%rsp)
@@ -4891,11 +4893,11 @@ Lzkboo_decrypt$274:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$273:
 	movl	%r9d, 1200(%rsp)
-	movl	1208(%rsp), %r11d
-	leaq	Lzkboo_decrypt$272(%rip), 	%r10
+	movl	1208(%rsp), %r10d
+	leaq	Lzkboo_decrypt$272(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$272:
-	movl	%r11d, 1204(%rsp)
+	movl	%r10d, 1204(%rsp)
 	movl	1212(%rsp), %edx
 	movl	1200(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -5075,11 +5077,11 @@ Lzkboo_decrypt$256:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$260:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$259(%rip), 	%r9
+	leaq	Lzkboo_decrypt$259(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$259:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1520(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -5137,12 +5139,12 @@ Lzkboo_decrypt$254:
 	leaq	Lzkboo_decrypt$253(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$253:
-	movl	1180(%rsp), %r10d
-	leaq	Lzkboo_decrypt$252(%rip), 	%r11
+	movl	1180(%rsp), %r11d
+	leaq	Lzkboo_decrypt$252(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$252:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1180(%rsp), %edx
 	andl	1176(%rsp), %edx
@@ -5156,7 +5158,7 @@ Lzkboo_decrypt$252:
 	movl	1520(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1192(%rsp), %r9d
-	leaq	Lzkboo_decrypt$251(%rip), 	%r11
+	leaq	Lzkboo_decrypt$251(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$251:
 	movl	%r9d, 1208(%rsp)
@@ -5165,11 +5167,11 @@ Lzkboo_decrypt$251:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$250:
 	movl	%r9d, 1204(%rsp)
-	movl	1192(%rsp), %r11d
-	leaq	Lzkboo_decrypt$249(%rip), 	%r10
+	movl	1192(%rsp), %r10d
+	leaq	Lzkboo_decrypt$249(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$249:
-	movl	%r11d, 1200(%rsp)
+	movl	%r10d, 1200(%rsp)
 	movl	1208(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -5357,11 +5359,11 @@ Lzkboo_decrypt$232:
 	jmp 	LROTRIGHT_17$1
 Lzkboo_decrypt$236:
 	movl	%ecx, %edx
-	leaq	Lzkboo_decrypt$235(%rip), 	%r9
+	leaq	Lzkboo_decrypt$235(%rip), 	%r10
 	jmp 	LROTRIGHT_19$1
 Lzkboo_decrypt$235:
 	shrl	$10, %ecx
-	xorl	%r10d, %r11d
+	xorl	%r9d, %r11d
 	xorl	%ecx, %r11d
 	movl	%r11d, 1776(%rsp,%rax,4)
 	movq	%rax, %rcx
@@ -5419,12 +5421,12 @@ Lzkboo_decrypt$230:
 	leaq	Lzkboo_decrypt$229(%rip), 	%r10
 	jmp 	LROTRIGHT_11$1
 Lzkboo_decrypt$229:
-	movl	1184(%rsp), %r10d
-	leaq	Lzkboo_decrypt$228(%rip), 	%r11
+	movl	1184(%rsp), %r11d
+	leaq	Lzkboo_decrypt$228(%rip), 	%r10
 	jmp 	LROTRIGHT_25$1
 Lzkboo_decrypt$228:
 	xorl	%ebx, %r12d
-	xorl	%r10d, %r12d
+	xorl	%r11d, %r12d
 	addl	%r12d, %ecx
 	movl	1184(%rsp), %edx
 	andl	1188(%rsp), %edx
@@ -5438,7 +5440,7 @@ Lzkboo_decrypt$228:
 	movl	1776(%rsp,%rax,4), %edx
 	addl	%edx, %ecx
 	movl	1168(%rsp), %r9d
-	leaq	Lzkboo_decrypt$227(%rip), 	%r11
+	leaq	Lzkboo_decrypt$227(%rip), 	%r10
 	jmp 	LROTRIGHT_2$1
 Lzkboo_decrypt$227:
 	movl	%r9d, 1200(%rsp)
@@ -5447,11 +5449,11 @@ Lzkboo_decrypt$227:
 	jmp 	LROTRIGHT_13$1
 Lzkboo_decrypt$226:
 	movl	%r9d, 1204(%rsp)
-	movl	1168(%rsp), %r11d
-	leaq	Lzkboo_decrypt$225(%rip), 	%r10
+	movl	1168(%rsp), %r10d
+	leaq	Lzkboo_decrypt$225(%rip), 	%r11
 	jmp 	LROTRIGHT_22$1
 Lzkboo_decrypt$225:
-	movl	%r11d, 1208(%rsp)
+	movl	%r10d, 1208(%rsp)
 	movl	1200(%rsp), %edx
 	movl	1204(%rsp), %r9d
 	xorl	%r9d, %edx
@@ -5540,6 +5542,7 @@ Lzkboo_decrypt$219:
 	movb	(%rsi,%rax), %r9b
 	cmpb	%r9b, %dl
 	je  	Lzkboo_decrypt$220
+	movb	$0, (%rsi)
 	movq	$1, 16(%rsp)
 Lzkboo_decrypt$220:
 	incq	%rax
@@ -5566,6 +5569,7 @@ Lzkboo_decrypt$215:
 	movb	(%rsi,%rax), %r9b
 	cmpb	%r9b, %dl
 	je  	Lzkboo_decrypt$216
+	movb	$1, 1(%rsi)
 	movq	$1, 16(%rsp)
 Lzkboo_decrypt$216:
 	incq	%rax
@@ -5589,6 +5593,7 @@ Lzkboo_decrypt$212:
 	movb	(%rdi,%rax), %r10b
 	cmpb	%r10b, %r9b
 	je  	Lzkboo_decrypt$213
+	movb	$2, 2(%rsi)
 	movq	$1, 16(%rsp)
 Lzkboo_decrypt$213:
 	incq	%rax
@@ -5615,6 +5620,7 @@ Lzkboo_decrypt$208:
 	movb	(%rdi,%rax), %r10b
 	cmpb	%r10b, %r9b
 	je  	Lzkboo_decrypt$209
+	movb	$3, 3(%rsi)
 	movq	$1, 16(%rsp)
 Lzkboo_decrypt$209:
 	incq	%rax
@@ -5768,6 +5774,9 @@ Lzkboo_decrypt$99:
 	movl	(%rdi,%rcx), %ecx
 	cmpl	%eax, %ecx
 	je  	Lzkboo_decrypt$191
+	movq	$0, (%rsi)
+	movl	%eax, 8(%rsi)
+	movl	%ecx, 12(%rsi)
 	movq	$1, 16(%rsp)
 Lzkboo_decrypt$191:
 	movl	%eax, 1260(%rsp)
@@ -5865,6 +5874,9 @@ Lzkboo_decrypt$186:
 	movl	(%rdi,%rcx), %ecx
 	cmpl	%eax, %ecx
 	je  	Lzkboo_decrypt$188
+	movq	$0, (%rsi)
+	movl	%eax, 8(%rsi)
+	movl	%ecx, 12(%rsi)
 	movq	$1, 16(%rsp)
 Lzkboo_decrypt$188:
 	movl	%eax, 1260(%rsp)
@@ -5917,48 +5929,54 @@ Lzkboo_decrypt$184:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$165
 Lzkboo_decrypt$166:
-	movl	1260(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	1260(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$182
 Lzkboo_decrypt$183:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$182:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$183
-	andl	$1, %ecx
-	movl	24(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	24(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$180
 Lzkboo_decrypt$181:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$180:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$181
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	48(%rsp), %rax
-	movl	1264(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	1264(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$178
 Lzkboo_decrypt$179:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$178:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$179
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	28(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -5972,6 +5990,7 @@ Lzkboo_decrypt$176:
 	jnbe	Lzkboo_decrypt$177
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -6074,48 +6093,54 @@ Lzkboo_decrypt$165:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$146
 Lzkboo_decrypt$147:
-	movl	1236(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	1236(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$163
 Lzkboo_decrypt$164:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$163:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$164
-	andl	$1, %ecx
-	movl	24(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	24(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$161
 Lzkboo_decrypt$162:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$161:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$162
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	72(%rsp), %rax
-	movl	1240(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	1240(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$159
 Lzkboo_decrypt$160:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$159:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$160
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	28(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -6129,6 +6154,7 @@ Lzkboo_decrypt$157:
 	jnbe	Lzkboo_decrypt$158
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -6233,48 +6259,54 @@ Lzkboo_decrypt$146:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$127
 Lzkboo_decrypt$128:
-	movl	24(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	24(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$144
 Lzkboo_decrypt$145:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$144:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$145
-	andl	$1, %ecx
-	movl	1252(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	1252(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$142
 Lzkboo_decrypt$143:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$142:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$143
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	72(%rsp), %rax
-	movl	28(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	28(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$140
 Lzkboo_decrypt$141:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$140:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$141
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	1256(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -6288,6 +6320,7 @@ Lzkboo_decrypt$138:
 	jnbe	Lzkboo_decrypt$139
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -6397,48 +6430,54 @@ Lzkboo_decrypt$127:
 	movq	$0, %rbx
 	jmp 	Lzkboo_decrypt$108
 Lzkboo_decrypt$109:
-	movl	1244(%rsp), %edx
-	movl	(%rdi,%rcx), %r9d
-	xorl	%r9d, %edx
-	movq	%rbx, %r9
+	movl	1244(%rsp), %r9d
+	movl	(%rdi,%rcx), %edx
+	xorl	%edx, %r9d
+	movq	%rbx, %rdx
 	jmp 	Lzkboo_decrypt$125
 Lzkboo_decrypt$126:
-	shrl	$1, %edx
-	addq	$-1, %r9
+	shrl	$1, %r9d
+	addq	$-1, %rdx
 Lzkboo_decrypt$125:
-	cmpq	$0, %r9
+	cmpq	$0, %rdx
 	jnbe	Lzkboo_decrypt$126
-	andl	$1, %edx
-	movl	24(%rsp), %r9d
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, (%rsi)
+	movl	24(%rsp), %r10d
 	movl	(%rdi,%rcx), %ecx
-	xorl	%ecx, %r9d
+	xorl	%ecx, %r10d
 	movq	%rbx, %rcx
 	jmp 	Lzkboo_decrypt$123
 Lzkboo_decrypt$124:
-	shrl	$1, %r9d
+	shrl	$1, %r10d
 	addq	$-1, %rcx
 Lzkboo_decrypt$123:
 	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$124
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 4(%rsi)
 	imulq	$3128, %rbp, %rcx
 	addq	$32, %rcx
 	addq	$64, %rcx
 	addq	$1480, %rcx
 	addq	$64, %rcx
 	addq	72(%rsp), %rcx
-	movl	1248(%rsp), %r10d
-	movl	(%rdi,%rcx), %r11d
-	xorl	%r11d, %r10d
-	movq	%rbx, %r11
+	movl	1248(%rsp), %r11d
+	movl	(%rdi,%rcx), %r10d
+	xorl	%r10d, %r11d
+	movq	%rbx, %r10
 	jmp 	Lzkboo_decrypt$121
 Lzkboo_decrypt$122:
-	shrl	$1, %r10d
-	addq	$-1, %r11
+	shrl	$1, %r11d
+	addq	$-1, %r10
 Lzkboo_decrypt$121:
-	cmpq	$0, %r11
+	cmpq	$0, %r10
 	jnbe	Lzkboo_decrypt$122
-	andl	$1, %r10d
+	andl	$1, %r11d
+	movl	%r11d, %r10d
+	movl	%r11d, 8(%rsi)
 	movl	28(%rsp), %r11d
 	movl	(%rdi,%rcx), %ecx
 	xorl	%ecx, %r11d
@@ -6452,6 +6491,7 @@ Lzkboo_decrypt$119:
 	jnbe	Lzkboo_decrypt$120
 	andl	$1, %r11d
 	movl	%r11d, %r12d
+	movl	%r11d, 12(%rsi)
 	imulq	$3128, %rbp, %rcx
 	addq	$32, %rcx
 	addq	$64, %rcx
@@ -6620,48 +6660,54 @@ Lzkboo_decrypt$98:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$79
 Lzkboo_decrypt$80:
-	movl	24(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	24(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$96
 Lzkboo_decrypt$97:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$96:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$97
-	andl	$1, %ecx
-	movl	8(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	8(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$94
 Lzkboo_decrypt$95:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$94:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$95
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	48(%rsp), %rax
-	movl	28(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	28(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$92
 Lzkboo_decrypt$93:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$92:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$93
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	12(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -6675,6 +6721,7 @@ Lzkboo_decrypt$90:
 	jnbe	Lzkboo_decrypt$91
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -6760,48 +6807,54 @@ Lzkboo_decrypt$79:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$60
 Lzkboo_decrypt$61:
-	movl	24(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	24(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$77
 Lzkboo_decrypt$78:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$77:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$78
-	andl	$1, %ecx
-	movl	32(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	32(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$75
 Lzkboo_decrypt$76:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$75:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$76
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	48(%rsp), %rax
-	movl	28(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	28(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$73
 Lzkboo_decrypt$74:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$73:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$74
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	36(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -6815,6 +6868,7 @@ Lzkboo_decrypt$71:
 	jnbe	Lzkboo_decrypt$72
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -6900,48 +6954,54 @@ Lzkboo_decrypt$60:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$41
 Lzkboo_decrypt$42:
-	movl	24(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	24(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$58
 Lzkboo_decrypt$59:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$58:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$59
-	andl	$1, %ecx
-	movl	1220(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	1220(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$56
 Lzkboo_decrypt$57:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$56:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$57
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	48(%rsp), %rax
-	movl	28(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	28(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$54
 Lzkboo_decrypt$55:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$54:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$55
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	1224(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -6955,6 +7015,7 @@ Lzkboo_decrypt$52:
 	jnbe	Lzkboo_decrypt$53
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -7040,48 +7101,54 @@ Lzkboo_decrypt$41:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$22
 Lzkboo_decrypt$23:
-	movl	24(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	24(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$39
 Lzkboo_decrypt$40:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$39:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$40
-	andl	$1, %ecx
-	movl	1228(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	1228(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$37
 Lzkboo_decrypt$38:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$37:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$38
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	48(%rsp), %rax
-	movl	28(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	28(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$35
 Lzkboo_decrypt$36:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$35:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$36
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	1232(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -7095,6 +7162,7 @@ Lzkboo_decrypt$33:
 	jnbe	Lzkboo_decrypt$34
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -7177,48 +7245,54 @@ Lzkboo_decrypt$22:
 	movq	$0, %r11
 	jmp 	Lzkboo_decrypt$3
 Lzkboo_decrypt$4:
-	movl	24(%rsp), %ecx
-	movl	(%rdi,%rax), %edx
-	xorl	%edx, %ecx
-	movq	%r11, %rdx
+	movl	24(%rsp), %edx
+	movl	(%rdi,%rax), %ecx
+	xorl	%ecx, %edx
+	movq	%r11, %rcx
 	jmp 	Lzkboo_decrypt$20
 Lzkboo_decrypt$21:
-	shrl	$1, %ecx
-	addq	$-1, %rdx
+	shrl	$1, %edx
+	addq	$-1, %rcx
 Lzkboo_decrypt$20:
-	cmpq	$0, %rdx
+	cmpq	$0, %rcx
 	jnbe	Lzkboo_decrypt$21
-	andl	$1, %ecx
-	movl	1236(%rsp), %edx
+	andl	$1, %edx
+	movl	%edx, %ecx
+	movl	%edx, (%rsi)
+	movl	1236(%rsp), %r9d
 	movl	(%rdi,%rax), %eax
-	xorl	%eax, %edx
+	xorl	%eax, %r9d
 	movq	%r11, %rax
 	jmp 	Lzkboo_decrypt$18
 Lzkboo_decrypt$19:
-	shrl	$1, %edx
+	shrl	$1, %r9d
 	addq	$-1, %rax
 Lzkboo_decrypt$18:
 	cmpq	$0, %rax
 	jnbe	Lzkboo_decrypt$19
-	andl	$1, %edx
+	andl	$1, %r9d
+	movl	%r9d, %edx
+	movl	%r9d, 4(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
 	addq	$1480, %rax
 	addq	$64, %rax
 	addq	48(%rsp), %rax
-	movl	28(%rsp), %r9d
-	movl	(%rdi,%rax), %r10d
-	xorl	%r10d, %r9d
-	movq	%r11, %r10
+	movl	28(%rsp), %r10d
+	movl	(%rdi,%rax), %r9d
+	xorl	%r9d, %r10d
+	movq	%r11, %r9
 	jmp 	Lzkboo_decrypt$16
 Lzkboo_decrypt$17:
-	shrl	$1, %r9d
-	addq	$-1, %r10
+	shrl	$1, %r10d
+	addq	$-1, %r9
 Lzkboo_decrypt$16:
-	cmpq	$0, %r10
+	cmpq	$0, %r9
 	jnbe	Lzkboo_decrypt$17
-	andl	$1, %r9d
+	andl	$1, %r10d
+	movl	%r10d, %r9d
+	movl	%r10d, 8(%rsi)
 	movl	1240(%rsp), %r10d
 	movl	(%rdi,%rax), %eax
 	xorl	%eax, %r10d
@@ -7232,6 +7306,7 @@ Lzkboo_decrypt$14:
 	jnbe	Lzkboo_decrypt$15
 	andl	$1, %r10d
 	movl	%r10d, %ebx
+	movl	%r10d, 12(%rsi)
 	imulq	$3128, %rbp, %rax
 	addq	$32, %rax
 	addq	$64, %rax
@@ -7297,7 +7372,7 @@ Lzkboo_decrypt$3:
 	jb  	Lzkboo_decrypt$4
 	incq	%rbp
 Lzkboo_decrypt$1:
-	cmpq	$10, %rbp
+	cmpq	(%rsp), %rbp
 	jb  	Lzkboo_decrypt$2
 	movq	16(%rsp), %rax
 	movq	%rax, (%r8)
@@ -7308,11 +7383,11 @@ Lzkboo_decrypt$1:
 	movq	1633376(%rsp), %rsp
 	ret 
 LROTRIGHT_19$1:
-	movl	%edx, %r10d
-	shrl	$19, %r10d
+	movl	%edx, %r9d
+	shrl	$19, %r9d
 	shll	$13, %edx
-	orl 	%edx, %r10d
-	jmp 	*%r9
+	orl 	%edx, %r9d
+	jmp 	*%r10
 LROTRIGHT_17$1:
 	movl	%edx, %r11d
 	shrl	$17, %r11d
@@ -7332,11 +7407,11 @@ LROTRIGHT_7$1:
 	xorl	%edx, %r11d
 	jmp 	*%r9
 LROTRIGHT_25$1:
-	movl	%r10d, %r9d
-	shrl	$25, %r10d
+	movl	%r11d, %r9d
+	shrl	$25, %r11d
 	shll	$7, %r9d
-	orl 	%r9d, %r10d
-	jmp 	*%r11
+	orl 	%r9d, %r11d
+	jmp 	*%r10
 LROTRIGHT_11$1:
 	movl	%ebx, %r9d
 	shrl	$11, %ebx
@@ -7350,11 +7425,11 @@ LROTRIGHT_6$1:
 	orl 	%r9d, %r12d
 	jmp 	*%r10
 LROTRIGHT_22$1:
-	movl	%r11d, %r9d
-	shrl	$22, %r11d
+	movl	%r10d, %r9d
+	shrl	$22, %r10d
 	shll	$10, %r9d
-	orl 	%r9d, %r11d
-	jmp 	*%r10
+	orl 	%r9d, %r10d
+	jmp 	*%r11
 LROTRIGHT_13$1:
 	movl	%r9d, %r11d
 	shrl	$13, %r9d
@@ -7362,11 +7437,11 @@ LROTRIGHT_13$1:
 	orl 	%r11d, %r9d
 	jmp 	*%r10
 LROTRIGHT_2$1:
-	movl	%r9d, %r10d
+	movl	%r9d, %r11d
 	shrl	$2, %r9d
-	shll	$30, %r10d
-	orl 	%r10d, %r9d
-	jmp 	*%r11
+	shll	$30, %r11d
+	orl 	%r11d, %r9d
+	jmp 	*%r10
 LROTRIGHT$1:
 	jmp 	*%rcx
 LROTLEFT$1:

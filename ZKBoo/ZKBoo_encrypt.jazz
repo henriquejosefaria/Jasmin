@@ -1830,7 +1830,7 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, stack u64 numBits, reg u64 ra
 	stack u32[3] temp;		 					// uint32_t temp[3]; 
 	stack u32[3] t0,t1,t2;						// uint32_t t0[3];
 
-	stack u32[3] a, b, c, d, e, f, w_aux;
+	stack u32[3] a, b, c, d, e, f;
 	stack u32 k;
 
 	stack u32[5] hA;
@@ -2090,17 +2090,7 @@ fn mpc_SHA1(stack u32[24] results, reg u64 inputs, stack u64 numBits, reg u64 ra
 
 		temp, randCount, countY, views = mpc_ADD_K(temp, k, randomness, randCount, views, countY, mpc_idx, mpcRounds);
 
-		n = j;
-		storage_u32 = w[(int)n];
-		w_aux[0] = storage_u32;
-		n += 80;
-		storage_u32 = w[(int)n];
-		w_aux[0] = storage_u32;
-		n += 80;
-		storage_u32 = w[(int)n];
-		w_aux[0] = storage_u32;
-
-		temp, randCount, countY, views = mpc_ADD(w_aux, temp, temp, randomness, randCount, views, countY, mpc_idx, mpcRounds);
+		temp, randCount, countY, views = mpc_ADD_W(w, temp, temp, randomness, randCount, views, countY, j, mpc_idx, mpcRounds);
 		
 		
 		storage_u32 = d[0];
@@ -3355,7 +3345,7 @@ fn sha256_update5(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_d
 }
 
 inline
-fn sha256_update6(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[26112] data, inline int len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
+fn sha256_update6(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u64 ctx_datalen, stack u32[2] ctx_bitlen, stack u8[26112] data, stack u64 len) -> stack u32[8], stack u8[64], stack u64, stack u32[2]
 {
     reg u64 i, temp;
     reg u8 t;
@@ -3491,7 +3481,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[136] es) -> stack u64[13
 
 	stack u64 bitTracker_aux;
 
-	inline int len;
+	stack u64 len;
 
 	reg u8 t;
 
@@ -3541,7 +3531,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[136] es) -> stack u64[13
 
 			/* a.yp */
 
-			temp_as = i * 192;
+			temp_as = i * 192; // 192 = 3 * a.yp + 3 * a.h
 
 			temp = j * 32;
 			temp_as += temp;
@@ -3568,8 +3558,7 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[136] es) -> stack u64[13
 
 			temp_as = i * 192;
 
-			temp = 3 * 32;
-			temp_as += temp;
+			temp_as += 96;
 
 			temp = j * 32;
 			temp_as += temp;
@@ -3600,9 +3589,10 @@ fn H3(stack u32[8] y, reg u64 a, stack u64 s, stack u64[136] es) -> stack u64[13
 		
 		i += 1;
 	}
-	
 
-	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update6(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a_s, 26112);
+	i = 192 * s;
+	len = i;
+	ctx_state, ctx_data, ctx_datalen, ctx_bitlen = sha256_update6(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, a_s, len);
 	
 
 	ctx_data, hash = sha256_final2(ctx_state, ctx_data, ctx_datalen, ctx_bitlen, hash);
@@ -3912,7 +3902,8 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 	/**************************************/
 
 	mpcRounds = 136;
-	numBytes = 16 * 8;
+	temp = 16 * 8;
+	numBytes = temp;
 
 	zs_s = zs;
 	
@@ -3994,19 +3985,3 @@ export fn zkboo_encrypt(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, r
 
 	preparationZKBoo(rs, randomValues, keys_shares, proofs, views, a);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
