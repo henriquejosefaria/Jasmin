@@ -33,7 +33,8 @@ int main(void) {
 	
 	printf("Iterations of SHA: %d\n", NUM_ROUNDS);
 
-	clock_t begin = clock(), delta, deltaFiles;
+	int average_total_time = 0;
+	clock_t begin;
 	
 	a as[NUM_ROUNDS];
 	z zs[NUM_ROUNDS];
@@ -49,50 +50,32 @@ int main(void) {
 	fread(&zs, sizeof(z), NUM_ROUNDS, file);
 	fclose(file);
 
-	uint32_t y[8];
-	reconstruct(as[0].yp[0],as[0].yp[1],as[0].yp[2],y);
-	uint8_t *ty;
-	
-	printf("Proof for hash: ");
-	for(int i=0;i<8;i++) {
-		printf("%02X", y[i]);
-	}
-	printf("\n");
+	for(int z=0;z<100;z++){
 
-	deltaFiles = clock() - begin;
-	int inMilliFiles = deltaFiles * 1000 / CLOCKS_PER_SEC;
-	printf("Loading files: %ju\n", (uintmax_t)inMilliFiles);
+		begin = clock();
+		uint32_t y[8];
+		reconstruct(as[0].yp[0],as[0].yp[1],as[0].yp[2],y);
+		uint8_t *ty;
+
+		int es[NUM_ROUNDS];
+		H3(y, as, NUM_ROUNDS, es);
 
 
-	clock_t beginE = clock(), deltaE;
-	int es[NUM_ROUNDS];
-	H3(y, as, NUM_ROUNDS, es);
-	deltaE = clock() - beginE;
-	int inMilliE = deltaE * 1000 / CLOCKS_PER_SEC;
-	printf("Generating E: %ju\n", (uintmax_t)inMilliE);
+		#pragma omp parallel for
+		for(int i = 0; i<NUM_ROUNDS; i++) {
+			//printf("-*- round %d -*-\n",i );
 
-	
-	clock_t beginV = clock(), deltaV;
-	#pragma omp parallel for
-	for(int i = 0; i<NUM_ROUNDS; i++) {
-		//printf("-*- round %d -*-\n",i );
-
-		//printf("\ne[%d] = %d\n",i,es[i]);
-		int verifyResult = verify(as[i], es[i], zs[i]);
-		if (verifyResult != 0) {
-			printf("Not Verified %d\n", i);
+			//printf("\ne[%d] = %d\n",i,es[i]);
+			int verifyResult = verify(as[i], es[i], zs[i]);
+			if (verifyResult != 0) {
+				printf("Not Verified %d\n", i);
+			}
 		}
+		average_total_time += clock() - begin;
+
 	}
-	deltaV = clock() - beginV;
-	int inMilliV = deltaV * 1000 / CLOCKS_PER_SEC;
-	printf("Verifying: %ju\n", (uintmax_t)inMilliV);
 
-	
-	delta = clock() - begin;
-	int inMilli = delta * 1000 / CLOCKS_PER_SEC;
-
-	printf("Total time: %ju\n", (uintmax_t)inMilli);
-	
+	printf("\n\nAverage Total Time Decrypt: %ju\n", average_total_time/100 );
 
 	openmp_thread_cleanup();
 	cleanup_EVP();

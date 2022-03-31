@@ -567,6 +567,8 @@ int main(void) {
 	init_EVP();
 	openmp_thread_setup();
 
+	int average_total_time = 0;
+
 	unsigned char garbage[4];
 	if(RAND_bytes(garbage, 4) != 1) {
 		printf("RAND_bytes failed crypto, aborting\n");
@@ -595,6 +597,9 @@ int main(void) {
 	a as[NUM_ROUNDS];
 	View localViews[NUM_ROUNDS][3];
 	int totalCrypto = 0;
+	int es[NUM_ROUNDS];
+	uint32_t finalHash[8];
+	z* zs = malloc(sizeof(z)*NUM_ROUNDS);
 	
 	//Generating keys
 	clock_t beginCrypto = clock(), deltaCrypto;
@@ -634,20 +639,6 @@ int main(void) {
 	int inMilli = deltaSS * 1000 / CLOCKS_PER_SEC;
 	totalSS = inMilli;
 
-	//Generating randomness
-	clock_t beginRandom = clock(), deltaRandom;
-	unsigned char *randomness[NUM_ROUNDS][3];
-	#pragma omp parallel for
-	for(int k=0; k<NUM_ROUNDS; k++) {
-		for(int j = 0; j<3; j++) {
-			randomness[k][j] = malloc(1472*sizeof(unsigned char));
-			getAllRandomness(keys[k][j], randomness[k][j]);
-		}
-	}
-	deltaRandom = clock() - beginRandom;
-	inMilli = deltaRandom * 1000 / CLOCKS_PER_SEC;
-	totalRandom = inMilli;
-
 
 	FILE *file2;
 
@@ -664,79 +655,69 @@ int main(void) {
 
 
 	uint8_t *views_u8;
+	clock_t beginSha;
+	int totalZRounds = 100;
 
-	//Running MPC-SHA1
-	clock_t beginSha = clock(), deltaSha;
-	#pragma omp parallel for
-	for(int k=0; k<NUM_ROUNDS; k++) {
-		as[k] = commit(i, shares[k], randomness[k], rs[k], localViews[k]);
-		
-		for(int j=0; j<3; j++) {
-			free(randomness[k][j]);
+	for(int z=0;z<totalZRounds;z++){
+
+		//Generating randomness
+		clock_t beginRandom = clock(), deltaRandom;
+		unsigned char *randomness[NUM_ROUNDS][3];
+		#pragma omp parallel for
+		for(int k=0; k<NUM_ROUNDS; k++) {
+			for(int j = 0; j<3; j++) {
+				randomness[k][j] = malloc(1472*sizeof(unsigned char));
+				getAllRandomness(keys[k][j], randomness[k][j]);
+			}
+		}
+		deltaRandom = clock() - beginRandom;
+		inMilli = deltaRandom * 1000 / CLOCKS_PER_SEC;
+		totalRandom = inMilli;
+
+		//Running MPC-SHA1
+		beginSha = clock();
+		#pragma omp parallel for
+		for(int k=0; k<NUM_ROUNDS; k++) {
+			as[k] = commit(i, shares[k], randomness[k], rs[k], localViews[k]);
+			
+			
+			for(int j=0; j<3; j++) {
+				free(randomness[k][j]);
+			}
+			
+
 		}
 
-	}
-	deltaSha = clock() - beginSha;
-	inMilli = deltaSha * 1000 / CLOCKS_PER_SEC;
-	totalSha = inMilli;
-	
-	fwrite(localViews, sizeof(View), NUM_ROUNDS * 3, file2);
-	
-	fclose(file2);
+		//Committing
+		#pragma omp parallel for
+		for(int k=0; k<NUM_ROUNDS; k++) {
+			unsigned char hash1[SHA256_DIGEST_LENGTH];
+			H(keys[k][0], localViews[k][0], rs[k][0], &hash1);
+			memcpy(as[k].h[0], &hash1, 32);
+			H(keys[k][1], localViews[k][1], rs[k][1], &hash1);
+			memcpy(as[k].h[1], &hash1, 32);
+			H(keys[k][2], localViews[k][2], rs[k][2], &hash1);
+			memcpy(as[k].h[2], &hash1, 32);
+		}
 
-
-	//Committing
-	clock_t beginHash = clock(), deltaHash;
-	#pragma omp parallel for
-	for(int k=0; k<NUM_ROUNDS; k++) {
-		unsigned char hash1[SHA256_DIGEST_LENGTH];
-		H(keys[k][0], localViews[k][0], rs[k][0], &hash1);
-		memcpy(as[k].h[0], &hash1, 32);
-		H(keys[k][1], localViews[k][1], rs[k][1], &hash1);
-		memcpy(as[k].h[1], &hash1, 32);
-		H(keys[k][2], localViews[k][2], rs[k][2], &hash1);
-		memcpy(as[k].h[2], &hash1, 32);
-	}
-	deltaHash = clock() - beginHash;
-				inMilli = deltaHash * 1000 / CLOCKS_PER_SEC;
-				totalHash += inMilli;
-				
-	deltaA = clock() - begin;
-	int inMilliA = deltaA * 1000 / CLOCKS_PER_SEC;
-
-	//Generating E
-	clock_t beginE = clock(), deltaE;
-	int es[NUM_ROUNDS];
-	uint32_t finalHash[8];
-	uint8_t *hash_aux;
-	//printf("\n\n\nfinalHash = { ");
-	for (int j = 0; j < 8; j++) {
-		finalHash[j] = as[0].yp[0][j]^as[0].yp[1][j]^as[0].yp[2][j];
-		hash_aux = &as[0].yp[1][j];
-		//printf("%u, %u, %u, %u, ", hash_aux[0], hash_aux[1], hash_aux[2], hash_aux[3] );
-	}
-	//printf("}\n\n\n");
-
-	H3(finalHash, as, NUM_ROUNDS, es);
-	deltaE = clock() - beginE;
-	int inMilliE = deltaE * 1000 / CLOCKS_PER_SEC;
-
-
-	//Packing Z
-	clock_t beginZ = clock(), deltaZ;
-	z* zs = malloc(sizeof(z)*NUM_ROUNDS);
-
-	//printf("\n\n\nes = {");
-	#pragma omp parallel for
-	for(int i = 0; i<NUM_ROUNDS; i++) {
-		zs[i] = prove(es[i],keys[i],rs[i], localViews[i]);
-	}
+		//Generating E
+		for (int j = 0; j < 8; j++) {
+			finalHash[j] = as[0].yp[0][j]^as[0].yp[1][j]^as[0].yp[2][j];
+		}
 		
+		H3(finalHash, as, NUM_ROUNDS, es);
 		
-	//printf("}\n\n\n");
-	deltaZ = clock() - beginZ;
-	int inMilliZ = deltaZ * 1000 / CLOCKS_PER_SEC;
-	
+		//Packing Z
+		#pragma omp parallel for
+		for(int i = 0; i<NUM_ROUNDS; i++) {
+			zs[i] = prove(es[i],keys[i],rs[i], localViews[i]);
+		}
+
+		average_total_time += clock() - beginSha;
+	}
+
+	printf("\n\nAverage Total Time Encrypt: %ju\n", average_total_time/totalZRounds );
+
 
 	//Writing to file
 	clock_t beginWrite = clock();
@@ -766,6 +747,7 @@ int main(void) {
 	inMilli = delta * 1000 / CLOCKS_PER_SEC;
 
 	int sumOfParts = 0;
+
 	/*
 	printf("Generating A: %ju\n", (uintmax_t)inMilliA);
 	printf("	Generating keys: %ju\n", (uintmax_t)totalCrypto);
@@ -775,7 +757,7 @@ int main(void) {
 	printf("	Sharing secrets: %ju\n", (uintmax_t)totalSS);
 	sumOfParts += totalSS;
 	printf("	Running MPC-SHA2: %ju\n", (uintmax_t)totalSha);
-	sumOfParts += totalSha;
+	sumOfParts = totalSha; //sumOfParts += totalSha;
 	printf("	Committing: %ju\n", (uintmax_t)totalHash);
 	sumOfParts += totalHash;
 	printf("	*Accounted for*: %ju\n", (uintmax_t)sumOfParts);

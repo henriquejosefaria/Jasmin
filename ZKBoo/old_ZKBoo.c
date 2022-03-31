@@ -168,7 +168,7 @@ int main(void)
 	fread(keys_aux, sizeof(unsigned char), NUM_ROUNDS*3*16, file);
 	fread(rs_aux, sizeof(unsigned char), NUM_ROUNDS*3*4, file);
 	fread(shares_aux, sizeof(unsigned char), NUM_ROUNDS*3*i, file);
-	fread(localViews, sizeof(View), NUM_ROUNDS * 3, file);
+	//fread(localViews, sizeof(View), NUM_ROUNDS * 3, file);
 
 
 	fclose(file);
@@ -270,55 +270,55 @@ int main(void)
 		a[i] = 0;
 	}
 
+	clock_t beginE, deltaE, beginD, deltaD;
+	int inMilliE = 0,inMilliD = 0;
 
-	clock_t begin;
-	int average_total_time = 0;
-	int totalZRounds = 100;
-
-	for(int i=0; i<totalZRounds; i++){
-		begin = clock();
-		zkboo_encrypt(rs, randomness, keys_shares, proofs, views, a);	
-		average_total_time += clock() - begin;
-	}
-
-	printf("\n\nAverage Total Time Encrypt: %ju\n", average_total_time/totalZRounds );
-	
-	
 	uint8_t key[32];
 	int temp_zs;
 	proofs_p = proofs;
-	uint64_t success = 0;
-	int insuccess_count = 0;
+	uint64_t success[100];
+	int success_var = 0;
+	int rounds = 100;
 
-	// Generating randomness
-	#pragma omp parallel for
-	for(int k=0; k<NUM_ROUNDS; k++) {
-		
-		temp_zs = k * 3128;
+	for(int aux=0; aux<rounds; aux++) {
+		success[aux] = 0;
+		beginE = clock();	
+		zkboo_encrypt(rs, randomness, keys_shares, proofs, views, a);	
+		deltaE = clock() - beginE;
+		inMilliE += deltaE;
 
-		for(int i = 0; i < 32; i++, temp_zs++){
-			key[i] = proofs_p[temp_zs];
+		// Generating randomness
+		#pragma omp parallel for
+		for(int k=0; k<NUM_ROUNDS; k++) {
+			
+			temp_zs = k * 3128;
+
+			for(int i = 0; i < 32; i++, temp_zs++){
+				key[i] = proofs_p[temp_zs];
+			}
+
+			getAllRandomness((unsigned char*)  key, (unsigned char*) &randomness_p1[k * 1472]);
+			getAllRandomness((unsigned char*)  key + 16, (unsigned char*) &randomness_p2[k * 1472]);
 		}
 
-		getAllRandomness((unsigned char*)  key, (unsigned char*) &randomness_p1[k * 1472]);
-		getAllRandomness((unsigned char*)  key + 16, (unsigned char*) &randomness_p2[k * 1472]);
+		beginD = clock();
+		zkboo_decrypt(proofs, a, randomness_p1, randomness_p2, &(success[aux]));
+		deltaD = clock() - beginD;
+		inMilliD += deltaD;
 	}
-
-	average_total_time = 0;
-
-	for(int i=0; i<totalZRounds; i++){
-		begin = clock();
-		zkboo_decrypt(proofs, a, randomness_p1, randomness_p2, &success);
-		average_total_time += clock() - begin;
-		if(success == 1) insuccess_count += 1;
-	}
-
-	printf("\n\nAverage Total Time Decrypt: %ju\n", average_total_time/totalZRounds );
 	
-	printf("failed %d/%d times!!\n",insuccess_count, totalZRounds);
 
-	//if(success == 1) printf("Success(%d) != 0 => Failed!!\n", success);
-	//else printf("Success(%d) != 0 => Succeded\n",success);
+
+	printf("\n\nAverage Total Time Encrypt: %ju\n",inMilliE/100 );
+	printf("\nAverage Total Time Decrypt: %ju\n\n",inMilliD/100 );
+	
+	for(int i=0; i<rounds;i++ ){
+		if(success[i] == 1) success_var += 1;
+	}
+
+	if(success_var != 0) printf("Failed %d/%d times!!\n", success_var, rounds);
+	else printf("Succeded %d/%d times\n",rounds,rounds);
+	
 
 
 	

@@ -1680,7 +1680,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
         t0 = GETBIT_u32_left(t0,i);
         a[0] = t0;
         
-        (u32)[as + 0] = t0; 
 
         t0 = y[0];
         t1 = (u32)[zs + (int)temp_zs];
@@ -1689,7 +1688,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
         t0 = GETBIT_u32_left(t0,i);
         b[0] = t0;
 
-        (u32)[as + 4] = t0; 
 
         
         // Player 2's view.y
@@ -1708,7 +1706,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
         t0 = GETBIT_u32_left(t0,i);
         a[1] = t0;
 
-        (u32)[as + 8] = t0; 
 
 
         t0 = y[1];
@@ -1718,7 +1715,6 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
         t0 = GETBIT_u32_left(t0,i);
         b[1] = t0;
         
-        (u32)[as + 12] = t0; 
 
 
         temp_zs = mpc_round * 3128;
@@ -1729,41 +1725,35 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
         t0 = a[0];
         t0 &= b[1];
 
-        //(u32)[as + 0] = t0;
         
         
         t1 = a[1];
         t1 &= b[0];
         t0 ^= t1;
 
-        //(u32)[as + 4] = t0;
         
 
         t1 = r[1];
         t1 = GETBIT_u32_left(t1,i);
         t0 ^= t1;
 
-        //(u32)[as + 8] = t0;
         
 
         t1 = a[0];
         t1 &= b[0];
         t0 ^= t1;
         
-        //(u32)[as + 12] = t0;
 
         t1 = (u32)[zs + (int)temp_zs];
         t1 = GETBIT_u32_left(t1, i);
         t0 ^= t1;
 
-        //(u32)[as + 16] = t0;
         
 
         t1 = r[0];
         t1 = GETBIT_u32_left(t1,i);
         t0 ^= t1;
 
-        //(u32)[as + 20] = t0;
        
 
         t1 = (u32)[zs + (int)temp_zs];
@@ -1771,10 +1761,8 @@ fn mpc_ADD_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
         i_plus += 1;
         t1 = GETBIT_u32_left(t1, i_plus);
         
-        //(u32)[as + 24] = t1;
 
         if(t1 != t0){
-            //(u64)[as + 28] = i;
             success = 1;
 
             i = 31;
@@ -1864,9 +1852,6 @@ fn mpc_AND_verify(stack u32[2] x, stack u32[2] y, stack u32[2] z, reg u64 zs, st
     t1 = (u32)[zs + (int)count]; 
     
     if(t1 != t0) {
-        (u64)[a + 0] = 0;
-        (u32)[a + 8] = t0;
-        (u32)[a + 12] = t1;
         success = 1;
     }
 
@@ -2197,26 +2182,6 @@ fn verify(reg u64 a, stack u64[136] es, reg u64 zs, reg u64 mpc_round, stack u64
         }
         j += 1;
     }
-    
-    /*
-        i = 0;
-        while(i < 100){
-            t = w[u8 (int)i]; 
-            (u8)[a + (int)i] = t;
-
-            i += 1;
-        }
-
-        j = 80 * 4;
-        i = 100;
-        while(i < 200){
-            t = w[u8 (int)j]; 
-            (u8)[a + (int)i] = t;
-
-            j += 1;
-            i += 1;
-        }
-    */
     
     
     // uint32_t a[2] = { hA[0],hA[0] };

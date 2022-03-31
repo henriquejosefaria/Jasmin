@@ -3942,8 +3942,6 @@ fn preparationZKBoo(reg u64 rs, reg u64 randomValues, reg u64 keys_shares, reg u
 
 		a_aux ^= (u32)[a + (int)temp];
 
-		//a_aux ^= b_aux;
-
 		temp += temp_aux;
 
 		a_aux ^= (u32)[a + (int)temp];

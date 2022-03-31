@@ -24,11 +24,11 @@ full:
 test:
 	clear
 	gcc -w $(CFLAGS) $(CONTROL_FILES) control/ZKBoo.c
-	time ./a.out
+	./a.out
 	gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
-	time ./a.out
+	./a.out
 	gcc -w $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
-	time ./a.out
+	./a.out
 
 
 H:
