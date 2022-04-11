@@ -3,7 +3,8 @@ CFLAGS = -I/usr/local/opt/openssl@1.1/include -L/usr/local/opt/openssl@1.1/lib -
 COMPILED = compiled_Jasmin
 
 CONTROL_FILES = control/shared.h
-ASSEMBLEY_FILES = ZKBoo_encrypt.s ZKBoo_decrypt.s
+ASSEMBLEY_FILES = ZKBoo_encrypt.s ZKBoo_decrypt.s 
+FAST_ASSEMBLEY = ZKBoo_encrypt_functions.s
 ASSEMBLEY_DEBUG_FILES = SHA256.s
 
 
@@ -25,9 +26,16 @@ test:
 	clear
 	gcc -w $(CFLAGS) $(CONTROL_FILES) control/ZKBoo.c
 	./a.out
-	gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
+	#gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
+	#./a.out
+	gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_fast.c
 	./a.out
-	gcc -w $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
+
+SHA256:
+	clear
+	gcc -w $(CFLAGS) $(CONTROL_FILES) control/SHA256_C.c
+	./a.out
+	gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_fast.c
 	./a.out
 
 
@@ -41,6 +49,10 @@ c:
 	clear
 	gcc $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
 	./a.out
+
+encrypt_functions:
+	clear
+	./../../jasminc -o ZKBoo_encrypt_functions.s  ZKBoo_encrypt_functions.jazz
 
 
 encrypt:

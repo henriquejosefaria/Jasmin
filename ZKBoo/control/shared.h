@@ -142,6 +142,8 @@ void cleanup_EVP() {
 }
 
 void H(unsigned char k[16], View v, unsigned char r[4], unsigned char hash[SHA256_DIGEST_LENGTH]) {
+
+
 	SHA256_CTX ctx;
 	SHA256_Init(&ctx);
 	SHA256_Update(&ctx, k, 16);
@@ -157,33 +159,16 @@ void H3(uint32_t y[8], a* as, int s, int* es) {
 	SHA256_CTX ctx;
 	SHA256_Init(&ctx);
 	SHA256_Update(&ctx, y, 20);
+	uint8_t *aux;
 
-	uint8_t *aux = ctx.data;
-
-	/*
-	printf("\n\n\ndata = {");
-	for(int i=0;i<64;i++) 
-		printf("%u, ",aux[i] );
-	printf("\n\n\n");
-	*/
 	SHA256_Update(&ctx, as, sizeof(a)*s);
-	/*
-	printf("\n\n\ndata = {");
-	for(int i=0;i<64;i++) 
-		printf("%u, ",aux[i] );
-	printf("\n\n\n");
-	*/
-	
 	SHA256_Final(hash, &ctx);
-	/*
-	aux = hash;	
-	printf("\n\n\ndata = {");
-	for(int i=0;i<32;i++) 
-		printf("%u, ",aux[i] );
-	printf("\n\n\n");
-	*/
-
+	
+	
+	aux = hash;
+	
 	//Pick bits from hash
+	
 	int i = 0;
 	int bitTracker = 0;
 	while(i < s) {
@@ -217,6 +202,7 @@ void H3(uint32_t y[8], a* as, int s, int* es) {
 			}
 		}
 	}
+	
 
 	/*srand(*hash);
 	for(int i=0; i<s; i++) {

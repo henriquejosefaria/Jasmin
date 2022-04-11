@@ -1,5 +1,0 @@
-[0] Config.pm:304> INFO - This is Biber 2.12
-[0] Config.pm:307> INFO - Logfile is 'planoDeTrabalhos.blg'
-[51] biber-darwin:315> INFO - === Dom Jan 30, 2022, 12:56:06
-[254] Utils.pm:209> ERROR - Cannot find control file 'planoDeTrabalhos.bcf'! - Did latex run successfully on your .tex file before you ran biber?
-[254] Biber.pm:114> INFO - ERRORS: 1

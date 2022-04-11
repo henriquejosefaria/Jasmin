@@ -28,6 +28,11 @@ typedef struct {
 } View;
 
 typedef struct {
+	uint32_t yp[3][8];
+	unsigned char h[3][32];
+} a;
+
+typedef struct {
 	uchar data[64];
 	uint datalen;
 	uint bitlen[2];
@@ -51,11 +56,12 @@ void SHA256Transform(SHA256_CTX *ctx, uchar data[])
 	uint a, b, c, d, e, f, g, h, i, j, t1, t2, m[64];
 	uint32_t m32;
 	uint8_t *m_aux = m;
-
+	/*
 	printf("\n\n received data = ");
 	for(int j=0; j<64;j++){
 		printf("%u, ",data[j]);
 	}
+	*/
 
 	//printf("data = { ");
 	for (i = 0, j = 0; i < 16; ++i, j += 4){
@@ -206,13 +212,7 @@ void SHA256Final(SHA256_CTX *ctx, uchar hash[])
 		memset(ctx->data, 0, 56);
 	}
 	
-	/*
-	printf("\n\ndata = {");
-	for(int i=0;i<64;i++){
-		printf("%u, ",ctx->data[i]);
-	}
-	printf("}\n\n");
-	*/
+	
 	
 	DBL_INT_ADD(ctx->bitlen[0], ctx->bitlen[1], ctx->datalen * 8);
 	
@@ -225,12 +225,23 @@ void SHA256Final(SHA256_CTX *ctx, uchar hash[])
 	ctx->data[58] = ctx->bitlen[1] >> 8;
 	ctx->data[57] = ctx->bitlen[1] >> 16;
 	ctx->data[56] = ctx->bitlen[1] >> 24;
+
+
+	printf("\n\nctx_data = {");
+	for(int i=0;i<64;i++){
+		printf("%u, ",ctx->data[i]);
+	}
+	printf("}\n\n");
+
+	uint8_t* aux = ctx->state;
+	printf("ctx_state = {");
+	for(int i=0;i<32;i++){
+		printf("%d, ",aux[i]);
+	}
+	
 	
 	SHA256Transform(ctx, ctx->data);
 	
-	//uint8_t *aux = &ctx->state[0];
-
-	//printf("\nctx->state[0] = %u, %u, %u, %u\n", *(aux), *(aux + 1), *(aux + 2), *(aux + 3));
 	
 	for (i = 0; i < 4; ++i) {
 		hash[i] = (ctx->state[0] >> (24 - i * 8)) & 0x000000ff;
@@ -243,28 +254,54 @@ void SHA256Final(SHA256_CTX *ctx, uchar hash[])
 		hash[i + 28] = (ctx->state[7] >> (24 - i * 8)) & 0x000000ff;
 	}
 	
+	
 }
 
-char* SHA256(char* data, unsigned char k[16], unsigned char rs[4], View v) {
+char* SHA256(uint8_t *y, a* as) {
 
 	SHA256_CTX ctx;
 	unsigned char hash[32];
 
 	SHA256Init(&ctx);
+	/*
 	int z = 0;
 	while(z < 64){
 		ctx.data[z] = 0;
 		z += 1;
 	}
+	*/
+	SHA256Update(&ctx, y, 20);
+	SHA256Update(&ctx, as, sizeof(a) * 136);
 	//SHA256Update(&ctx, k, 16);
 	//SHA256Update(&ctx, rs, 4);
-	SHA256Update(&ctx, &v, sizeof(v));
+	//SHA256Update(&ctx, &v, sizeof(v));
 	//SHA256Update(&ctx, view_y, 1480);
+	
+
+	/*
+	uint8_t* aux = ctx.data;
+	printf("\n\n\ndata = {");
+	for(int i=0;i<64;i++) 
+		printf("%u, ",aux[i] );
+	printf("}\n\n\n");
+
+	aux = ctx.state;
+	printf("ctx_state = {");
+	for(int i=0;i<32;i++){
+		printf("%d, ",aux[i]);
+	}
+	*/
+
 	SHA256Final(&ctx, hash);
 
 	
-	printf("\n\nas[0].h[0] = { %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u}\n\n", hash[0],hash[1],hash[2],hash[3],hash[4],hash[5],hash[6],hash[7],hash[8],hash[9],hash[10],hash[11],hash[12],hash[13],hash[14], hash[15]);
-	
+	printf("}\n\nhash = {");
+	for(int i=0;i<32;i++){
+		printf("%d, ",hash[i]);
+	}
+
+	printf("}\n\n");
+
 	char s[3];
 	/*
 	printf("\n\n hash => ");
@@ -283,36 +320,56 @@ int main(void)
 	char data[] = "";
 
 
-	int NUM_ROUNDS = 1;
+	int NUM_ROUNDS = 136;
 	int i = 16;
 
 	FILE *file;
 
-	file = fopen("values.bin", "rb");
+	file = fopen("check.bin", "rb");
 
 	if (!file) {
 		printf("Unable to open file!");
 	}
 
-	unsigned char input[i];
-	unsigned char rs_aux[NUM_ROUNDS][3][4];
-	unsigned char keys_aux[NUM_ROUNDS][3][i];
-	unsigned char shares_aux[NUM_ROUNDS][3][i];
-	unsigned char *randomness_aux[NUM_ROUNDS][3];
-	View localViews[NUM_ROUNDS][3];
+	//unsigned char input[i];
+	//unsigned char rs_aux[NUM_ROUNDS][3][4];
+	//unsigned char keys_aux[NUM_ROUNDS][3][i];
+	//unsigned char shares_aux[NUM_ROUNDS][3][i];
+	//unsigned char *randomness_aux[NUM_ROUNDS][3];
+	//View localViews[NUM_ROUNDS][3];
+	a as[NUM_ROUNDS];
+	uint32_t finalHash[8];
 
-	fread(input, sizeof(unsigned char), i, file);
-	fread(keys_aux, sizeof(unsigned char), NUM_ROUNDS*3*16, file);
-	fread(rs_aux, sizeof(unsigned char), NUM_ROUNDS*3*4, file);
-	fread(shares_aux, sizeof(unsigned char), NUM_ROUNDS*3*i, file);
-	fread(localViews, sizeof(View), NUM_ROUNDS * 3, file);
+	fread(finalHash, sizeof(uint32_t), 8, file);
+	fread(as, sizeof(a), NUM_ROUNDS, file);
+
+	//fread(input, sizeof(unsigned char), i, file);
+	//fread(keys_aux, sizeof(unsigned char), NUM_ROUNDS*3*16, file);
+	//fread(rs_aux, sizeof(unsigned char), NUM_ROUNDS*3*4, file);
+	//fread(shares_aux, sizeof(unsigned char), NUM_ROUNDS*3*i, file);
+	//fread(localViews, sizeof(View), NUM_ROUNDS * 3, file);
 
 	fclose(file);
 
-	uint8_t* keys = &keys_aux[0][0];
-	View view = localViews[0][0];
+	uint8_t *aux = finalHash;
 
-	char* sha256 = SHA256(data, keys_aux[0][0], rs_aux[0][0], view);
-	
+	uint8_t *as_aux = &as[105].yp[0][0];
+	printf("\n\n{");
+	for(int i=0;i<32;i++){
+		printf("%u, ",as_aux[i] );
+	}
+	//as_aux = &as[k].h[1][0];
+	printf("\n\n{");
+	for(int i=32;i<64;i++){
+		printf("%u, ",as_aux[i] );
+	}
+	//as_aux = &as[k].h[2][0];
+	printf("\n\n{");
+	for(int i=64;i<96;i++){
+		printf("%u, ",as_aux[i] );
+	}
+	printf("}\n\n");
+
+	char* sha256 = SHA256(aux, &as[0]);
 }
 

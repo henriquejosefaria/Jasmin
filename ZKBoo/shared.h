@@ -18,7 +18,7 @@
 #endif
 #include <openssl/rand.h>
 #include "omp.h"
-const int NUM_ROUNDS 1;//= 136;
+const int NUM_ROUNDS = 136;
 #define VERBOSE FALSE
 
 
@@ -40,6 +40,7 @@ static const uint32_t k[64] = { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 		0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2 };
 
 #define ySize 370
+int debug = 0;
 
 typedef struct {
 	unsigned char x[64];
@@ -75,9 +76,10 @@ void handleErrors(void)
 }
 
 
-EVP_CIPHER_CTX setupAES(unsigned char key[16]) {
-	EVP_CIPHER_CTX ctx;
-	EVP_CIPHER_CTX_init(&ctx);
+EVP_CIPHER_CTX* setupAES(unsigned char key[16]) {
+
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+	EVP_CIPHER_CTX_init(ctx);
 
 	///* A 128 bit key */
 	//unsigned char *key = (unsigned char *)"01234567890123456";
@@ -93,29 +95,28 @@ EVP_CIPHER_CTX setupAES(unsigned char key[16]) {
 	 * In this example we are using 256 bit AES (i.e. a 256 bit key). The
 	 * IV size for *most* modes is the same as the block size. For AES this
 	 * is 128 bits */
-	if(1 != EVP_EncryptInit_ex(&ctx, EVP_aes_128_ctr(), NULL, key, iv))
+	if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv))
 		handleErrors();
 
 	return ctx;
-
-
 }
 
 void getAllRandomness(unsigned char key[16], unsigned char randomness[1472]) {
 	//Generate randomness: We use 365*32 bit of randomness per key.
 	//Since AES block size is 128 bit, we need to run 365*32/128 = 91.25 iterations. Let's just round up.
 
-	EVP_CIPHER_CTX ctx;
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+
 	ctx = setupAES(key);
 	unsigned char *plaintext =
 			(unsigned char *)"0000000000000000";
 	int len;
 	for(int j=0;j<92;j++) {
-		if(1 != EVP_EncryptUpdate(&ctx, &randomness[j*16], &len, plaintext, strlen ((char *)plaintext)))
+		if(1 != EVP_EncryptUpdate(ctx, &randomness[j*16], &len, plaintext, strlen ((char *)plaintext)))
 			handleErrors();
 
 	}
-	EVP_CIPHER_CTX_cleanup(&ctx);
+	EVP_CIPHER_CTX_cleanup(ctx);
 }
 
 uint32_t getRandom32(unsigned char randomness[1472], int randCount) {
@@ -124,6 +125,7 @@ uint32_t getRandom32(unsigned char randomness[1472], int randCount) {
 	memcpy(&ret, &randomness[randCount], 4);
 	return ret;
 }
+
 
 
 void init_EVP() {
@@ -138,7 +140,7 @@ void cleanup_EVP() {
 	EVP_cleanup();
 	ERR_free_strings();
 }
-
+/*
 void H(unsigned char k[16], View v, unsigned char r[4], unsigned char hash[SHA256_DIGEST_LENGTH]) {
 	SHA256_CTX ctx;
 	SHA256_Init(&ctx);
@@ -147,15 +149,19 @@ void H(unsigned char k[16], View v, unsigned char r[4], unsigned char hash[SHA25
 	SHA256_Update(&ctx, r, 4);
 	SHA256_Final(hash, &ctx);
 }
-
-
+*/
+/*
 void H3(uint32_t y[8], a* as, int s, int* es) {
 
 	unsigned char hash[SHA256_DIGEST_LENGTH];
 	SHA256_CTX ctx;
 	SHA256_Init(&ctx);
 	SHA256_Update(&ctx, y, 20);
+
+	uint8_t *aux = ctx.data;
+
 	SHA256_Update(&ctx, as, sizeof(a)*s);
+	
 	SHA256_Final(hash, &ctx);
 
 	//Pick bits from hash
@@ -167,7 +173,6 @@ void H3(uint32_t y[8], a* as, int s, int* es) {
 			SHA256_Update(&ctx, hash, sizeof(hash));
 			SHA256_Final(hash, &ctx);
 			bitTracker = 0;
-			//printf("Generated new hash\n");
 		}
 
 		int b1 = GETBIT(hash[bitTracker/8], bitTracker % 8);
@@ -193,11 +198,8 @@ void H3(uint32_t y[8], a* as, int s, int* es) {
 		}
 	}
 
-	/*srand(*hash);
-	for(int i=0; i<s; i++) {
-		es[i] = random_at_most(2);
-	}*/
 }
+*/
 
 void output(View v, uint32_t* result) {
 	memcpy(result, &v.y[ySize - 5], 20);
@@ -271,8 +273,16 @@ int mpc_AND_verify(uint32_t x[2], uint32_t y[2], uint32_t z[2], View ve, View ve
 	*randCount += 4;
 
 	uint32_t t = 0;
+	uint8_t *t_aux = r;
 
-	t = (x[0] & y[1]) ^ (x[1] & y[0]) ^ (x[0] & y[0]) ^ r[0] ^ r[1];
+
+	t_aux = &t;
+	t = (x[0] & y[1]);
+	t ^= (x[1] & y[0]);
+	t ^= (x[0] & y[0]);
+	t ^= r[0];
+	t ^= r[1];
+	
 	if(ve.y[*countY] != t) {
 		return 1;
 	}
@@ -291,18 +301,39 @@ int mpc_ADD_verify(uint32_t x[2], uint32_t y[2], uint32_t z[2], View ve, View ve
 	uint8_t a[2], b[2];
 
 	uint8_t t;
+	uint8_t *t_aux;
 
 	for(int i=0;i<31;i++)
 	{
+
 		a[0]=GETBIT(x[0]^ve.y[*countY],i);
+		//if(i == 3) printf("a[0] = {%u}\n", a[0]);
 		a[1]=GETBIT(x[1]^ve1.y[*countY],i);
+		//if(i == 3) printf("a[1] = {%u}\n", a[1]);
 
 		b[0]=GETBIT(y[0]^ve.y[*countY],i);
+		//if(i == 3) printf("a[0] = {%u}\n", b[0]);
 		b[1]=GETBIT(y[1]^ve1.y[*countY],i);
+		//if(i == 3) printf("a[0] = {%u}\n", b[1]);
 
-		t = (a[0]&b[1]) ^ (a[1]&b[0]) ^ GETBIT(r[1],i);
-		if(GETBIT(ve.y[*countY],i+1) != (t ^ (a[0]&b[0]) ^ GETBIT(ve.y[*countY],i) ^ GETBIT(r[0],i))) {
+		t = (a[0]&b[1]);
+		//if(i == 3) printf("t0 = {%u}\n",t );
+		t ^= (a[1]&b[0]);
+		//if(i == 3) printf("t0 = {%u}\n",t );
+		t ^= GETBIT(r[1],i);
+		//if(i == 3) printf("t0 = {%u}\n",t );
+		t ^= (a[0]&b[0]);
+		//if(i == 3) printf("t0 = {%u}\n",t );
+		t ^= GETBIT(ve.y[*countY],i);
+		//if(i == 3) printf("t0 = {%u}\n",t );
+		t ^= GETBIT(r[0],i);
+		//if(i == 3) printf("t0 = {%u}\n",t );
+
+		//if(i == 3) printf("t1 = {%u}\n",GETBIT(ve.y[*countY],i+1) );
+
+		if(GETBIT(ve.y[*countY],i+1) != t) {
 			return 1;
+			printf("FAILED!!!");
 		}
 	}
 
@@ -354,10 +385,12 @@ int mpc_CH_verify(uint32_t e[2], uint32_t f[2], uint32_t g[2], uint32_t z[2], Vi
 	return 0;
 }
 
-
+/*
 int verify(a a, int e, z z) {
 	unsigned char* hash = malloc(SHA256_DIGEST_LENGTH);
 	H(z.ke, z.ve, z.re, hash);
+
+	uint8_t *aux;
 
 	if (memcmp(a.h[e], hash, 32) != 0) {
 #if VERBOSE
@@ -366,6 +399,7 @@ int verify(a a, int e, z z) {
 		return 1;
 	}
 	H(z.ke1, z.ve1, z.re1, hash);
+
 	if (memcmp(a.h[(e + 1) % 3], hash, 32) != 0) {
 #if VERBOSE
 		printf("Failing at %d", __LINE__);
@@ -376,6 +410,8 @@ int verify(a a, int e, z z) {
 
 	uint32_t* result = malloc(20);
 	output(z.ve, result);
+	aux = result;
+
 	if (memcmp(a.yp[e], result, 20) != 0) {
 #if VERBOSE
 		printf("Failing at %d", __LINE__);
@@ -384,6 +420,7 @@ int verify(a a, int e, z z) {
 	}
 
 	output(z.ve1, result);
+
 	if (memcmp(a.yp[(e + 1) % 3], result, 20) != 0) {
 #if VERBOSE
 		printf("Failing at %d", __LINE__);
@@ -398,7 +435,8 @@ int verify(a a, int e, z z) {
 	randomness[1] = malloc(1472*sizeof(unsigned char));
 	getAllRandomness(z.ke, randomness[0]);
 	getAllRandomness(z.ke1, randomness[1]);
-
+	
+	
 	int* randCount = calloc(1, sizeof(int));
 	int* countY = calloc(1, sizeof(int));
 
@@ -429,10 +467,14 @@ int verify(a a, int e, z z) {
 	uint32_t f[2];
 	uint32_t k;
 	uint32_t temp1[2];
+	uint8_t *t_aux = f;
+
 	for (int i = 0; i < 80; i++) {
+
 		if(i <= 19) {
 			//f = d ^ (b & (c ^ d))
 			mpc_XOR2(vc,vd,f);
+			
 			if(mpc_AND_verify(vb, f, f, z.ve, z.ve1, randomness, randCount, countY) == 1) {
 #if VERBOSE
 				if(i == 0) {
@@ -445,7 +487,9 @@ int verify(a a, int e, z z) {
 #endif
 				return 1;
 			}
+			
 			mpc_XOR2(vd,f,f);
+			
 			k = 0x5A827999;
 		}
 		else if(i <= 39) {
@@ -469,21 +513,23 @@ int verify(a a, int e, z z) {
 			k = 0xCA62C1D6;
 		}
 
-
 		//temp = (a leftrotate 5) + f + e + k + w[i]
 		mpc_LEFTROTATE2(va,5,temp);
+
 		if(mpc_ADD_verify(f,temp,temp, z.ve, z.ve1, randomness, randCount, countY) == 1) {
 #if VERBOSE
 			printf("Failing at %d, iteration %d", __LINE__, i);
 #endif
 			return 1;
 		}
+		
 		if(mpc_ADD_verify(ve,temp,temp, z.ve, z.ve1, randomness, randCount, countY) == 1) {
 #if VERBOSE
 			printf("Failing at %d, iteration %d", __LINE__, i);
 #endif
 			return 1;
 		}
+
 		temp1[0] = k;
 		temp1[1] = k;
 		if(mpc_ADD_verify(temp,temp1,temp, z.ve, z.ve1, randomness, randCount, countY) == 1) {
@@ -492,12 +538,14 @@ int verify(a a, int e, z z) {
 #endif
 			return 1;
 		}
+
 		if(mpc_ADD_verify(w[i],temp,temp, z.ve, z.ve1, randomness, randCount, countY) == 1) {
 #if VERBOSE
 			printf("Failing at %d, iteration %d", __LINE__, i);
 #endif
 			return 1;
 		}
+		
 
 		memcpy(ve, vd, sizeof(uint32_t) * 2);
 		memcpy(vd, vc, sizeof(uint32_t) * 2);
@@ -505,7 +553,7 @@ int verify(a a, int e, z z) {
 		memcpy(vb, va, sizeof(uint32_t) * 2);
 		memcpy(va, temp, sizeof(uint32_t) * 2);
 	}
-
+	
 	uint32_t hHa[8][3] = { { hA[0],hA[0],hA[0]  }, { hA[1],hA[1],hA[1] }, { hA[2],hA[2],hA[2] }, { hA[3],hA[3],hA[3] },
 			{ hA[4],hA[4],hA[4] }, { hA[5],hA[5],hA[5] }, { hA[6],hA[6],hA[6] }, { hA[7],hA[7],hA[7] } };
 	if(mpc_ADD_verify(hHa[0], va, hHa[0], z.ve, z.ve1, randomness, randCount, countY) == 1) {
@@ -539,9 +587,9 @@ int verify(a a, int e, z z) {
 		return 1;
 	}
 	//printf("CountY: %d\n", countY);
-
+	
 	return 0;
 }
-
+*/
 
 #endif /* SHARED_H_ */
