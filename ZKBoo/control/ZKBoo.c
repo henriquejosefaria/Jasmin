@@ -700,29 +700,7 @@ int main(void) {
 		#pragma omp parallel for
 		for(int k=0; k<NUM_ROUNDS; k++) {
 			as[k] = commit(i, shares[k], randomness[k], rs[k], localViews[k]);
-			/*
-			if(z == 0 & k == 0){
 
-				views_u8 = &randomness[k][0][0];
-				printf("\n\nrandomness[0][0][0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				views_u8 = &randomness[k][1][0];
-				printf("\n\nrandomness[0][1][0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				views_u8 = &randomness[k][2][0];
-				printf("\n\nrandomness[0][2][0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				
-				views_u8 = &localViews[k][0].x[0];
-				printf("\n\nlocalViews[0][0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				views_u8 = &localViews[k][1].x[0];
-				printf("\n\nlocalViews[0][1].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				views_u8 = &localViews[k][2].x[0];
-				printf("\n\nlocalViews[0][2].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				
-				views_u8 = &localViews[k][0].y[365];
-				printf("\n\nlocalViews[0][0].y[0-4] = {%u, %u, %u, %u,%u, %u, %u, %u,%u, %u, %u, %u,%u, %u, %u, %u,%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3],views_u8[4], views_u8[5], views_u8[6], views_u8[7],views_u8[8], views_u8[9], views_u8[10], views_u8[11],views_u8[12], views_u8[13], views_u8[14], views_u8[15],views_u8[16], views_u8[17], views_u8[18], views_u8[19]);
-				as_aux = &as[k].yp[0][0];
-				printf("\n\na[0].yp[0-4] = {%u, %u, %u, %u}\n",as_aux[0], as_aux[1], as_aux[2], as_aux[3]);
-			}
-			*/
 			for(int j=0; j<3; j++) {
 				free(randomness[k][j]);
 			}
@@ -742,79 +720,6 @@ int main(void) {
 			memcpy(as[k].h[1], &hash1, 32);
 			H(keys[k][2], localViews[k][2], rs[k][2], &hash1);
 			memcpy(as[k].h[2], &hash1, 32);
-			/*
-			if(z == 0 & k == 105){
-				
-				//printf("\n\nrs[0][0][0-4] = {%u, %u, %u, %u}\n",rs[0][0][0], rs[0][0][1], rs[0][0][2], rs[0][0][3]);
-				printf("\n\nrs[0][1][0-4] = {%u, %u, %u, %u}\n",rs[0][1][0], rs[0][1][1], rs[0][1][2], rs[0][1][3]);
-				//printf("\n\nrs[0][2][0-4] = {%u, %u, %u, %u}\n",rs[0][2][0], rs[0][2][1], rs[0][2][2], rs[0][2][3]);
-				
-				//printf("\n\nKeys[0][0][0-4] = {%u, %u, %u, %u}\n",keys[0][0][0], keys[0][0][1], keys[0][0][2], keys[0][0][3]);
-				printf("\n\nKeys[0][1][0-4] = {%u, %u, %u, %u}\n",keys[0][1][0], keys[0][1][1], keys[0][1][2], keys[0][1][3]);
-				//printf("\n\nKeys[0][2][0-4] = {%u, %u, %u, %u}\n",keys[0][2][0], keys[0][2][1], keys[0][2][2], keys[0][2][3]);
-				
-				views_u8 = &localViews[k][0];
-				printf("\n\n\n");
-				printf("\n\n\n");
-				for(int i=0; i< 64; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				
-				printf("\n\n");
-				views_u8 = &localViews[k][1];
-				for(int i=0; i< 64; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				printf("\n\n");
-				
-				views_u8 = &localViews[k][2];
-				printf("\n\n\n");
-				for(int i=0; i< 64; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				printf("\n\n\n");
-				printf("\n\n\n");
-				
-				//printf("\n\nview[0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-				views_u8 = &localViews[k][1];
-				printf("\n\nview[0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-				//views_u8 = &localViews[k][2];
-				//printf("\n\nview[0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-
-				//views_u8 = &localViews[k][0];
-				//printf("\n\nview[0].y = {%u, %u, %u, %u}\n",views_u8[1466], views_u8[1467], views_u8[1468], views_u8[1469]);
-				
-				printf("\n\n");
-				views_u8 = &localViews[k][1];
-				for(int i=64; i< 1544; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				printf("\n\n");
-				//views_u8 = &localViews[k][1];
-				//printf("\n\nview[1].y = {%u, %u, %u, %u}\n",views_u8[1466], views_u8[1467], views_u8[1468], views_u8[1469]);
-				//views_u8 = &localViews[k][2];
-				//printf("\n\nview[2].y = {%u, %u, %u, %u}\n",views_u8[1466], views_u8[1467], views_u8[1468], views_u8[1469]);
-				
-
-				
-				as_aux = &as[k].h[0][0];
-				printf("\n\n{");
-				for(int i=0;i<32;i++){
-					printf("%u, ",as_aux[i] );
-				}
-				as_aux = &as[k].h[1][0];
-				printf("\n\n{");
-				for(int i=0;i<32;i++){
-					printf("%u, ",as_aux[i] );
-				}
-				as_aux = &as[k].h[2][0];
-				printf("\n\n{");
-				for(int i=0;i<32;i++){
-					printf("%u, ",as_aux[i] );
-				}
-				printf("}\n\n");	
-			}
-			*/
 		}
 
 		deltaH = clock() - beginH;
@@ -844,6 +749,7 @@ int main(void) {
 		beginZ = clock();
 		#pragma omp parallel for
 		for(int i = 0; i<NUM_ROUNDS; i++) {
+
 			zs[i] = prove(es[i],keys[i],rs[i], localViews[i]);
 		}
 

@@ -6,11 +6,38 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "shared.h"
+#include <openssl/sha.h>
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+#ifdef _WIN32
+#include <openssl/applink.c>
+#endif
+#include <openssl/rand.h>
 #include "omp.h"
+//#include "shared.h"
 
+#define NUM_ROUNDS 136
+#define ySize 370
 
+typedef struct {
+	unsigned char x[64];
+	uint32_t y[ySize];
+} View;
 
+typedef struct {
+	uint32_t yp[3][8];
+	unsigned char h[3][32];
+} a;
+
+typedef struct {
+	unsigned char ke[16];
+	unsigned char ke1[16];
+	View ve;
+	View ve1;
+	unsigned char re[4];
+	unsigned char re1[4];
+} z;
 
 extern void shares_xor(uint64_t *player2, uint64_t *input, uint64_t *player0, uint64_t *player1);
 extern void commit(uint64_t *as, uint64_t *shares, uint64_t *randomness, uint64_t *rs, uint64_t *localViews);
@@ -20,14 +47,115 @@ extern void prove(uint64_t *zs, uint64_t *es, uint64_t *keys, uint64_t *rs, uint
 		
 
 
+void handleErrors(void)
+{
+	ERR_print_errors_fp(stderr);
+	abort();
+}
 
 
+EVP_CIPHER_CTX* setupAES(unsigned char key[16]) {
+
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+	EVP_CIPHER_CTX_init(ctx);
+
+	///* A 128 bit key */
+	//unsigned char *key = (unsigned char *)"01234567890123456";
+
+	/* A 128 bit IV */
+	unsigned char *iv = (unsigned char *)"01234567890123456";
+
+	/* Create and initialise the context */
+	//if(!(ctx = EVP_CIPHER_CTX_new())) handleErrors();
+
+	/* Initialise the encryption operation. IMPORTANT - ensure you use a key
+	 * and IV size appropriate for your cipher
+	 * In this example we are using 256 bit AES (i.e. a 256 bit key). The
+	 * IV size for *most* modes is the same as the block size. For AES this
+	 * is 128 bits */
+	if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv))
+		handleErrors();
+
+	return ctx;
+}
 
 
+void getAllRandomness(unsigned char key[16], unsigned char randomness[1472]) {
+	//Generate randomness: We use 365*32 bit of randomness per key.
+	//Since AES block size is 128 bit, we need to run 365*32/128 = 91.25 iterations. Let's just round up.
 
+	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
 
+	ctx = setupAES(key);
+	unsigned char *plaintext =
+			(unsigned char *)"0000000000000000";
+	int len;
+	for(int j=0;j<92;j++) {
+		if(1 != EVP_EncryptUpdate(ctx, &randomness[j*16], &len, plaintext, strlen ((char *)plaintext)))
+			handleErrors();
 
+	}
+	EVP_CIPHER_CTX_cleanup(ctx);
+}
 
+void init_EVP() {
+	/* Initialise the library */
+	ERR_load_crypto_strings();
+	OpenSSL_add_all_algorithms();
+	OPENSSL_config(NULL);
+}
+
+void cleanup_EVP() {
+	/* Clean up */
+	EVP_cleanup();
+	ERR_free_strings();
+}
+
+omp_lock_t *locks;
+
+// Locking callback
+void openmp_locking_callback(int mode, int type, char *file, int line)
+{
+  if (mode & CRYPTO_LOCK)
+  {
+    omp_set_lock(&locks[type]);
+  }
+  else
+  {
+    omp_unset_lock(&locks[type]);
+  }
+}
+
+// Thread ID callback
+unsigned long openmp_thread_id(void)
+{
+  return (unsigned long)omp_get_thread_num();
+}
+
+void openmp_thread_setup(void)
+{
+  int i;
+
+  locks = OPENSSL_malloc(CRYPTO_num_locks() * sizeof(omp_lock_t));
+  for (i=0; i<CRYPTO_num_locks(); i++)
+  {
+    omp_init_lock(&locks[i]);
+  }
+
+  CRYPTO_set_id_callback((unsigned long (*)())openmp_thread_id);
+  CRYPTO_set_locking_callback((void (*)())openmp_locking_callback);
+}
+
+void openmp_thread_cleanup(void)
+{
+  int i;
+
+  CRYPTO_set_id_callback(NULL);
+  CRYPTO_set_locking_callback(NULL);
+  for (i=0; i<CRYPTO_num_locks(); i++)
+    omp_destroy_lock(&locks[i]);
+  OPENSSL_free(locks);
+}
 
 
 int main(void) {
@@ -85,12 +213,12 @@ int main(void) {
 	totalCrypto = inMilliCrypto;
 	
 
-	//Sharing secrets
+	
 	clock_t beginS, beginC, beginH, beginH3, beginZ;
 	clock_t deltaS, deltaC, deltaH, deltaH3, deltaZ;
 
 	int totalC = 0, totalH = 0, totalH3 = 0, totalZ = 0;
-	
+	//Sharing secrets
 	unsigned char shares[NUM_ROUNDS][3][i];
 	if(RAND_bytes(shares, NUM_ROUNDS*3*i) != 1) {
 		printf("RAND_bytes failed crypto, aborting\n");
@@ -148,42 +276,6 @@ int main(void) {
 		for(int k=0; k<NUM_ROUNDS; k++) {
 
 			commit((uint64_t *) &as[k], (uint64_t *) &shares[k][0][0], (uint64_t *) randomness[k][0], (uint64_t *) rs[k][0], (uint64_t *) &localViews[k][0].x[0]);
-
-			/*
-			if(z == 0 & k == 0){
-
-				views_u8 = &shares[k][0];
-				printf("\n\nshares[0][0][0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-				printf("\n\nshares[0][1][0-4] = {%u, %u, %u, %u}\n",views_u8[16], views_u8[17], views_u8[18], views_u8[19]);
-				printf("\n\nshares[0][2][0-4] = {%u, %u, %u, %u}\n",views_u8[32], views_u8[33], views_u8[34], views_u8[35]);
-				
-				
-				views_u8 = &randomness[k][0][0];
-				printf("\n\nrandomness[0][0][0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				printf("\n\nrandomness[0][1][0-4] = {%u, %u, %u, %u}\n",views_u8[1472], views_u8[1473], views_u8[1474], views_u8[1475]);
-				printf("\n\nrandomness[0][2][0-4] = {%u, %u, %u, %u}\n",views_u8[2944], views_u8[2945], views_u8[2946], views_u8[2947]);
-				
-				views_u8 = &localViews[k][0].x[0];
-				printf("\n\nlocalViews[0][0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				views_u8 = &localViews[k][1].x[0];
-				printf("\n\nlocalViews[0][0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				views_u8 = &localViews[k][2].x[0];
-				printf("\n\nlocalViews[0][0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3] );
-				
-				views_u8 = &localViews[k][0].y[365];
-				printf("\n\nlocalViews[0][0].y[0-4] = {%u, %u, %u, %u,%u, %u, %u, %u,%u, %u, %u, %u,%u, %u, %u, %u,%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3],views_u8[4], views_u8[5], views_u8[6], views_u8[7],views_u8[8], views_u8[9], views_u8[10], views_u8[11],views_u8[12], views_u8[13], views_u8[14], views_u8[15],views_u8[16], views_u8[17], views_u8[18], views_u8[19]);
-
-				as_aux = &as[k].yp[0][0];
-				printf("\n\na[0].yp[0-4] = {%u, %u, %u, %u}\n",as_aux[0], as_aux[1], as_aux[2], as_aux[3] );
-				
-			}
-			*/
-			
-			/*
-			for(int j=0; j<3; j++) {
-				free(randomness[k][j]);
-			}
-			*/
 		}
 
 		deltaC = clock() - beginC;
@@ -198,80 +290,6 @@ int main(void) {
 			H((uint64_t *)&keys[k][0][0], (uint64_t *)&localViews[k][0], (uint64_t *)rs[k][0], (uint64_t *)&as[k].h[0][0]);
 			H((uint64_t *)&keys[k][1][0], (uint64_t *)&localViews[k][1], (uint64_t *)rs[k][1], (uint64_t *)&as[k].h[1][0]);
 			H((uint64_t *)&keys[k][2][0], (uint64_t *)&localViews[k][2], (uint64_t *)rs[k][2], (uint64_t *)&as[k].h[2][0]);
-			
-			/*
-			if(z == 0 &  k == 105){
-				
-				//printf("\n\nrs[0][0][0-4] = {%u, %u, %u, %u}\n",rs[0][0][0], rs[0][0][1], rs[0][0][2], rs[0][0][3]);
-				printf("\n\nrs[0][1][0-4] = {%u, %u, %u, %u}\n",rs[0][1][0], rs[0][1][1], rs[0][1][2], rs[0][1][3]);
-				//printf("\n\nrs[0][2][0-4] = {%u, %u, %u, %u}\n",rs[0][2][0], rs[0][2][1], rs[0][2][2], rs[0][2][3]);
-				
-				//printf("\n\nKeys[0][0][0-4] = {%u, %u, %u, %u}\n",keys[0][0][0], keys[0][0][1], keys[0][0][2], keys[0][0][3]);
-				printf("\n\nKeys[0][1][0-4] = {%u, %u, %u, %u}\n",keys[0][1][0], keys[0][1][1], keys[0][1][2], keys[0][1][3]);
-				//printf("\n\nKeys[0][2][0-4] = {%u, %u, %u, %u}\n",keys[0][2][0], keys[0][2][1], keys[0][2][2], keys[0][2][3]);
-				
-				views_u8 = &localViews[k][0];
-				printf("\n\n\n");
-				printf("\n\n\n");
-				for(int i=0; i< 64; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				
-				printf("\n\n");
-				views_u8 = &localViews[k][1];
-				for(int i=0; i< 64; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				printf("\n\n");
-				
-				views_u8 = &localViews[k][2];
-				printf("\n\n\n");
-				for(int i=0; i< 64; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				printf("\n\n\n");
-				printf("\n\n\n");
-				
-				//printf("\n\nview[0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-				views_u8 = &localViews[k][1];
-				printf("\n\nview[0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-				//views_u8 = &localViews[k][2];
-				//printf("\n\nview[0].x[0-4] = {%u, %u, %u, %u}\n",views_u8[0], views_u8[1], views_u8[2], views_u8[3]);
-
-				//views_u8 = &localViews[k][0];
-				//printf("\n\nview[0].y = {%u, %u, %u, %u}\n",views_u8[1466], views_u8[1467], views_u8[1468], views_u8[1469]);
-				
-				printf("\n\n");
-				views_u8 = &localViews[k][1];
-				for(int i=64; i< 1544; i++){
-					printf("%u, ", views_u8[i]);
-				}
-				printf("\n\n");
-				//views_u8 = &localViews[k][1];
-				//printf("\n\nview[1].y = {%u, %u, %u, %u}\n",views_u8[1466], views_u8[1467], views_u8[1468], views_u8[1469]);
-				//views_u8 = &localViews[k][2];
-				//printf("\n\nview[2].y = {%u, %u, %u, %u}\n",views_u8[1466], views_u8[1467], views_u8[1468], views_u8[1469]);
-				
-
-				
-				as_aux = &as[k].yp[0][0];
-				printf("\n\n{");
-				for(int i=0;i<32;i++){
-					printf("%u, ",as_aux[i] );
-				}
-				//as_aux = &as[k].h[1][0];
-				printf("\n\n{");
-				for(int i=32;i<64;i++){
-					printf("%u, ",as_aux[i] );
-				}
-				//as_aux = &as[k].h[2][0];
-				printf("\n\n{");
-				for(int i=64;i<96;i++){
-					printf("%u, ",as_aux[i] );
-				}
-				printf("}\n\n");
-			}
-			*/
 		}
 		deltaH = clock() - beginH;
 		totalH += deltaH;

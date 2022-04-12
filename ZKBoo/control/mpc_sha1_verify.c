@@ -50,32 +50,44 @@ int main(void) {
 	fread(&zs, sizeof(z), NUM_ROUNDS, file);
 	fclose(file);
 
-	for(int z=0;z<100;z++){
+	clock_t beginS, beginH3;
+	clock_t deltaS, deltaH3;
 
-		begin = clock();
-		uint32_t y[8];
-		reconstruct(as[0].yp[0],as[0].yp[1],as[0].yp[2],y);
-		uint8_t *ty;
+	int totalV = 0, totalH, totalH3 = 0;
+
+	uint32_t y[8];
+	beginS = clock();
+	reconstruct(as[0].yp[0],as[0].yp[1],as[0].yp[2],y);
+	deltaS += clock() - beginS;
+
+	int totalZRounds = 100;
+
+	for(int z=0;z<totalZRounds;z++){
 
 		int es[NUM_ROUNDS];
+
+		beginH3 = clock();
 		H3(y, as, NUM_ROUNDS, es);
-
-
+		deltaH3 = clock() - beginH3;
+		totalH3 += deltaH3;
+ 
 		#pragma omp parallel for
 		for(int i = 0; i<NUM_ROUNDS; i++) {
 			//printf("-*- round %d -*-\n",i );
 
 			//printf("\ne[%d] = %d\n",i,es[i]);
-			int verifyResult = verify(as[i], es[i], zs[i]);
+
+			int verifyResult = verify(as[i], es[i], zs[i], &totalH, &totalV);
 			if (verifyResult != 0) {
 				printf("Not Verified %d\n", i);
 			}
 		}
-		average_total_time += clock() - begin;
-
 	}
 
-	printf("\n\nAverage Total Time Decrypt: %ju\n", average_total_time/100 );
+	printf("\n\nAverage Total Time: \n\n - Shares_xor(): %ju\n - verify():     %ju\n  - H():         %ju\n  - H3():        %ju\n\n", deltaS, totalV/totalZRounds, totalH/totalZRounds, totalH3/totalZRounds);
+
+
+	printf("Total Time: %ju\n\n", deltaS + (totalV + totalH + totalH3)/totalZRounds);
 
 	openmp_thread_cleanup();
 	cleanup_EVP();

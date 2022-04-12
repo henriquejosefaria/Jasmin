@@ -147,6 +147,14 @@ void H(unsigned char k[16], View v, unsigned char r[4], unsigned char hash[SHA25
 	SHA256_CTX ctx;
 	SHA256_Init(&ctx);
 	SHA256_Update(&ctx, k, 16);
+	/*
+	uint8_t *aux = ctx.data;
+	printf("data = {");
+	for(int i=0;i<64;i++){
+		printf("%u, ",aux[i]);
+	}
+	printf("}\n\n");
+	*/
 	SHA256_Update(&ctx, &v, sizeof(v));
 	SHA256_Update(&ctx, r, 4);
 	SHA256_Final(hash, &ctx);
@@ -395,11 +403,17 @@ int mpc_CH_verify(uint32_t e[2], uint32_t f[2], uint32_t g[2], uint32_t z[2], Vi
 }
 
 
-int verify(a a, int e, z z) {
-	unsigned char* hash = malloc(SHA256_DIGEST_LENGTH);
-	H(z.ke, z.ve, z.re, hash);
+int verify(a a, int e, z z, int *totalH, int *totalV) {
 
-	uint8_t *aux;
+	clock_t beginH, beginV;
+	clock_t deltaH, deltaV;
+
+	unsigned char* hash = malloc(SHA256_DIGEST_LENGTH);
+	
+	beginH = clock();
+	H(z.ke, z.ve, z.re, hash);
+	deltaH = clock() - beginH;
+	(*totalH) += deltaH;
 
 	if (memcmp(a.h[e], hash, 32) != 0) {
 #if VERBOSE
@@ -407,8 +421,11 @@ int verify(a a, int e, z z) {
 #endif
 		return 1;
 	}
+	beginH = clock();
 	H(z.ke1, z.ve1, z.re1, hash);
-
+	deltaH = clock() - beginH;
+	(*totalH) += deltaH;
+	
 	if (memcmp(a.h[(e + 1) % 3], hash, 32) != 0) {
 #if VERBOSE
 		printf("Failing at %d", __LINE__);
@@ -419,7 +436,6 @@ int verify(a a, int e, z z) {
 
 	uint32_t* result = malloc(20);
 	output(z.ve, result);
-	aux = result;
 
 	if (memcmp(a.yp[e], result, 20) != 0) {
 #if VERBOSE
@@ -445,7 +461,8 @@ int verify(a a, int e, z z) {
 	getAllRandomness(z.ke, randomness[0]);
 	getAllRandomness(z.ke1, randomness[1]);
 	
-	
+	beginV = clock();
+
 	int* randCount = calloc(1, sizeof(int));
 	int* countY = calloc(1, sizeof(int));
 
@@ -547,7 +564,7 @@ int verify(a a, int e, z z) {
 #endif
 			return 1;
 		}
-
+		
 		if(mpc_ADD_verify(w[i],temp,temp, z.ve, z.ve1, randomness, randCount, countY) == 1) {
 #if VERBOSE
 			printf("Failing at %d, iteration %d", __LINE__, i);
@@ -597,6 +614,9 @@ int verify(a a, int e, z z) {
 	}
 	//printf("CountY: %d\n", countY);
 	
+	deltaV = clock() - beginV;
+	(*totalV) += deltaV;
+
 	return 0;
 }
 
