@@ -24,14 +24,14 @@ full:
 
 test:
 	clear
-	gcc -w $(CFLAGS) $(CONTROL_FILES) control/ZKBoo.c
-	./a.out
-	gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
-	./a.out
+	#gcc -w $(CFLAGS) $(CONTROL_FILES) control/ZKBoo.c
+	#./a.out
+	#gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
+	#./a.out
 	gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_fast.c
 	./a.out
-	gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_verify_fast.c
-	./a.out
+	#gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_verify_fast.c
+	#./a.out
 
 SHA256:
 	clear

@@ -251,9 +251,6 @@ int main(void) {
 		
 		#pragma omp parallel for
 		for(int i = 0; i<NUM_ROUNDS; i++) {
-			//printf("-*- round %d -*-\n",i );
-
-			//printf("\ne[%d] = %d\n",i,es[i]);
 
 			int verifyResult = round_verify(as[i], es[i], zs[i], &totalH, &totalV);
 

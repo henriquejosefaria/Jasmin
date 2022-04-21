@@ -1,0 +1,194 @@
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} % Allows you to insert figures
+\usepackage{amsmath} % Allows you to do equations
+\usepackage{fancyhdr} % Formats the header
+\usepackage{geometry} % Formats the paper size, orientation, and margins
+\usepackage{euler}
+\usepackage{amsfonts} 
+\usepackage{tikz}
+\usepackage{placeins}
+\usepackage{array}
+\usepackage{witharrows}
+\usepackage{algorithmicx}
+\usepackage{listings}
+\usepackage{multirow}
+\usetikzlibrary{fit, arrows}
+\linespread{1.25} % about 1.5 spacing in Word
+\setlength{\parindent}{0pt} % no paragraph indents
+\setlength{\parskip}{1em} % paragraphs separated by one line
+\usepackage[style=authoryear-ibid,backend=biber,maxbibnames=99,maxcitenames=2,uniquelist=false,isbn=false,url=true,eprint=false,doi=true,giveninits=true,uniquename=init]{biblatex} % Allows you to do citations - does Harvard style and compatible with Zotero
+\addbibresource{local.bib}
+\urlstyle{same} % makes a nicer URL and DOI font 
+\AtEveryBibitem{
+    \clearfield{urlyear}
+    \clearfield{urlmonth}
+} % removes access date
+\AtEveryBibitem{\clearfield{month}} % removes months in bibliography
+\AtEveryCitekey{\clearfield{month}} % removes months in citations
+\renewbibmacro{in:}{} % Removes the "In" before journal names
+
+\usepackage{tabstackengine,amssymb}
+\TABstackMath
+\stackText
+\newcommand\ldsar{\,\scalebox{1.4}{%
+  \raisebox{-3pt}{\rotatebox[origin=bottom]{-90}{$\curvearrowright$}}%
+}\,}
+\setstackgap{L}{1.2\baselineskip}
+
+\renewbibmacro*{editorstrg}{%from biblatex.def
+  \printtext[editortype]{%
+    \iffieldundef{editortype}
+      {\ifboolexpr{
+         test {\ifnumgreater{\value{editor}}{1}}
+         or
+         test {\ifandothers{editor}}
+       }
+         {\bibcpstring{editors}}
+         {\bibcpstring{editor}}}
+      {\ifbibxstring{\thefield{editortype}}
+         {\ifboolexpr{
+            test {\ifnumgreater{\value{editor}}{1}}
+            or
+            test {\ifandothers{editor}}
+          }
+            {\bibcpstring{\thefield{editortype}s}}%changed
+            {\bibcpstring{\thefield{editortype}}}}%changed
+         {\thefield{editortype}}}}}
+
+\renewbibmacro*{byeditor+others}{%from biblatex.def
+  \ifnameundef{editor}
+    {}
+    {\printnames[byeditor]{editor}%
+     \addspace%added
+     \mkbibparens{\usebibmacro{editorstrg}}%added
+     \clearname{editor}%
+     \newunit}%
+  \usebibmacro{byeditorx}%
+  \usebibmacro{bytranslator+others}}
+  % The commands above from lines 20-49 change the way editors are displayed in books
+\AtEveryBibitem{%
+  \clearlist{language}%
+} % removes language from bibliography
+\citetrackerfalse 
+% Removes ibids (ibidems)
+\DeclareNameAlias{sortname}{family-given} % Ensures the names of the authors after the first author are in the correct order in the bibliography
+\renewcommand*{\revsdnamepunct}{} % Corrects punctuation for authors with just a first initial
+\addbibresource{Example.bib} % Tells LaTeX where the citations are coming from. This is imported from Zotero
+\usepackage[format=plain,
+            font=it]{caption} % Italicizes figure captions
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\renewcommand*{\nameyeardelim}{\addcomma\space} % Adds comma in in-text citations
+\renewcommand{\headrulewidth}{0pt}
+\geometry{letterpaper, portrait, margin=1in}
+\setlength{\headheight}{14.49998pt}
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+\newcommand*\ShiftRight{\gg}
+\newcommand\titleofdoc{ZKboo} %%%%% Put your document title in this argument
+\newcommand\GroupName{Henrique José Carvalho Faria} %%%%% Put your group name here. If you are the only member of the group, just put your name
+
+
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}[thm]{Corollary}
+
+\begin{document}
+\begin{titlepage}
+   \begin{center}
+        \vspace*{4cm} % Adjust spacings to ensure the title page is generally filled with text
+
+        \Huge{\titleofdoc} 
+
+        \vspace{0.5cm}
+        %\LARGE{optional subtitle below}
+            
+        \vspace{3 cm}
+        \Large{\GroupName}
+       
+        \vspace{0.25cm}
+        %\large{Member Name 1, Member Name 2, Member Name 3, Member Name 4}
+       
+        \vspace{3 cm}
+        \Large{03 21, 2022}
+        
+
+       \vfill
+    \end{center}
+\end{titlepage}
+
+\setcounter{page}{2}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\GroupName; \titleofdoc}
+
+\section*{Performance Report} % If you want numbered sections, remove the star after \section
+
+
+\subsection*{Results}
+
+The first jasmin implementation of ZKBoo started with a performance deficit of 50 times the original C version. The following results and description explain the modifications undertaken during the process of increasing the jasmin performance beyond the current C version.
+
+
+  The most important modificiation conssisted of replacing the used arrays arrangement. In the first version the arrays were divided between players, and inside each player's part into rounds. In the new version the arrays were divided by rounds and only then by player. 
+
+
+
+  In function commit the array $w$ was filled by round instead of by player (Switched the while loops).
+  \par The resulting array went from:
+
+  \par $P_1(0-80)$ $P_2(80-160)$ $P_3(160-240) \Rightarrow R_1(0-3)$ $R_2(3-6)$ $...$ $R_{136}(237-240)$
+
+  \par Modified the mpc\_ADD() function on the type of the variable i from u64 to inline int allowing the change on bit shifts in the get\_bit/set\_bit functions. Stopped using a while loop and started using shift directly.
+
+  From:
+
+  \begin{lstlisting}
+  n = i;
+  while(n > 0) {
+      x = x >> 1;
+      n = n - 1;
+  }
+  \end{lstlisting}
+
+  \par To:
+  \begin{lstlisting}
+  x = x >> i;
+  \end{lstlisting}
+
+  In function prove() the variables were accessed using u64 instead of u8.
+
+  Both jasmin functions H() and H3() share several functions. Regarding the function that updates the data buffer using a 8-bit value at a time, it was split into two: one to update the buffer using 32-bit values at a time and another to update the buffer using 64-bit values at a time.
+
+
+
+
+
+  \FloatBarrier
+
+  \begin{center}
+    \begin{table}[!htb]
+      \begin{tabular}{|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|P{1.1cm}|}%{|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      \multirow{3}{*}{Phase} & \multicolumn{10}{c|}{Encrypt}\\% & \multicolumn{9}{c}{Verify}\\
+      \cline{2-11}
+       & \multicolumn{2}{c|}{Shares\_xor} & \multicolumn{2}{c|}{Commit} & \multicolumn{2}{c|}{H} & \multicolumn{2}{c|}{H3} & \multicolumn{2}{c|}{Prove}\\
+      \cline{2-11}
+      & C & J & C & J & C & J & C & J & C & J\\ 
+      \hline
+      1 & 12 & 3 & 57572 & 686848 & 2217 & 13584 & 89 & 563 & 85 & 300 \\
+      \hline
+      6 & 18 & 4 & 60781 & 51829  & 2051 & 11137 & 100 & 464 & 87 & 85 \\
+      \hline  
+      \end{tabular}
+    \caption{Encrypt performance enhancement.}
+    \end{table}
+  \end{center}
+  \FloatBarrier
+
+\pagebreak
+
+\printbibliography % If something looks strange in the bibliography, more often than not, you can modify the parameter in the .bib to fix the problem
+\end{document}

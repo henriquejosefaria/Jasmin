@@ -1,20 +1,11 @@
-result_1 => result_2
+result_1 => result_3
 
 modificar acesso ás variáveis da função prove() de u8 para u64 e u32.
-
-
-result_2 => result_3
-
-desdobrar função sha_update() em sha_update() e sha_update2() de u8 para u64 e u32 respetivamente.
-
-
--------------------------------------------------------------------------------------
-A partir deste passo comecei a compilar apenas até ao que alterei!!
 
 result_3 => result_4
 
 last store in the players' views and a.yps were copyed with u64 and u32 instead of u8;
-preencher o array chunks usando u64 e  do array W a partir do chunks com u32 (devido á necessidade de usar o #BSWAP())
+preencher o array chunks usando u64 e o array W a partir do chunks com u32 (devido á necessidade de usar o #BSWAP())
 
 Troca dos whiles sobre o array W: 
 while(j=16;j<80;j++){while(i=0;i<3;i++){}} => while(i=0;i<3;i++){while(j=16;j<80;j++){}}
@@ -49,6 +40,11 @@ Modified mpc_ADD (main factor for delay) shifted u64 to get/set bit with a while
 	passou a:
 
 	x = x >> i;     // i é um inline int
+
+
+
+desdobrar função sha_update() em sha_update() e sha_update2() de u8 para u64 e u32 respetivamente.
+
 
 Modificação das funções de hash! - absorção de u32 e u64  em vez de u8 para ctx_data!
 

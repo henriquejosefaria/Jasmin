@@ -301,7 +301,7 @@ int main(void) {
 		}
 
 		beginH3 = clock();
-		H3((uint64_t *)&finalHash[0], (uint64_t *)&as[0], (uint64_t *)es);
+		
 		deltaH3 = clock() - beginH3;
 		totalH3 += deltaH3;
 
@@ -318,6 +318,8 @@ int main(void) {
 	}
 
 	printf("\n\nAverage Total Time: \n\n - Shares_xor(): %ju\n - commit():     %ju\n  - H():         %ju\n  - H3():        %ju\n  - prove():     %ju\n\n", deltaS, totalC/totalZRounds, totalH/totalZRounds, totalH3/totalZRounds, totalZ/totalZRounds);
+
+	printf("\n\nAverage Total Time: \n\n - Shares_xor(): %ju\n - commit():     %ju\n  - H():         %ju\n  - H3():        %ju\n  - prove():     %ju\n\n", deltaS, (totalC/CLOCKS_PER_SEC)/totalZRounds, (totalH/CLOCKS_PER_SEC)/totalZRounds, (totalH3/CLOCKS_PER_SEC)/totalZRounds, (totalZ/CLOCKS_PER_SEC)/totalZRounds);
 
 
 	printf("Total Time: %ju\n\n", deltaS + (totalC + totalH + totalH3 + totalZ)/totalZRounds);

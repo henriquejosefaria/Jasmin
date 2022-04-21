@@ -59,9 +59,9 @@ fn ROTRIGHT_2(reg u32 a) -> stack u32 {
     a >>= 2;
     a_aux <<= 30;
 
-    a |= a_aux;
+    a_aux |= a;
 
-    return a;
+    return a_aux;
 }
 
 fn ROTRIGHT_13(reg u32 a) -> stack u32 {
@@ -73,9 +73,9 @@ fn ROTRIGHT_13(reg u32 a) -> stack u32 {
     a >>= 13;
     a_aux <<= 19;
 
-    a |= a_aux;
+    a_aux |= a;
 
-    return a;
+    return a_aux;
 }
 
 fn ROTRIGHT_22(reg u32 a) -> stack u32 {
@@ -87,9 +87,9 @@ fn ROTRIGHT_22(reg u32 a) -> stack u32 {
     a >>= 22;
     a_aux <<= 10;
 
-    a |= a_aux;
+    a_aux |= a;
 
-    return a;
+    return a_aux;
 }
 
 fn ROTRIGHT_6(reg u32 a) -> stack u32 {
@@ -101,9 +101,9 @@ fn ROTRIGHT_6(reg u32 a) -> stack u32 {
     a >>= 6;
     a_aux <<= 26;
 
-    a |= a_aux;
+    a_aux |= a;
 
-    return a;
+    return a_aux;
 }
 
 fn ROTRIGHT_11(reg u32 a) -> stack u32 {
@@ -115,9 +115,9 @@ fn ROTRIGHT_11(reg u32 a) -> stack u32 {
     a >>= 11;
     a_aux <<= 21;
 
-    a |= a_aux;
+    a_aux |= a;
 
-    return a;
+    return a_aux;
 }
 
 fn ROTRIGHT_25(reg u32 a) -> stack u32 {
@@ -129,59 +129,48 @@ fn ROTRIGHT_25(reg u32 a) -> stack u32 {
     a >>= 25;
     a_aux <<= 7;
 
-    a |= a_aux;
+    a_aux |= a;
 
-    return a;
+    return a_aux;
 }
 
 
 inline
-fn EP0(stack u32 x) -> reg u32{
+fn EP0(reg u32 x) -> reg u32{
 
-    reg u32 res, res1, res2;
-    stack u32 r,r1,r2;
+    reg u32 res, r;
 
-
-    res = x;
-    res = ROTRIGHT_2(res);
+    r = x;
+    r = ROTRIGHT_2(r);
     r = res;
 
-    res1 = x;
-    res1 = ROTRIGHT_13(res1);
-    r1 = res1;
+    res = x;
+    res = ROTRIGHT_13(res);
+    r ^= res;
 
+    res = x;
+    res = ROTRIGHT_22(res);
+    r ^= res;
 
-    res2 = x;
-    res2 = ROTRIGHT_22(res2);
-    r2 = res2;
-    
-    res = r;
-    res1 = r1;
-    res ^= res1;
-    res2 = r2;
-    res ^= res2;
-
-    return res;
+    return r;
 }
 
 inline
 fn EP1(stack u32 x) -> reg u32{
 
-    reg u32 res, res1, res2;
+    reg u32 r, res;
+
+    r = x;
+    r = ROTRIGHT_6(r);
 
     res = x;
-    res = ROTRIGHT_6(res);
-
-    res1 = x;
-    res1 = ROTRIGHT_11(res1);
+    res = ROTRIGHT_11(res);
+    r ^= res;
     
-    res2 = x;
-    res2 = ROTRIGHT_25(res2);
+    res = ROTRIGHT_25(res);
+    r ^= res;
 
-    res ^= res1;
-    res ^= res2;
-
-    return res;
+    return r;
 } 
 
 
@@ -272,7 +261,7 @@ fn SIG1(reg u32 x) -> reg u32{
     x1 = ROTRIGHT_19(x1);
 
     x2 = x;
-    x2 = (x2 >> 10); 
+    x2 >>= 10; 
 
     x0 ^= x1;
     x0 ^= x2;
@@ -300,20 +289,17 @@ fn CH(stack u32 x, stack u32 y, stack u32 z) -> reg u32{
 inline
 fn MAJ(stack u32 x, stack u32 y, stack u32 z) -> reg u32{
 
-    reg u32 t0, t1, tx, ty, tz;
+    reg u32 t0, t1;
 
     t0 = x;
-    ty = y;
-    t0 = t0 & ty;
+    t0 &= y;
 
     t1 = x;
-    tz = z;
-    t1 &= tz;
+    t1 &= z;
     t0 ^= t1;
 
     t1 = y;
-    tz = z;
-    t1 &= tz;
+    t1 &= z;
     t0 ^= t1;
 
     return t0;
@@ -396,23 +382,19 @@ fn dbl_int_add(stack u32[2] ctx_bitlen, reg u64 c) -> stack u32[2] {
     
     a = ctx_bitlen[0];
     
-    b = 0xffffffff;
     b -= c;
 
-    if(a > b){
-        a = ctx_bitlen[1];
-        a += 1; 
-        ctx_bitlen[1] = a;
+    if(a > 0xffffffff){
+        ctx_bitlen[1] += 1;
     } else {
-        a += c;
-        ctx_bitlen[0] = a;
+        ctx_bitlen[0] += c;
     }
 
     return ctx_bitlen;
 }
 
 inline
-fn compute_t1(stack u32 e, stack u32 f, stack u32 g, stack u32 h, stack u32[64] k, stack u32[64] m, reg u64 i) -> reg u32{
+fn compute_t1(stack u32 e, stack u32 f, stack u32 g, stack u32 h, reg u32 k, reg u32 m) -> reg u32{
 
     reg u32 t, t1;
 
@@ -424,11 +406,9 @@ fn compute_t1(stack u32 e, stack u32 f, stack u32 g, stack u32 h, stack u32[64] 
     t = CH(e,f,g);
     t1 += t;
 
-    t = k[(int)i];
-    t1 += t;
+    t1 += k;
     
-    t = m[(int)i];
-    t1 += t;
+    t1 += m;
 
     return t1;
 }
@@ -436,12 +416,15 @@ fn compute_t1(stack u32 e, stack u32 f, stack u32 g, stack u32 h, stack u32[64] 
 inline
 fn compute_t2(stack u32 a, stack u32 b, stack u32 c) -> reg u32{
     
-    reg u32 t, t2;
+    reg u32 ar, br, cr, t, t2;
 
+    ar = a;
+    br = b;
+    cr = c;
 
-    t2 = EP0(a);
+    t2 = EP0(ar);
     
-    t = MAJ(a, b, c); 
+    t = MAJ(ar, br, cr); 
     t2 += t;
     
 
@@ -458,7 +441,7 @@ fn sha256_transform(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u32[64]
 
     reg u32 sig0, sig1;
 
-    reg u64 i, j,z;
+    reg u64 i, j;
 
     inline int idx;
 
@@ -478,7 +461,6 @@ fn sha256_transform(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u32[64]
     
 
     /* IGUAL */
-    z = 0;
     while(i < 64){
 
         j = i;
@@ -524,12 +506,16 @@ fn sha256_transform(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u32[64]
     temp = ctx_state[7];
     h = temp;
 
+
+    // 12000 => 4000
     
     i = 0;
-    j = 0;
     while(i < 64){
 
-        t1 = compute_t1(e, f, g, h, k, m, i);
+        t1 = k[(int)i];
+        t2 = m[(int)i];
+
+        t1 = compute_t1(e, f, g, h, t1, t2);
         t2 = compute_t2(a,b,c);
         
         t0 = g;
@@ -555,13 +541,12 @@ fn sha256_transform(stack u32[8] ctx_state, stack u8[64] ctx_data, stack u32[64]
         t0 = a;
         b = t0;
 
-        t0 = t1;
-        t0 += t2;
+        t1 += t2;
         a = t0;
 
-        j += 4;
         i += 1;
     }
+    
 
     temp = ctx_state[0];
     temp += a;
@@ -1013,12 +998,6 @@ fn H3 (reg u64 finalHash, reg u64 as, reg u64 es) {
     ctx_state[5] = 0x9b05688c;
     ctx_state[6] = 0x1f83d9ab;
     ctx_state[7] = 0x5be0cd19;
-
-    i = 0;
-    while(i<64){
-        ctx_data[(int)i] = 0;
-        i += 1;
-    }
 
     k = initializeK(k);
 
