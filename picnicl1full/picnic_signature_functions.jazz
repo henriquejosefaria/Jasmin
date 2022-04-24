@@ -1,0 +1,465 @@
+
+export
+fn xor_three(reg u64 player2, reg u64 privateKey, reg u64 player0, reg u64 player1, reg u64 bytes) {
+
+	reg u64 i, j;
+	reg u8 length;
+	reg u32 t32;
+	reg u8 t;
+
+	length = (u8)[bytes + 0];
+	
+	i = 0;
+	j = -4;
+	while(i < length){
+		j += 4;
+		t32 = (u32)[privateKey + (int)j];
+		t32 ^= (u32)[player0 + (int)j];
+		t32 ^= (u32)[player1 + (int)j];
+
+		(u32)[player2 + (int)j] = t32;
+		i += 4;
+		
+	}
+	
+	while(j < length){
+		t = (u8)[privateKey + (int)j];
+		t ^= (u8)[player0 + (int)j];
+		t ^= (u8)[player1 + (int)j];
+
+		(u8)[player2 + (int)j] = t;
+		j += 1;
+	}
+}
+
+
+export
+fn xor_array(reg u64 out, reg u64 in1, reg u64 in2, reg u64 bytesLength) {
+
+	reg u64 i;
+	reg u32 t, length;
+
+	length = (u32)[bytesLength + 0];
+	length *= 4;
+
+	i = 0;
+	while(i < length){
+
+		t = (u32)[in1 + (int)i];
+		t ^= (u32)[in2 + (int)i];
+
+		(u32)[out + (int)i] = t;
+
+		i += 4;
+	}
+}
+
+
+export
+fn jazz_getBit(reg u64 array, reg u64 bitNumber, reg u64 out){
+
+	reg u64 byte, bit, i;
+	reg u8 chosenBit;
+	stack u64 out_s;
+
+
+	i = 8;
+	bit = (u64)[bitNumber + 0];
+	byte = bit;
+	out_s = out;
+	byte = byte / i;
+	out = out_s;
+
+	chosenBit = (u8)[array + (int)byte];
+
+	byte = bit;
+	byte = byte % i;
+	byte -= 7;
+
+	while(byte < 0){
+		chosenBit >>= 1;
+		byte += 1;
+	}
+
+	chosenBit &= 0x01;
+
+	(u8)[out + 0] = chosenBit;
+}
+
+export
+fn jazz_setBit(reg u64 array, reg u64 bitNumber, reg u64 val){
+
+	reg u64 byte, bit, i, aux;
+	reg u8 chosenBit, t;
+
+	stack u64 val_s;
+
+	byte = (u64)[bitNumber + 0];
+	byte = byte >> 3;
+	chosenBit = (u8)[array + (int)byte];
+
+	i = 7;
+	byte = (u64)[bitNumber + 0];
+	byte &= 7;
+	i -= byte; 
+	byte = i;
+
+
+	t = 1;
+	while(i > 0){
+		t <<= 1;
+		i -= 1;
+	}
+
+	t ^= 0xff;
+	chosenBit &= t;
+
+
+	t = (u8)[val + 0];
+
+	while(byte > 0){
+		t <<= 1;
+		byte -= 1;
+	} 
+
+	chosenBit |= t;
+
+	byte = (u64)[bitNumber + 0];
+	byte = byte >> 3;
+
+	(u8)[array + (int) byte] = chosenBit;
+
+}
+
+export
+fn jazz_setBit2(reg u64 array, reg u64 bitNumber, reg u64 val, reg u64 output){
+
+	reg u64 byte, bit, i, aux;
+	reg u8 chosenBit, t;
+
+	stack u64 val_s;
+
+	byte = (u64)[bitNumber + 0];
+	byte = byte >> 3;
+	chosenBit = (u8)[array + (int)byte];
+
+	i = 7;
+	byte = (u64)[bitNumber + 0];
+	byte &= 7;
+	i -= byte; 
+	byte = i;
+
+
+	t = 1;
+	while(i > 0){
+		t <<= 1;
+		i -= 1;
+	}
+
+	t ^= 0xff;
+	chosenBit &= t;
+
+	aux = (u64)[bitNumber + 0];
+	(u8)[output + (int)aux] = t;
+
+
+	t = (u8)[val + 0];
+
+	while(byte > 0){
+		t <<= 1;
+		byte -= 1;
+	} 
+
+	chosenBit |= t;
+
+	byte = (u64)[bitNumber + 0];
+	byte = byte >> 3;
+
+	(u8)[array + (int) byte] = chosenBit;
+
+}
+
+
+
+export
+fn getBitFromWordArray(reg u64 array, reg u64 bitNumber, reg u64 out){
+
+	reg u64 byte, bit, i;
+	reg u8 chosenBit;
+	stack u64 out_s;
+
+
+	i = 8;
+	bit = (u64)[bitNumber + 0];
+	byte = bit;
+	out_s = out;
+	byte = byte / i;
+	out = out_s;
+
+	chosenBit = (u8)[array + (int)byte];
+
+	byte = bit;
+	byte = byte % i;
+	byte -= 7;
+
+	while(byte < 0){
+		chosenBit >>= 1;
+		byte += 1;
+	}
+
+	chosenBit &= 0x01;
+
+	(u8)[out + 0] = chosenBit;
+}
+
+
+inline
+fn jazz_getBitFromWordArray(reg u64 array, reg u64 bitNumber) -> reg u8 {
+
+	reg u64 byte, i;
+	reg u8 chosenBit;
+	stack u64 out_s;
+
+	byte = bitNumber;
+	byte >>= 3;
+
+	chosenBit = (u8)[array + (int)byte];
+
+	
+	byte = bitNumber;
+	byte &= 7;
+	i = 7;
+	i -= byte;
+
+	while(i > 0){
+		chosenBit >>= 1;
+		i -= 1;
+	}
+
+	chosenBit &= 0x01;
+
+	return chosenBit;
+}
+
+
+inline
+fn jazz_my_setBit(stack u8[64] array, reg u64 bitNumber, reg u32 val) -> stack u8[64] {
+
+	reg u64 byte, bit, i;
+	reg u8 chosenBit, t;
+
+	byte = bitNumber;
+	byte = byte >> 3;
+	chosenBit = array[(int)byte];
+
+	i = 7;
+	byte = bitNumber;
+	byte &= 7;
+	i -= byte; 
+	byte = i;
+
+	t = 1;
+	while(i > 0){
+		t <<= 1;
+		i -= 1;
+	}
+
+	t ^= 0xff;
+	chosenBit &= t;
+
+
+	if(val == 0x00000001){
+		t = 1;
+	} else{
+		t = 0;
+	}
+
+	while(byte > 0){
+		t <<= 1;
+		byte -= 1;
+	}
+
+	chosenBit |= t;
+
+	byte = bitNumber;
+	byte >>= 3;
+	array[(int)byte] = chosenBit;
+
+	return array;
+
+}
+
+inline
+fn parity32(reg u32 x) -> reg u32{
+
+	reg u32 y, y1;
+
+	//y = x ^ (x >> 1);
+
+	y = x;
+	y1 = x;
+	y1 >>= 1;
+	y ^= y1;
+
+
+	// y ^= (y >> 2);
+	y1 = y;
+	y1 >>= 2;
+	y ^= y1;
+
+
+	//y ^= (y >> 4);
+	y1 = y;
+	y1 >>= 4;
+	y ^= y1;
+
+	// y ^= (y >> 8);
+	y1 = y;
+	y1 >>= 8;
+	y ^= y1;
+
+	// y ^= (y >> 16);
+	y1 = y;
+	y1 >>= 16;
+	y ^= y1;
+
+	return y;
+
+}
+
+// WORD_SIZE_BITS = 32
+
+export 
+fn jazz_matrix_mul(reg u64 output, reg u64 state, reg u64 matrix, reg u64 stateSizeBits_s, reg u64 stateSizeWords_s, reg u64 wholeWords_s){
+
+	reg u64 i, j, index, aux;
+	reg u64 stateSizeBits, stateSizeWords, wholeWords;
+	reg u32 prod, prod1, prod2, tmp;
+
+	reg u8 bit, bit_aux;
+
+	stack u8[64] temp;
+	stack u8[4] tmp_aux;
+	stack u32[1] tmp_aux2;
+
+	stateSizeWords = [stateSizeWords_s + 0];
+	stateSizeBits = [stateSizeBits_s + 0];
+	wholeWords = [wholeWords_s + 0];
+	wholeWords *= 4;                           // is used as u32
+
+	aux = 0;
+	i=0;
+	while(i < stateSizeBits){
+
+		prod = 0;
+		j = 0;
+		while(j < wholeWords){
+
+			// index = i * params->stateSizeWords + j;
+
+			index = i;			
+			index *= stateSizeWords;
+			index *= 4;
+			index += j;
+			
+			prod1 = (u32)[state + (int)j];
+			prod2 = (u32)[matrix + (int)index];
+			prod1 &= prod2;
+			prod ^= prod1;
+
+			j += 4;
+		}
+		
+		
+		j = [wholeWords_s + 0];
+		j *= 32;
+		while(j < stateSizeBits){
+			index = i;
+			index *= stateSizeWords;
+			index *= 32;
+			index += j;
+			
+			bit = jazz_getBitFromWordArray(state, j);
+			bit_aux = jazz_getBitFromWordArray(state, index);
+			bit &= bit_aux;
+
+			tmp_aux2[u8 3] = bit; 
+			prod ^= tmp_aux2[0];
+
+			j += 1;
+		}
+		
+		tmp = parity32(prod);
+		
+		// this operation is out of the function parity32() cause it caused the function
+		// to have weird values; Fixed when the operation was placed outside the function!! 
+		tmp &= 1;
+		temp = jazz_my_setBit(temp, i, tmp);	
+
+		aux += 4;
+		i += 1;
+	}
+	
+	
+	i = 0;
+	j = 0;
+	while(i < wholeWords){
+		tmp = temp[u32 (int)i];
+		(u32)[output + (int)j] = tmp;
+		i += 1;
+		j += 4;
+	}
+	
+	
+	
+}
+
+
+/*
+
+	for (uint32_t i = 0; i < params->stateSizeBits; i++) {
+        prod = 0;
+        for (uint32_t j = 0; j < wholeWords; j++) {
+            size_t index = i * params->stateSizeWords + j;
+            prod ^= (state[j] & matrix[index]);
+        }
+
+        for(uint32_t j = wholeWords*WORD_SIZE_BITS; j < params->stateSizeBits; j++) {
+            size_t index = i * params->stateSizeWords*WORD_SIZE_BITS + j;
+            uint8_t bit, bit1, bit2;
+            bitNumber = (uint64_t)j;
+            getBitFromWordArray((uint64_t*) state, &bitNumber, (uint64_t*) &bit1);
+            bitNumber = (uint64_t)index;
+            getBitFromWordArray((uint64_t*)matrix, &bitNumber, (uint64_t*) &bit2);
+            bit = bit1 & bit2;
+            prod ^= bit;
+        }
+
+        setBit((uint8_t*)temp, i, parity32(prod));
+    }
+    memcpy((uint8_t*)output, (uint8_t*)temp, params->stateSizeWords * sizeof(uint32_t));
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

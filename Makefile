@@ -1,76 +1,29 @@
 CFLAGS = -I/usr/local/opt/openssl@1.1/include -L/usr/local/opt/openssl@1.1/lib -lcrypto -L/usr/local/Cellar/libomp -lomp
 
-COMPILED = compiled_Jasmin
+COMPILED = compiled_jasmin
 
 JASMIN_ROOT = ./../jasmin/compiler/jasminc
 
-CONTROL_FILES = control/shared.h
-ASSEMBLEY_FILES = ZKBoo_encrypt.s ZKBoo_decrypt.s 
-FAST_ASSEMBLEY = ZKBoo_encrypt_functions.s ZKBoo_verify_functions.s
-ASSEMBLEY_DEBUG_FILES = SHA256.s
-
-
+CONTROL_DIR = control
+ASSEMBLEY_FILES = picnic_signature_functions.s
+PICNIC_SIGNATURE_FUNCTIONS = picnic_signature_functions
+TEST_DIR = picnicl1full
 
 all: full
 
 
 full:
 	clear
-	$(JASMIN_ROOT) -o $(COMPILED)/ZKBoo_encrypt.s  ZKBoo_encrypt.jazz
-	$(JASMIN_ROOT) -o $(COMPILED)/ZKBoo_decrypt.s  ZKBoo_decrypt.jazz
-	cp $(COMPILED)/ZKBoo_encrypt.s .
-	cp $(COMPILED)/ZKBoo_decrypt.s .
-	gcc $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
-	clear
-	time ./a.out
+	$(JASMIN_ROOT) -o $(TEST_DIR)/$(COMPILED)/$(PICNIC_SIGNATURE_FUNCTIONS).s $(TEST_DIR)/$(PICNIC_SIGNATURE_FUNCTIONS).jazz
+	cd $(TEST_DIR) && make example
+	./$(TEST_DIR)/example
+	
 
 
 test:
 	clear
-	#gcc -w $(CFLAGS) $(CONTROL_FILES) control/ZKBoo.c
-	#./a.out
-	#gcc -w $(CFLAGS) $(CONTROL_FILES) control/mpc_sha1_verify.c
-	#./a.out
-	gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_fast.c
-	./a.out
-	#gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_verify_fast.c
-	#./a.out
+	#rm -r $(COMPILED)
+	$(JASMIN_ROOT) -o $(TEST_DIR)/$(COMPILED)/$(PICNIC_SIGNATURE_FUNCTIONS).s $(TEST_DIR)/$(PICNIC_SIGNATURE_FUNCTIONS).jazz
+	cd $(TEST_DIR) && make example
+	./$(TEST_DIR)/example
 
-SHA256:
-	clear
-	gcc -w $(CFLAGS) $(CONTROL_FILES) control/SHA256_C.c
-	./a.out
-	gcc -w $(CFLAGS) $(FAST_ASSEMBLEY) ZKBoo_fast.c
-	./a.out
-
-
-H:
-	clear
-	$(JASMIN_ROOT) -o SHA256.s  control/SHA256.jazz
-
-
-
-c:
-	clear
-	gcc $(CFLAGS) $(ASSEMBLEY_FILES) ZKBoo.c
-	./a.out
-
-
-encrypt_functions:
-	clear
-	$(JASMIN_ROOT) -o ZKBoo_encrypt_functions.s  ZKBoo_encrypt_functions.jazz
-
-
-verify_functions:
-	clear
-	$(JASMIN_ROOT) -o ZKBoo_verify_functions.s  ZKBoo_verify_functions.jazz
-
-
-encrypt:
-	clear
-	$(JASMIN_ROOT) -o ZKBoo_encrypt.s  ZKBoo_encrypt.jazz
-
-
-decrypt:
-	clear
-	$(JASMIN_ROOT) -o ZKBoo_decrypt.s  ZKBoo_decrypt.jazz
