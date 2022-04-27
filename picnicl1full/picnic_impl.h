@@ -95,11 +95,11 @@ uint8_t getBit(const uint8_t* array, uint32_t bitNumber);
 //void getBitFromWordArray(const uint64_t* array, uint64_t* bitNumber, uint64_t* aux);
 void setBit(uint8_t* bytes, uint32_t bitNumber, uint8_t val);
 
-void setBitInWordArray(uint32_t* array, uint64_t bitNumber, uint64_t val);
+void setBitInWordArray(uint64_t* array, uint64_t bitNumber, uint64_t val);
 uint8_t parity(uint32_t* data, size_t len);
 uint8_t parityBitstring(uint32_t* input, size_t bitlength);
 //void xor_array(uint32_t* out, const uint32_t * in1, const uint32_t * in2, uint32_t length);
-void matrix_mul(uint32_t* output, const uint32_t* state, const uint32_t* matrix, const paramset_t* params);
+void matrix_mul(uint64_t* output, const uint64_t* state, const uint64_t* matrix, uint64_t stateSizeBits, uint64_t stateSizeWords, uint64_t wholeWords);
 int arePaddingBitsZero(uint8_t* data, size_t bitLength);
 void zeroTrailingBits(uint8_t* data, size_t bitLength);
 
