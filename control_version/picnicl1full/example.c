@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <inttypes.h>
+#include <time.h>
 
 #define MSG_LEN 500
 
@@ -26,6 +27,7 @@ int picnicExample(picnic_params_t parameters)
 
     fprintf(stdout, "Generating key... ");
     fflush(stdout);
+
     int ret  = picnic_keygen(parameters, &pk, &sk);
 
     if (ret != 0) {
@@ -135,8 +137,18 @@ int main(int argc, char** argv)
         picnicExample(atoi(argv[1]));
         return 0;
     }
+    clock_t a, b;
 
-    for (picnic_params_t params = 1; params < PARAMETER_SET_MAX_INDEX; params++) {
+    int total;
+
+    //for (picnic_params_t params = 1; params < PARAMETER_SET_MAX_INDEX; params++) {
+    for (picnic_params_t params = 1; params < 7; params++) {
+        total = 0;
+        a = clock();
         picnicExample(params);
+        b = clock();
+        total = b - a;
+        printf("\n\n\nClock Ticks (Version %d): %d\n\n\n", params, total);
+        exit(1);
     }
 }

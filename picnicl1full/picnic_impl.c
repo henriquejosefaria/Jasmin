@@ -30,6 +30,9 @@
 #include "picnic_types.h"
 #include "hash.h"
 
+#include <time.h>
+
+
 #define MAX(a, b) ((a) > (b)) ? (a) : (b)
 
 #define VIEW_OUTPUTS(i, j) viewOutputs[(i) * 3 + (j)]
@@ -56,6 +59,7 @@ extern void jazz_substitution(uint64_t* state, uint64_t* boxes);
 extern void jazz_mpc_AND(uint64_t* in1, uint64_t* in2, uint64_t* out, uint64_t* r);
 extern void jazz_and_getBit(uint64_t* randTape0, uint64_t* randTape1, uint64_t* randTape2, uint64_t* randPos, uint64_t* r);
 extern void jazz_and_setBit(uint64_t* view0, uint64_t* view1, uint64_t* view2, uint64_t* randPos, uint64_t* r);
+
 extern void jazz_mpc_getBit(uint64_t* array0, uint64_t* array1, uint64_t* array2, uint64_t* bitNumber, uint64_t* out);
 extern void jazz_mpc_setBit_precompute(uint64_t* in0, uint64_t* in1, uint64_t* out);
 extern void jazz_mpc_setBit(uint64_t* array0, uint64_t* array1, uint64_t* array2, uint64_t* bitNumber, uint64_t* out);
@@ -63,8 +67,12 @@ extern void jazz_mpc_setBit(uint64_t* array0, uint64_t* array1, uint64_t* array2
 
 /* MPC Low MC verify functions */
 
+extern void jazz_mpc_AND_verify(uint64_t* in1, uint64_t* in2, uint64_t* out, uint64_t* r);
 extern void jazz_mpc_getBit_verify(uint64_t* array0, uint64_t* array1, uint64_t* bitNumber, uint64_t* out);
 extern void jazz_and_getBit_verify(uint64_t* randTape0, uint64_t* randTape1, uint64_t* randPos, uint64_t* r);
+
+extern void jazz_mpc_setBit_precompute_verify(uint64_t* in0, uint64_t* in1, uint64_t* out);
+extern void jazz_mpc_setBit_verify(uint64_t* array0, uint64_t* array1, uint64_t* bitNumber, uint64_t* out);
 
 
 
@@ -190,7 +198,7 @@ static uint8_t parity32(uint32_t x)
     y ^= (y >> 16);
     return y & 1;
 }
-*/
+*/ 
 
 void matrix_mul(
     uint64_t* output,
@@ -201,11 +209,11 @@ void matrix_mul(
     uint64_t wholeWords)
 {
     
-    uint64_t* output2 = malloc(sizeof(uint32_t) * stateSizeBits);
+    //uint64_t* output2 = malloc(stateSizeWords * sizeof(uint32_t));
     
-    jazz_matrix_mul((uint64_t*) output2,(uint64_t*) state,(uint64_t*) matrix, &stateSizeBits, &stateSizeWords, &wholeWords);
-     
-    memcpy((uint8_t*)output, (uint8_t*)output2, stateSizeWords * sizeof(uint32_t));
+    jazz_matrix_mul((uint64_t*) output,(uint64_t*) state,(uint64_t*) matrix, &stateSizeBits, &stateSizeWords, &wholeWords);
+    
+    //memcpy((uint8_t*)output, (uint8_t*)output2, stateSizeWords * sizeof(uint32_t));
 }
 #endif
 
@@ -455,6 +463,7 @@ void prove(proof_t* proof, uint8_t challenge, seeds_t* seeds,
            view_t views[3], commitments_t* commitments, g_commitments_t* gs, paramset_t* params)
 {
     if (challenge == 0) {
+        //compact_seeds((uint64_t*) proof->seed1, (uint64_t*) proof->seed2, (uint64_t*) seeds->seed[0], (uint64_t*) seeds->seed[0], );
         memcpy(proof->seed1, seeds->seed[0], params->seedSizeBytes);
         memcpy(proof->seed2, seeds->seed[1], params->seedSizeBytes);
     }
@@ -481,23 +490,26 @@ void prove(proof_t* proof, uint8_t challenge, seeds_t* seeds,
         memcpy(proof->view3UnruhG, gs->G[(challenge + 2) % 3], view3UnruhLength);
     }
 }
-
+ 
 void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
                     randomTape_t* rand, view_t* view1, view_t* view2)
 {
     //uint8_t r[2] = { getBit(rand->tape[0], rand->pos), getBit(rand->tape[1], rand->pos) };
     
     uint8_t r[2];
-    uint64_t randPos = (uint64_t)rand->pos;
+    uint64_t bitNumber = (uint64_t)rand->pos;
     
-    jazz_and_getBit_verify((uint64_t*) rand->tape[0], (uint64_t*) rand->tape[1], &randPos, (uint64_t*) r);
-    
-    uint64_t bitNumber;
 
-    out[0] = (in1[0] & in2[1]) ^ (in1[1] & in2[0]) ^ (in1[0] & in2[0]) ^ r[0] ^ r[1];
+    //printf("\n\n getBit\n\n");
+    jazz_and_getBit_verify((uint64_t*) rand->tape[0], (uint64_t*) rand->tape[1], &bitNumber, (uint64_t*) r);
+
+    //printf("\n\n AND\n\n");
+    jazz_mpc_AND_verify((uint64_t*)in1, (uint64_t*) in2, (uint64_t*) out, (uint64_t*) r);
     
-    bitNumber = rand->pos;
+    //printf("\n\n setBit\n\n");
     jazz_setBit((uint64_t*)view1->communicatedBits, &bitNumber,(uint64_t*) out);
+
+    //printf("\n\n getBit\n\n");
     out[1] = getBit(view2->communicatedBits, rand->pos);
     
     (rand->pos)++;
@@ -507,51 +519,53 @@ void mpc_substitution_verify(uint32_t* state[2], randomTape_t* rand, view_t* vie
                              view_t* view2, paramset_t* params)
 {
 
-    uint64_t bitNumber, val;
-    uint8_t aux; 
+    uint64_t bitNumber;
+
     uint8_t total[6];
+
     uint8_t *a = total;
     uint8_t *b = &total[2];
     uint8_t *c = &total[4];
 
-    uint8_t ab[2];
-    uint8_t bc[2];
-    uint8_t ca[2];
+    uint8_t merged[6];
+    
+    uint8_t *bc = merged;
+    uint8_t *ca = &merged[2];
+    uint8_t *ab = &merged[4];
+
+    uint8_t out[6];
 
     for (uint32_t i = 0; i < params->numSboxes * 3; i += 3) {
 
+        //printf("\n\n%u/%u\n\n", i/3, params->numSboxes);
         bitNumber = (uint64_t) i;
         bitNumber += 2;
-
+        //printf("getBit verify");
+        //fflush(stdout);
         jazz_mpc_getBit_verify((uint64_t*) state[0], (uint64_t*) state[1], &bitNumber, (uint64_t*) total);
         
         
-
+        //printf("AND VERIFY\n");
+        //fflush(stdout);
         mpc_AND_verify(a, b, ab, rand, view1, view2);
         mpc_AND_verify(b, c, bc, rand, view1, view2);
         mpc_AND_verify(c, a, ca, rand, view1, view2);
 
-        for (uint8_t j = 0; j < 2; j++) {
-            bitNumber = (uint64_t) i;
-            bitNumber += 2;
-            aux = a[j] ^ (bc[j]);
-            val = (uint64_t) aux;
-            setBitInWordArray((uint64_t*)state[j], bitNumber, a[j] ^ (bc[j]));
-            bitNumber -= 1;
-            aux = a[j] ^ b[j] ^ (ca[j]);
-            val = (uint64_t) aux;
-            setBitInWordArray((uint64_t*)state[j], bitNumber, a[j] ^ b[j] ^ (ca[j]));
-            bitNumber -= 1;
-            aux = a[j] ^ b[j] ^ c[j] ^ (ab[j]);
-            val = (uint64_t) aux;
-            setBitInWordArray((uint64_t*)state[j], bitNumber, a[j] ^ b[j] ^ c[j] ^ (ab[j]));
-        }
+        //printf("SETBIT precompute\n");
+        //fflush(stdout);
+        jazz_mpc_setBit_precompute_verify((uint64_t*)total, (uint64_t*) merged, (uint64_t*) out);
+
+        //printf("setBit verify");
+        //fflush(stdout);
+        jazz_mpc_setBit_verify((uint64_t*) state[0], (uint64_t*) state[1], &bitNumber, (uint64_t*) out);
+        
     }
 }
 
 void mpc_matrix_mul(uint32_t* output[3], uint32_t* state[3], const uint32_t* matrix,
                     paramset_t* params, size_t players)
 {
+    (void) players;
     uint64_t stateSizeBits, stateSizeWords, wholeWords;
 
     stateSizeBits = (uint64_t)params->stateSizeBits;
@@ -559,8 +573,9 @@ void mpc_matrix_mul(uint32_t* output[3], uint32_t* state[3], const uint32_t* mat
     wholeWords = stateSizeBits/WORD_SIZE_BITS;
 
     for (uint32_t player = 0; player < players; player++) {
-        matrix_mul((uint64_t*)output[player], (uint64_t*)state[player], (uint64_t*)matrix, stateSizeBits, stateSizeWords, wholeWords);
+        jazz_matrix_mul((uint64_t*)output[player], (uint64_t*)state[player], (uint64_t*)matrix, &stateSizeBits, &stateSizeWords, &wholeWords);
     }
+    
 }
 
 void mpc_LowMC_verify(view_t* view1, view_t* view2,
@@ -581,20 +596,33 @@ void mpc_LowMC_verify(view_t* view1, view_t* view2,
 
     keyShares[0] = view1->inputShare;
     keyShares[1] = view2->inputShare;
-
+    
     mpc_matrix_mul(roundKey, keyShares, KMatrix(0, params), params, 2);
     mpc_xor(state, roundKey, params->stateSizeWords, 2);
 
+
     for (uint32_t r = 1; r <= params->numRounds; ++r) {
+        //printf("\n%u/%u\n",r, params->numRounds);
+        //printf("\nmatrix mul\n");
+        //fflush(stdout);
         mpc_matrix_mul(roundKey, keyShares, KMatrix(r, params), params, 2);
+        //printf("\nsubstitution verify\n");
+        //fflush(stdout);
         mpc_substitution_verify(state, tapes, view1, view2, params);
+        //printf("\nmatrix mul\n");
+        //fflush(stdout);
         mpc_matrix_mul(state, state, LMatrix(r - 1, params), params, 2);
+        //printf("\nxor constant\n");
+        //fflush(stdout);
         mpc_xor_constant_verify(state, RConstant(r - 1, params), params->stateSizeWords, challenge);
+        //printf("\nxor\n");
+        //fflush(stdout);
         mpc_xor(state, roundKey, params->stateSizeWords, 2);
     }
 
     memcpy(view1->outputShare, state[0], params->stateSizeBytes);
     memcpy(view2->outputShare, state[1], params->stateSizeBytes);
+
 }
 
 void verifyProof(const proof_t* proof, view_t* view1, view_t* view2,
@@ -755,8 +783,7 @@ int verify(signature_t* sig, const uint32_t* pubKey, const uint32_t* plaintext,
 void mpc_AND(uint8_t in1[3], uint8_t in2[3], uint8_t out[3], randomTape_t* rand,
              view_t views[3])
 {
-    //uint8_t r[3] = { getBit(rand->tape[0], rand->pos), getBit(rand->tape[1], rand->pos), getBit(rand->tape[2], rand->pos) };
-    
+
     uint8_t r[3];
     uint64_t randPos = (uint64_t)rand->pos;
     
@@ -765,8 +792,7 @@ void mpc_AND(uint8_t in1[3], uint8_t in2[3], uint8_t out[3], randomTape_t* rand,
     jazz_mpc_AND((uint64_t*)in1, (uint64_t*) in2, (uint64_t*) out, (uint64_t*) r);
 
     jazz_and_setBit((uint64_t*) views[0].communicatedBits, (uint64_t*) views[1].communicatedBits, (uint64_t*) views[2].communicatedBits, &randPos, (uint64_t*) out);
-     
-    (rand->pos)++; 
+    
 }
 
 void mpc_substitution(uint32_t* state[3], randomTape_t* rand, view_t views[3],
@@ -786,21 +812,39 @@ void mpc_substitution(uint32_t* state[3], randomTape_t* rand, view_t views[3],
     uint8_t out[9];
 
     uint64_t bitNumber;
-    
-    for (uint32_t i = 0; i < params->numSboxes * 3; i += 3) {
 
-        bitNumber = (uint64_t) i;
-        bitNumber += 2;
-        jazz_mpc_getBit((uint64_t*) state[0], (uint64_t*) state[1], (uint64_t*) state[2], &bitNumber, (uint64_t*) total);
-        
-        mpc_AND(a, b, ab, rand, views);
-        mpc_AND(b, c, bc, rand, views);
-        mpc_AND(c, a, ca, rand, views);
+    clock_t var1, var2, var3, var4, var5, var6;
+    int delta1, delta2, delta3;
 
-        jazz_mpc_setBit_precompute((uint64_t*)total, (uint64_t*) merged, (uint64_t*) out);
+    delta1 = delta2 = delta3 = 0;
 
-        jazz_mpc_setBit((uint64_t*) state[0], (uint64_t*) state[1], (uint64_t*) state[2], &bitNumber, (uint64_t*) out); 
+    for(int z=0;z<5000;z++){
+        for (uint32_t i = 0; i < params->numSboxes * 3; i += 3) {
+
+            bitNumber = (uint64_t) i;
+            bitNumber += 2;
+            
+            var1 = clock();
+            jazz_mpc_getBit((uint64_t*) state[0], (uint64_t*) state[1], (uint64_t*) state[2], &bitNumber, (uint64_t*) total);
+            var2 = clock();
+            delta1 += var2 - var1;
+  
+            var3 = clock();
+            mpc_AND(a, b, ab, rand, views);
+            mpc_AND(b, c, bc, rand, views);
+            mpc_AND(c, a, ca, rand, views);
+            var4 = clock();
+            delta2 += var4 - var3;
+
+            var5 = clock();
+            jazz_mpc_setBit_precompute((uint64_t*)total, (uint64_t*) merged, (uint64_t*) out);
+            jazz_mpc_setBit((uint64_t*) state[0], (uint64_t*) state[1], (uint64_t*) state[2], &bitNumber, (uint64_t*) out);
+            var6 = clock();
+            delta3 += var6 - var5;
+        } 
     }
+    printf("\n\ngetBit: %d\nAND   : %d\nsetBit: %d\n\n",delta1/5000, delta2/5000, delta3/5000 );
+    exit(1);
 }
 
 
@@ -833,21 +877,43 @@ void mpc_LowMC(randomTape_t* tapes, view_t views[3],
     state[0] = roundKey[2] + params->stateSizeWords;
     state[1] = state[0] + params->stateSizeWords;
     state[2] = state[1] + params->stateSizeWords;
-
+ 
     for (int i = 0; i < 3; i++) {
         keyShares[i] = views[i].inputShare;
     }
-    mpc_xor_constant(state, plaintext, params->stateSizeWords);                     // on jasmin
-    mpc_matrix_mul(roundKey, keyShares, KMatrix(0, params), params, 3);             // on jasmin
-    mpc_xor(state, roundKey, params->stateSizeWords, 3);                            // on jasmin
+    clock_t a,b;
+    int total = 0;
+   
+    for(int i =0; i<10000;i++){
 
-    for (uint32_t r = 1; r <= params->numRounds; r++) {
-        mpc_matrix_mul(roundKey, keyShares, KMatrix(r, params), params, 3);         // on jasmin
-        mpc_substitution(state, tapes, views, params);                              // on jasmin
-        mpc_matrix_mul(state, state, LMatrix(r - 1, params), params, 3);            // on jasmin
-        mpc_xor_constant(state, RConstant(r - 1, params), params->stateSizeWords);  // on jasmin
-        mpc_xor(state, roundKey, params->stateSizeWords, 3);                        // on jasmin
+        mpc_xor_constant(state, plaintext, params->stateSizeWords);                     // on jasmin
+        a = clock();
+        mpc_matrix_mul(roundKey, keyShares, KMatrix(0, params), params, 3);             // on jasmin
+        b = clock() - a;
+        total += b;
+        mpc_xor(state, roundKey, params->stateSizeWords, 3);                            // on jasmin
+
     }
+    
+    printf("\n\n\nFirst  : %d\n",total/10000 );
+
+    total = 0;
+    for(int i =0; i<1000;i++){
+        //printf("\ni = % d",i );
+        for (uint32_t r = 1; r <= params->numRounds; r++) {
+            a = clock();
+            mpc_matrix_mul(roundKey, keyShares, KMatrix(r, params), params, 3);         // on jasmin
+            mpc_substitution(state, tapes, views, params);                              // on jasmin
+            mpc_matrix_mul(state, state, LMatrix(r - 1, params), params, 3);            // on jasmin
+            b = clock() - a;
+            total += b;
+            mpc_xor_constant(state, RConstant(r - 1, params), params->stateSizeWords);  // on jasmin
+            mpc_xor(state, roundKey, params->stateSizeWords, 3);                        // on jasmin
+        }
+    }
+    printf("\nSecond : %d\n\n\n",total/1000 );
+    exit(1);
+
 
     for (int i = 0; i < 3; i++) {
         memcpy(views[i].outputShare, state[i], params->stateSizeBytes);
@@ -925,6 +991,8 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
                  size_t messageByteLength, signature_t* sig, paramset_t* params)
 {
     bool status;
+    //clock_t mpc_start;
+    //clock_t mpc_delta;
 
     /* Allocate views and commitments for all parallel iterations */
     view_t** views = allocateViews(params);
@@ -965,7 +1033,13 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
 
         xor_three((uint64_t*)views[k][2].inputShare,(uint64_t*) privateKey, (uint64_t*)views[k][0].inputShare, (uint64_t*)views[k][1].inputShare, (uint64_t*)&params->stateSizeBytes);
         tape.pos = 0;
+        
+
+        //mpc_start = clock();
+
         mpc_LowMC(&tape, views[k], plaintext, (uint32_t*)tmp, params);
+
+        //mpc_delta = clock() - mpc_start;
 
         uint32_t temp[LOWMC_MAX_WORDS] = {0};
         xor_three((uint64_t*)temp, (uint64_t*)views[k][0].outputShare, (uint64_t*)views[k][1].outputShare, (uint64_t*)views[k][2].outputShare, (uint64_t*)&params->stateSizeBytes);
@@ -991,7 +1065,7 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
     for (size_t i = 0; i < params->numMPCRounds; i++) {
         for (size_t j = 0; j < 3; j++) {
             VIEW_OUTPUTS(i, j) = views[i][j].outputShare;
-        }
+        } 
     }
 
     H3(pubKey, plaintext, viewOutputs, as,
@@ -1003,6 +1077,8 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
         prove(proof, getChallenge(sig->challengeBits, i), &seeds[i],
               views[i], &as[i], (gs == NULL) ? NULL : &gs[i], params);
     }
+
+    //printf("\n\n\nTimes: \n\n     - mpc_LowMC: %ju\n\n", mpc_delta);//, prove_delta);
 
 
 #if 0   /* Self-test, verify the signature we just created */

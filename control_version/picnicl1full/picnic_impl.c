@@ -10,7 +10,7 @@
  *  more details.
  *  SPDX-License-Identifier: MIT
  */
-
+#include <time.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -729,24 +729,45 @@ void mpc_substitution(uint32_t* state[3], randomTape_t* rand, view_t views[3],
     uint8_t bc[3];
     uint8_t ca[3];
 
-    for (uint32_t i = 0; i < params->numSboxes * 3; i += 3) {
+    clock_t var1, var2, var3, var4, var5, var6;
+    int delta1, delta2, delta3;
 
-        for (uint8_t j = 0; j < 3; j++) {
-            a[j] = getBitFromWordArray(state[j], i + 2);
-            b[j] = getBitFromWordArray(state[j], i + 1);
-            c[j] = getBitFromWordArray(state[j], i);
+    delta1 = delta2 = delta3 = 0;
+
+    for(int z=0;z<5000;z++){
+        for (uint32_t i = 0; i < params->numSboxes * 3; i += 3) {
+
+            var1 = clock();
+            for (uint8_t j = 0; j < 3; j++) {
+                a[j] = getBitFromWordArray(state[j], i + 2);
+                b[j] = getBitFromWordArray(state[j], i + 1);
+                c[j] = getBitFromWordArray(state[j], i);
+            }
+            var2 = clock();
+            delta1 += var2 - var1;
+
+            var3 = clock();
+            mpc_AND(a, b, ab, rand, views);
+            mpc_AND(b, c, bc, rand, views);
+            mpc_AND(c, a, ca, rand, views);
+            var4 = clock();
+            delta2 += var4 - var3;
+            
+ 
+            var5 = clock();
+            for (uint8_t j = 0; j < 3; j++) {
+                setBitInWordArray(state[j], i + 2, a[j] ^ (bc[j]));
+                setBitInWordArray(state[j], i + 1, a[j] ^ b[j] ^ (ca[j]));
+                setBitInWordArray(state[j], i, a[j] ^ b[j] ^ c[j] ^ (ab[j]));
+            }
+            var6 = clock();
+            delta3 += var6 - var5;
         }
 
-        mpc_AND(a, b, ab, rand, views);
-        mpc_AND(b, c, bc, rand, views);
-        mpc_AND(c, a, ca, rand, views);
-
-        for (uint8_t j = 0; j < 3; j++) {
-            setBitInWordArray(state[j], i + 2, a[j] ^ (bc[j]));
-            setBitInWordArray(state[j], i + 1, a[j] ^ b[j] ^ (ca[j]));
-            setBitInWordArray(state[j], i, a[j] ^ b[j] ^ c[j] ^ (ab[j]));
-        }
     }
+
+    printf("\n\ngetBit: %d\nAND   : %d\nsetBit: %d\n\n",delta1/5000, delta2/5000, delta3/5000 );
+    exit(1);
 }
 
 #if 0   /* Debugging helper: reconstruct a secret shared value and print it */
@@ -782,17 +803,36 @@ void mpc_LowMC(randomTape_t* tapes, view_t views[3],
     for (int i = 0; i < 3; i++) {
         keyShares[i] = views[i].inputShare;
     }
-    mpc_xor_constant(state, plaintext, params->stateSizeWords);
-    mpc_matrix_mul(roundKey, keyShares, KMatrix(0, params), params, 3);
-    mpc_xor(state, roundKey, params->stateSizeWords, 3);
+    
+    clock_t a,b;
+    int total = 0;
 
-    for (uint32_t r = 1; r <= params->numRounds; r++) {
-        mpc_matrix_mul(roundKey, keyShares, KMatrix(r, params), params, 3);
-        mpc_substitution(state, tapes, views, params);
-        mpc_matrix_mul(state, state, LMatrix(r - 1, params), params, 3);
-        mpc_xor_constant(state, RConstant(r - 1, params), params->stateSizeWords);
+    a = clock();
+    for(int i =0; i<10000;i++){
+        mpc_xor_constant(state, plaintext, params->stateSizeWords);
+        a = clock();
+        mpc_matrix_mul(roundKey, keyShares, KMatrix(0, params), params, 3);
+        b = clock() - a;
+        total += b;
         mpc_xor(state, roundKey, params->stateSizeWords, 3);
     }
+    
+    printf("\n\nFirst  : %d\n",total/10000 );
+    total = 0;
+    for(int i =0; i<1000;i++){
+        for (uint32_t r = 1; r <= params->numRounds; r++) {
+            a = clock();
+            mpc_matrix_mul(roundKey, keyShares, KMatrix(r, params), params, 3);
+            mpc_substitution(state, tapes, views, params);                              // on jasmin
+            mpc_matrix_mul(state, state, LMatrix(r - 1, params), params, 3);
+            b = clock() - a;
+            total += b;
+            mpc_xor_constant(state, RConstant(r - 1, params), params->stateSizeWords);
+            mpc_xor(state, roundKey, params->stateSizeWords, 3);
+        }
+    }
+    printf("\nSecond : %d\n\n",total/1000 );
+    exit(1);
 
     for (int i = 0; i < 3; i++) {
         memcpy(views[i].outputShare, state[i], params->stateSizeBytes);
@@ -871,6 +911,9 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
 {
     bool status;
 
+    //clock_t mpc_start;
+    //clock_t mpc_delta;
+
     /* Allocate views and commitments for all parallel iterations */
     view_t** views = allocateViews(params);
     commitments_t* as = allocateCommitments(params, 0);
@@ -911,7 +954,12 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
 
         xor_three(views[k][2].inputShare, privateKey, views[k][0].inputShare, views[k][1].inputShare, params->stateSizeBytes);
         tape.pos = 0;
+
+        //mpc_start = clock();
+
         mpc_LowMC(&tape, views[k], plaintext, (uint32_t*)tmp, params);
+
+        //mpc_delta = clock() - mpc_start;
 
         uint32_t temp[LOWMC_MAX_WORDS] = {0};
         xor_three(temp, views[k][0].outputShare, views[k][1].outputShare, views[k][2].outputShare, params->stateSizeBytes);
@@ -949,6 +997,10 @@ int sign_picnic1(uint32_t* privateKey, uint32_t* pubKey, uint32_t* plaintext, co
         prove(proof, getChallenge(sig->challengeBits, i), &seeds[i],
               views[i], &as[i], (gs == NULL) ? NULL : &gs[i], params);
     }
+
+
+    //printf("\n\n\nTimes: \n\n     - mpc_LowMC: %ju\n\n", mpc_delta);//, prove_delta);
+
 
 
 #if 0   /* Self-test, verify the signature we just created */
