@@ -67,10 +67,11 @@ extern void jazz_mpc_setBit(uint64_t* array0, uint64_t* array1, uint64_t* array2
 
 /* MPC Low MC verify functions */
 
-extern void jazz_mpc_AND_verify(uint64_t* in1, uint64_t* in2, uint64_t* out, uint64_t* r);
-extern void jazz_mpc_getBit_verify(uint64_t* array0, uint64_t* array1, uint64_t* bitNumber, uint64_t* out);
 extern void jazz_and_getBit_verify(uint64_t* randTape0, uint64_t* randTape1, uint64_t* randPos, uint64_t* r);
+extern void jazz_mpc_AND_verify(uint64_t* in1, uint64_t* in2, uint64_t* out, uint64_t* r);
+extern void jazz_and_setBit_verify(uint64_t* randTape0, uint64_t* randTape1, uint64_t* randPos, uint64_t* r);
 
+extern void jazz_mpc_getBit_verify(uint64_t* array0, uint64_t* array1, uint64_t* bitNumber, uint64_t* out);
 extern void jazz_mpc_setBit_precompute_verify(uint64_t* in0, uint64_t* in1, uint64_t* out);
 extern void jazz_mpc_setBit_verify(uint64_t* array0, uint64_t* array1, uint64_t* bitNumber, uint64_t* out);
 
@@ -495,25 +496,15 @@ void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
                     randomTape_t* rand, view_t* view1, view_t* view2)
 {
 
-    uint8_t r[2] = { getBit(rand->tape[0], rand->pos), getBit(rand->tape[1], rand->pos) };
-    
-    //uint8_t r[2];
+    uint8_t r[2];
     uint64_t bitNumber = (uint64_t)rand->pos;
     
-
-    //printf("\n\n getBit\n\n");
     jazz_and_getBit_verify((uint64_t*) rand->tape[0], (uint64_t*) rand->tape[1], &bitNumber, (uint64_t*) r);
 
-    //printf("\n\n AND\n\n");
     jazz_mpc_AND_verify((uint64_t*)in1, (uint64_t*) in2, (uint64_t*) out, (uint64_t*) r);
     
-    //printf("\n\n setBit\n\n");
-    jazz_setBit((uint64_t*)view1->communicatedBits, &bitNumber,(uint64_t*) out);
-    //out[0] = (in1[0] & in2[1]) ^ (in1[1] & in2[0]) ^ (in1[0] & in2[0]) ^ r[0] ^ r[1];
-    //setBit(view1->communicatedBits, rand->pos, out[0]);
-    //printf("\n\n getBit\n\n");
-    out[1] = getBit(view2->communicatedBits, rand->pos);
-    
+    jazz_and_setBit_verify((uint64_t*)view1->communicatedBits, (uint64_t*)view2->communicatedBits, &bitNumber,(uint64_t*) out);
+     
     (rand->pos)++;
 } 
 

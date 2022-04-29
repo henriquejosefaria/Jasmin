@@ -4,10 +4,12 @@
 	.globl	jazz_mpc_setBit_verify
 	.globl	_jazz_mpc_setBit_precompute_verify
 	.globl	jazz_mpc_setBit_precompute_verify
-	.globl	_jazz_and_getBit_verify
-	.globl	jazz_and_getBit_verify
+	.globl	_jazz_and_setBit_verify
+	.globl	jazz_and_setBit_verify
 	.globl	_jazz_mpc_AND_verify
 	.globl	jazz_mpc_AND_verify
+	.globl	_jazz_and_getBit_verify
+	.globl	jazz_and_getBit_verify
 	.globl	_jazz_mpc_getBit_verify
 	.globl	jazz_mpc_getBit_verify
 	.globl	_jazz_mpc_setBit
@@ -159,40 +161,54 @@ jazz_mpc_setBit_precompute_verify:
 	xorb	%cl, %al
 	movb	%al, 5(%rdx)
 	ret 
-_jazz_and_getBit_verify:
-jazz_and_getBit_verify:
+_jazz_and_setBit_verify:
+jazz_and_setBit_verify:
 	movq	(%rdx), %rax
+	movb	(%rcx), %dl
+	movq	%rax, %r8
+	shrq	$3, %r8
+	movb	(%rdi,%r8), %r8b
+	movq	$7, %r9
+	movq	%rax, %r10
+	andq	$7, %r10
+	subq	%r10, %r9
+	movq	%r9, %r10
+	movb	$1, %r11b
+	jmp 	Ljazz_and_setBit_verify$5
+Ljazz_and_setBit_verify$6:
+	shlb	$1, %r11b
+	addq	$-1, %r9
+Ljazz_and_setBit_verify$5:
+	cmpq	$0, %r9
+	jnbe	Ljazz_and_setBit_verify$6
+	xorb	$-1, %r11b
+	andb	%r11b, %r8b
+	jmp 	Ljazz_and_setBit_verify$3
+Ljazz_and_setBit_verify$4:
+	shlb	$1, %dl
+	addq	$-1, %r10
+Ljazz_and_setBit_verify$3:
+	cmpq	$0, %r10
+	jnbe	Ljazz_and_setBit_verify$4
+	orb 	%dl, %r8b
 	movq	%rax, %rdx
 	shrq	$3, %rdx
-	movb	(%rdi,%rdx), %dl
-	movq	%rax, %rdi
-	andq	$7, %rdi
-	movq	$7, %r8
-	subq	%rdi, %r8
-	jmp 	Ljazz_and_getBit_verify$3
-Ljazz_and_getBit_verify$4:
-	shrb	$1, %dl
-	addq	$-1, %r8
-Ljazz_and_getBit_verify$3:
-	cmpq	$0, %r8
-	jnbe	Ljazz_and_getBit_verify$4
-	andb	$1, %dl
-	movq	%rax, %rdi
-	shrq	$3, %rdi
-	movb	(%rsi,%rdi), %sil
+	movb	%r8b, (%rdi,%rdx)
+	movq	%rax, %rdx
+	shrq	$3, %rdx
+	movb	(%rsi,%rdx), %dl
 	andq	$7, %rax
-	movq	$7, %rdi
-	subq	%rax, %rdi
-	jmp 	Ljazz_and_getBit_verify$1
-Ljazz_and_getBit_verify$2:
-	shrb	$1, %sil
-	addq	$-1, %rdi
-Ljazz_and_getBit_verify$1:
-	cmpq	$0, %rdi
-	jnbe	Ljazz_and_getBit_verify$2
-	andb	$1, %sil
-	movb	%dl, (%rcx)
-	movb	%sil, 1(%rcx)
+	movq	$7, %rsi
+	subq	%rax, %rsi
+	jmp 	Ljazz_and_setBit_verify$1
+Ljazz_and_setBit_verify$2:
+	shrb	$1, %dl
+	addq	$-1, %rsi
+Ljazz_and_setBit_verify$1:
+	cmpq	$0, %rsi
+	jnbe	Ljazz_and_setBit_verify$2
+	andb	$1, %dl
+	movb	%dl, 1(%rcx)
 	ret 
 _jazz_mpc_AND_verify:
 jazz_mpc_AND_verify:
@@ -228,6 +244,41 @@ jazz_mpc_AND_verify:
 	movb	2(%rcx), %cl
 	xorb	%cl, %al
 	movb	%al, 1(%rdx)
+	ret 
+_jazz_and_getBit_verify:
+jazz_and_getBit_verify:
+	movq	(%rdx), %rax
+	movq	%rax, %rdx
+	shrq	$3, %rdx
+	movb	(%rdi,%rdx), %dl
+	movq	%rax, %rdi
+	andq	$7, %rdi
+	movq	$7, %r8
+	subq	%rdi, %r8
+	jmp 	Ljazz_and_getBit_verify$3
+Ljazz_and_getBit_verify$4:
+	shrb	$1, %dl
+	addq	$-1, %r8
+Ljazz_and_getBit_verify$3:
+	cmpq	$0, %r8
+	jnbe	Ljazz_and_getBit_verify$4
+	andb	$1, %dl
+	movq	%rax, %rdi
+	shrq	$3, %rdi
+	movb	(%rsi,%rdi), %sil
+	andq	$7, %rax
+	movq	$7, %rdi
+	subq	%rax, %rdi
+	jmp 	Ljazz_and_getBit_verify$1
+Ljazz_and_getBit_verify$2:
+	shrb	$1, %sil
+	addq	$-1, %rdi
+Ljazz_and_getBit_verify$1:
+	cmpq	$0, %rdi
+	jnbe	Ljazz_and_getBit_verify$2
+	andb	$1, %sil
+	movb	%dl, (%rcx)
+	movb	%sil, 1(%rcx)
 	ret 
 _jazz_mpc_getBit_verify:
 jazz_mpc_getBit_verify:

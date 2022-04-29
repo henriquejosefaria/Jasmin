@@ -1128,6 +1128,29 @@ fn jazz_mpc_getBit_verify(reg u64 rand0, reg u64 rand1, reg u64 randPos, reg u64
 
 
 
+
+/*###############################################################
+#                                                               #
+#                   MPC_AND_GET_BIT VERIFY                      # 
+#                                                               #
+###############################################################*/
+
+
+export
+fn jazz_and_getBit_verify(reg u64 rand0, reg u64 rand1, reg u64 randPos, reg u64 out){
+
+	reg u64 bitNumber;
+	reg u8 a, b;
+
+	bitNumber = [randPos + 0];
+
+	a = global_getBit(rand0, bitNumber);
+	b = global_getBit(rand1, bitNumber);
+
+	(u8)[out + 0] = a;
+	(u8)[out + 1] = b;	
+}
+
 /*###############################################################
 #                                                               #
 #                       MPC_AND_VERIFY                          # 
@@ -1198,6 +1221,7 @@ fn jazz_mpc_AND_verify(reg u64 in1, reg u64 in2, reg u64 out, reg u64 r){
 	(u8)[out + 1] = t;
 }
 
+
 /*###############################################################
 #                                                               #
 #                   MPC_AND_SET_BIT VERIFY                      # 
@@ -1206,21 +1230,22 @@ fn jazz_mpc_AND_verify(reg u64 in1, reg u64 in2, reg u64 out, reg u64 r){
 
 
 export
-fn jazz_and_getBit_verify(reg u64 rand0, reg u64 rand1, reg u64 randPos, reg u64 out){
+fn jazz_and_setBit_verify(reg u64 array0, reg u64 array1, reg u64 randPos, reg u64 out){
 
 	reg u64 bitNumber;
-	reg u8 a, b;
+	reg u8 a;
 
 	bitNumber = [randPos + 0];
 
-	a = global_getBit(rand0, bitNumber);
-	b = global_getBit(rand1, bitNumber);
+	a = (u8)[out + 0];
 
-	(u8)[out + 0] = a;
-	(u8)[out + 1] = b;	
+	inline_setBit(array0, bitNumber, a);
+
+
+	a = global_getBit(array1, bitNumber);
+
+	(u8)[out + 1] = a;	
 }
-
-
 
 
 /*###############################################################
