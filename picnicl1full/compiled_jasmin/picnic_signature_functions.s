@@ -10,18 +10,18 @@
 	.globl	jazz_mpc_AND_verify
 	.globl	_jazz_mpc_getBit_verify
 	.globl	jazz_mpc_getBit_verify
-	.globl	_jazz_and_setBit
-	.globl	jazz_and_setBit
-	.globl	_jazz_mpc_AND
-	.globl	jazz_mpc_AND
-	.globl	_jazz_and_getBit
-	.globl	jazz_and_getBit
 	.globl	_jazz_mpc_setBit
 	.globl	jazz_mpc_setBit
 	.globl	_jazz_mpc_setBit_precompute
 	.globl	jazz_mpc_setBit_precompute
 	.globl	_jazz_mpc_getBit
 	.globl	jazz_mpc_getBit
+	.globl	_jazz_and_setBit
+	.globl	jazz_and_setBit
+	.globl	_jazz_mpc_AND
+	.globl	jazz_mpc_AND
+	.globl	_jazz_and_getBit
+	.globl	jazz_and_getBit
 	.globl	_jazz_substitution
 	.globl	jazz_substitution
 	.globl	_jazz_matrix_mul
@@ -335,191 +335,6 @@ Ljazz_mpc_getBit_verify$1:
 	movb	%dl, 1(%rcx)
 	movb	%dil, 3(%rcx)
 	movb	%sil, 5(%rcx)
-	ret 
-_jazz_and_setBit:
-jazz_and_setBit:
-	movq	%rsp, %rax
-	leaq	-24(%rsp), %rsp
-	andq	$-8, %rsp
-	movq	%rax, (%rsp)
-	movq	%rbx, 8(%rsp)
-	movq	%rbp, 16(%rsp)
-	movq	(%rcx), %rax
-	movq	%rax, %r9
-	shrq	$3, %r9
-	movb	(%rdi,%r9), %r11b
-	movq	$7, %rbp
-	movq	%rax, %r10
-	andq	$7, %r10
-	subq	%r10, %rbp
-	movq	%rbp, %r10
-	movb	$1, %bl
-	jmp 	Ljazz_and_setBit$11
-Ljazz_and_setBit$12:
-	shlb	$1, %bl
-	addq	$-1, %rbp
-Ljazz_and_setBit$11:
-	cmpq	$0, %rbp
-	jnbe	Ljazz_and_setBit$12
-	xorb	$-1, %bl
-	andb	%bl, %r11b
-	movb	(%r8), %bpl
-	movq	%r10, %rbx
-	jmp 	Ljazz_and_setBit$9
-Ljazz_and_setBit$10:
-	shlb	$1, %bpl
-	addq	$-1, %rbx
-Ljazz_and_setBit$9:
-	cmpq	$0, %rbx
-	jnbe	Ljazz_and_setBit$10
-	orb 	%bpl, %r11b
-	movb	%r11b, (%rdi,%r9)
-	movb	(%rsi,%r9), %dil
-	movb	$1, %r11b
-	movq	%r10, %rbp
-	jmp 	Ljazz_and_setBit$7
-Ljazz_and_setBit$8:
-	shlb	$1, %r11b
-	addq	$-1, %rbp
-Ljazz_and_setBit$7:
-	cmpq	$0, %rbp
-	jnbe	Ljazz_and_setBit$8
-	xorb	$-1, %r11b
-	andb	%r11b, %dil
-	movb	1(%r8), %r11b
-	movq	%r10, %rbp
-	jmp 	Ljazz_and_setBit$5
-Ljazz_and_setBit$6:
-	shlb	$1, %r11b
-	addq	$-1, %rbp
-Ljazz_and_setBit$5:
-	cmpq	$0, %rbp
-	jnbe	Ljazz_and_setBit$6
-	orb 	%r11b, %dil
-	movb	%dil, (%rsi,%r9)
-	movb	(%rdx,%r9), %sil
-	movb	$1, %dil
-	movq	%r10, %r11
-	jmp 	Ljazz_and_setBit$3
-Ljazz_and_setBit$4:
-	shlb	$1, %dil
-	addq	$-1, %r11
-Ljazz_and_setBit$3:
-	cmpq	$0, %r11
-	jnbe	Ljazz_and_setBit$4
-	xorb	$-1, %dil
-	andb	%dil, %sil
-	movb	2(%r8), %dil
-	jmp 	Ljazz_and_setBit$1
-Ljazz_and_setBit$2:
-	shlb	$1, %dil
-	addq	$-1, %r10
-Ljazz_and_setBit$1:
-	cmpq	$0, %r10
-	jnbe	Ljazz_and_setBit$2
-	orb 	%dil, %sil
-	movb	%sil, (%rdx,%r9)
-	incq	%rax
-	movq	%rax, (%rcx)
-	movq	8(%rsp), %rbx
-	movq	16(%rsp), %rbp
-	movq	(%rsp), %rsp
-	ret 
-_jazz_mpc_AND:
-jazz_mpc_AND:
-	movb	(%rdi), %al
-	movb	1(%rsi), %r8b
-	andb	%al, %r8b
-	movb	1(%rdi), %r9b
-	movb	(%rsi), %r10b
-	andb	%r10b, %r9b
-	xorb	%r9b, %r8b
-	andb	%r10b, %al
-	xorb	%al, %r8b
-	movb	(%rcx), %al
-	xorb	%al, %r8b
-	movb	1(%rcx), %al
-	xorb	%al, %r8b
-	movb	%r8b, (%rdx)
-	movb	1(%rdi), %al
-	movb	2(%rsi), %r8b
-	andb	%al, %r8b
-	movb	2(%rdi), %r9b
-	movb	1(%rsi), %r10b
-	andb	%r10b, %r9b
-	xorb	%r9b, %r8b
-	andb	%r10b, %al
-	xorb	%al, %r8b
-	movb	1(%rcx), %al
-	xorb	%al, %r8b
-	movb	2(%rcx), %al
-	xorb	%al, %r8b
-	movb	%r8b, 1(%rdx)
-	movb	2(%rdi), %al
-	movb	(%rsi), %r8b
-	andb	%al, %r8b
-	movb	(%rdi), %dil
-	movb	2(%rsi), %sil
-	andb	%sil, %dil
-	xorb	%dil, %r8b
-	andb	%sil, %al
-	xorb	%al, %r8b
-	movb	2(%rcx), %al
-	xorb	%al, %r8b
-	movb	(%rcx), %al
-	xorb	%al, %r8b
-	movb	%r8b, 2(%rdx)
-	ret 
-_jazz_and_getBit:
-jazz_and_getBit:
-	movq	(%rcx), %rax
-	movq	%rax, %rcx
-	shrq	$3, %rcx
-	movb	(%rdi,%rcx), %cl
-	movq	%rax, %rdi
-	andq	$7, %rdi
-	movq	$7, %r9
-	subq	%rdi, %r9
-	jmp 	Ljazz_and_getBit$5
-Ljazz_and_getBit$6:
-	shrb	$1, %cl
-	addq	$-1, %r9
-Ljazz_and_getBit$5:
-	cmpq	$0, %r9
-	jnbe	Ljazz_and_getBit$6
-	andb	$1, %cl
-	movq	%rax, %rdi
-	shrq	$3, %rdi
-	movb	(%rsi,%rdi), %sil
-	movq	%rax, %rdi
-	andq	$7, %rdi
-	movq	$7, %r9
-	subq	%rdi, %r9
-	jmp 	Ljazz_and_getBit$3
-Ljazz_and_getBit$4:
-	shrb	$1, %sil
-	addq	$-1, %r9
-Ljazz_and_getBit$3:
-	cmpq	$0, %r9
-	jnbe	Ljazz_and_getBit$4
-	andb	$1, %sil
-	movq	%rax, %rdi
-	shrq	$3, %rdi
-	movb	(%rdx,%rdi), %dl
-	andq	$7, %rax
-	movq	$7, %rdi
-	subq	%rax, %rdi
-	jmp 	Ljazz_and_getBit$1
-Ljazz_and_getBit$2:
-	shrb	$1, %dl
-	addq	$-1, %rdi
-Ljazz_and_getBit$1:
-	cmpq	$0, %rdi
-	jnbe	Ljazz_and_getBit$2
-	andb	$1, %dl
-	movb	%cl, (%r8)
-	movb	%sil, 1(%r8)
-	movb	%dl, 2(%r8)
 	ret 
 _jazz_mpc_setBit:
 jazz_mpc_setBit:
@@ -853,6 +668,208 @@ Ljazz_mpc_getBit$1:
 	movb	%cl, 2(%r8)
 	movb	%sil, 5(%r8)
 	movb	%dl, 8(%r8)
+	ret 
+_jazz_and_setBit:
+jazz_and_setBit:
+	movq	%rsp, %rax
+	leaq	-16(%rsp), %rsp
+	andq	$-8, %rsp
+	movq	%rax, (%rsp)
+	movq	%rbp, 8(%rsp)
+	movq	(%rcx), %rax
+	movb	(%r8), %cl
+	movq	%rax, %r9
+	shrq	$3, %r9
+	movb	(%rdi,%r9), %r9b
+	movq	$7, %r10
+	movq	%rax, %r11
+	andq	$7, %r11
+	subq	%r11, %r10
+	movq	%r10, %r11
+	movb	$1, %bpl
+	jmp 	Ljazz_and_setBit$11
+Ljazz_and_setBit$12:
+	shlb	$1, %bpl
+	addq	$-1, %r10
+Ljazz_and_setBit$11:
+	cmpq	$0, %r10
+	jnbe	Ljazz_and_setBit$12
+	xorb	$-1, %bpl
+	andb	%bpl, %r9b
+	jmp 	Ljazz_and_setBit$9
+Ljazz_and_setBit$10:
+	shlb	$1, %cl
+	addq	$-1, %r11
+Ljazz_and_setBit$9:
+	cmpq	$0, %r11
+	jnbe	Ljazz_and_setBit$10
+	orb 	%cl, %r9b
+	movq	%rax, %rcx
+	shrq	$3, %rcx
+	movb	%r9b, (%rdi,%rcx)
+	movb	1(%r8), %cl
+	movq	%rax, %rdi
+	shrq	$3, %rdi
+	movb	(%rsi,%rdi), %dil
+	movq	$7, %r9
+	movq	%rax, %r10
+	andq	$7, %r10
+	subq	%r10, %r9
+	movq	%r9, %r10
+	movb	$1, %r11b
+	jmp 	Ljazz_and_setBit$7
+Ljazz_and_setBit$8:
+	shlb	$1, %r11b
+	addq	$-1, %r9
+Ljazz_and_setBit$7:
+	cmpq	$0, %r9
+	jnbe	Ljazz_and_setBit$8
+	xorb	$-1, %r11b
+	andb	%r11b, %dil
+	jmp 	Ljazz_and_setBit$5
+Ljazz_and_setBit$6:
+	shlb	$1, %cl
+	addq	$-1, %r10
+Ljazz_and_setBit$5:
+	cmpq	$0, %r10
+	jnbe	Ljazz_and_setBit$6
+	orb 	%cl, %dil
+	movq	%rax, %rcx
+	shrq	$3, %rcx
+	movb	%dil, (%rsi,%rcx)
+	movb	2(%r8), %cl
+	movq	%rax, %rsi
+	shrq	$3, %rsi
+	movb	(%rdx,%rsi), %sil
+	movq	$7, %rdi
+	movq	%rax, %r8
+	andq	$7, %r8
+	subq	%r8, %rdi
+	movq	%rdi, %r8
+	movb	$1, %r9b
+	jmp 	Ljazz_and_setBit$3
+Ljazz_and_setBit$4:
+	shlb	$1, %r9b
+	addq	$-1, %rdi
+Ljazz_and_setBit$3:
+	cmpq	$0, %rdi
+	jnbe	Ljazz_and_setBit$4
+	xorb	$-1, %r9b
+	andb	%r9b, %sil
+	jmp 	Ljazz_and_setBit$1
+Ljazz_and_setBit$2:
+	shlb	$1, %cl
+	addq	$-1, %r8
+Ljazz_and_setBit$1:
+	cmpq	$0, %r8
+	jnbe	Ljazz_and_setBit$2
+	orb 	%cl, %sil
+	shrq	$3, %rax
+	movb	%sil, (%rdx,%rax)
+	movq	8(%rsp), %rbp
+	movq	(%rsp), %rsp
+	ret 
+_jazz_mpc_AND:
+jazz_mpc_AND:
+	movb	(%rdi), %al
+	movb	1(%rsi), %r8b
+	andb	%r8b, %al
+	movb	1(%rdi), %r8b
+	movb	(%rsi), %r9b
+	andb	%r9b, %r8b
+	xorb	%r8b, %al
+	movb	(%rdi), %r8b
+	movb	(%rsi), %r9b
+	andb	%r9b, %r8b
+	xorb	%r8b, %al
+	movb	(%rcx), %r8b
+	xorb	%r8b, %al
+	movb	1(%rcx), %r8b
+	xorb	%r8b, %al
+	movb	%al, (%rdx)
+	movb	1(%rdi), %al
+	movb	2(%rsi), %r8b
+	andb	%r8b, %al
+	movb	2(%rdi), %r8b
+	movb	1(%rsi), %r9b
+	andb	%r9b, %r8b
+	xorb	%r8b, %al
+	movb	1(%rdi), %r8b
+	movb	1(%rsi), %r9b
+	andb	%r9b, %r8b
+	xorb	%r8b, %al
+	movb	1(%rcx), %r8b
+	xorb	%r8b, %al
+	movb	2(%rcx), %r8b
+	xorb	%r8b, %al
+	movb	%al, 1(%rdx)
+	movb	2(%rdi), %al
+	movb	(%rsi), %r8b
+	andb	%r8b, %al
+	movb	(%rdi), %r8b
+	movb	2(%rsi), %r9b
+	andb	%r9b, %r8b
+	xorb	%r8b, %al
+	movb	2(%rdi), %dil
+	movb	2(%rsi), %sil
+	andb	%sil, %dil
+	xorb	%dil, %al
+	movb	2(%rcx), %sil
+	xorb	%sil, %al
+	movb	(%rcx), %cl
+	xorb	%cl, %al
+	movb	%al, 2(%rdx)
+	ret 
+_jazz_and_getBit:
+jazz_and_getBit:
+	movq	(%rcx), %rax
+	movq	%rax, %rcx
+	shrq	$3, %rcx
+	movb	(%rdi,%rcx), %cl
+	movq	%rax, %rdi
+	andq	$7, %rdi
+	movq	$7, %r9
+	subq	%rdi, %r9
+	jmp 	Ljazz_and_getBit$5
+Ljazz_and_getBit$6:
+	shrb	$1, %cl
+	addq	$-1, %r9
+Ljazz_and_getBit$5:
+	cmpq	$0, %r9
+	jnbe	Ljazz_and_getBit$6
+	andb	$1, %cl
+	movq	%rax, %rdi
+	shrq	$3, %rdi
+	movb	(%rsi,%rdi), %sil
+	movq	%rax, %rdi
+	andq	$7, %rdi
+	movq	$7, %r9
+	subq	%rdi, %r9
+	jmp 	Ljazz_and_getBit$3
+Ljazz_and_getBit$4:
+	shrb	$1, %sil
+	addq	$-1, %r9
+Ljazz_and_getBit$3:
+	cmpq	$0, %r9
+	jnbe	Ljazz_and_getBit$4
+	andb	$1, %sil
+	movq	%rax, %rdi
+	shrq	$3, %rdi
+	movb	(%rdx,%rdi), %dl
+	andq	$7, %rax
+	movq	$7, %rdi
+	subq	%rax, %rdi
+	jmp 	Ljazz_and_getBit$1
+Ljazz_and_getBit$2:
+	shrb	$1, %dl
+	addq	$-1, %rdi
+Ljazz_and_getBit$1:
+	cmpq	$0, %rdi
+	jnbe	Ljazz_and_getBit$2
+	andb	$1, %dl
+	movb	%cl, (%r8)
+	movb	%sil, 1(%r8)
+	movb	%dl, 2(%r8)
 	ret 
 _jazz_substitution:
 jazz_substitution:

@@ -494,9 +494,10 @@ void prove(proof_t* proof, uint8_t challenge, seeds_t* seeds,
 void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
                     randomTape_t* rand, view_t* view1, view_t* view2)
 {
-    //uint8_t r[2] = { getBit(rand->tape[0], rand->pos), getBit(rand->tape[1], rand->pos) };
+
+    uint8_t r[2] = { getBit(rand->tape[0], rand->pos), getBit(rand->tape[1], rand->pos) };
     
-    uint8_t r[2];
+    //uint8_t r[2];
     uint64_t bitNumber = (uint64_t)rand->pos;
     
 
@@ -508,12 +509,13 @@ void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
     
     //printf("\n\n setBit\n\n");
     jazz_setBit((uint64_t*)view1->communicatedBits, &bitNumber,(uint64_t*) out);
-
+    //out[0] = (in1[0] & in2[1]) ^ (in1[1] & in2[0]) ^ (in1[0] & in2[0]) ^ r[0] ^ r[1];
+    //setBit(view1->communicatedBits, rand->pos, out[0]);
     //printf("\n\n getBit\n\n");
     out[1] = getBit(view2->communicatedBits, rand->pos);
     
     (rand->pos)++;
-}
+} 
 
 void mpc_substitution_verify(uint32_t* state[2], randomTape_t* rand, view_t* view1,
                              view_t* view2, paramset_t* params)
@@ -793,6 +795,7 @@ void mpc_AND(uint8_t in1[3], uint8_t in2[3], uint8_t out[3], randomTape_t* rand,
 
     jazz_and_setBit((uint64_t*) views[0].communicatedBits, (uint64_t*) views[1].communicatedBits, (uint64_t*) views[2].communicatedBits, &randPos, (uint64_t*) out);
     
+    (rand->pos)++;
 }
 
 void mpc_substitution(uint32_t* state[3], randomTape_t* rand, view_t views[3],
@@ -813,38 +816,36 @@ void mpc_substitution(uint32_t* state[3], randomTape_t* rand, view_t views[3],
 
     uint64_t bitNumber;
 
-    clock_t var1, var2, var3, var4, var5, var6;
-    int delta1, delta2, delta3;
+    //clock_t var1, var2, var3, var4, var5, var6;
+    //int delta1, delta2, delta3;
 
-    delta1 = delta2 = delta3 = 0;
+    //delta1 = delta2 = delta3 = 0;
 
-    for(int z=0;z<5000;z++){
+    //for(int z=0;z<5000;z++){
         for (uint32_t i = 0; i < params->numSboxes * 3; i += 3) {
 
             bitNumber = (uint64_t) i;
             bitNumber += 2;
             
-            var1 = clock();
+        //    var1 = clock();
             jazz_mpc_getBit((uint64_t*) state[0], (uint64_t*) state[1], (uint64_t*) state[2], &bitNumber, (uint64_t*) total);
-            var2 = clock();
-            delta1 += var2 - var1;
+        //    var2 = clock();
+        //    delta1 += var2 - var1;
   
-            var3 = clock();
+        //    var3 = clock();
             mpc_AND(a, b, ab, rand, views);
             mpc_AND(b, c, bc, rand, views);
             mpc_AND(c, a, ca, rand, views);
-            var4 = clock();
-            delta2 += var4 - var3;
+        //    var4 = clock();
+        //    delta2 += var4 - var3;
 
-            var5 = clock();
+        //    var5 = clock();
             jazz_mpc_setBit_precompute((uint64_t*)total, (uint64_t*) merged, (uint64_t*) out);
             jazz_mpc_setBit((uint64_t*) state[0], (uint64_t*) state[1], (uint64_t*) state[2], &bitNumber, (uint64_t*) out);
-            var6 = clock();
-            delta3 += var6 - var5;
+        //    var6 = clock();
+        ///    delta3 += var6 - var5;
         } 
-    }
-    printf("\n\ngetBit: %d\nAND   : %d\nsetBit: %d\n\n",delta1/5000, delta2/5000, delta3/5000 );
-    exit(1);
+   // }
 }
 
 
@@ -881,38 +882,38 @@ void mpc_LowMC(randomTape_t* tapes, view_t views[3],
     for (int i = 0; i < 3; i++) {
         keyShares[i] = views[i].inputShare;
     }
-    clock_t a,b;
-    int total = 0;
+    //clock_t a,b;
+    //int total = 0;
    
-    for(int i =0; i<10000;i++){
+    //for(int i =0; i<10000;i++){
 
         mpc_xor_constant(state, plaintext, params->stateSizeWords);                     // on jasmin
-        a = clock();
+        //a = clock();
         mpc_matrix_mul(roundKey, keyShares, KMatrix(0, params), params, 3);             // on jasmin
-        b = clock() - a;
-        total += b;
+        //b = clock() - a;
+        //total += b;
         mpc_xor(state, roundKey, params->stateSizeWords, 3);                            // on jasmin
 
-    }
+    //}
     
-    printf("\n\n\nFirst  : %d\n",total/10000 );
+    //printf("\n\n\nFirst  : %d\n",total/10000 );
 
-    total = 0;
-    for(int i =0; i<1000;i++){
+    //total = 0;
+    //for(int i =0; i<1000;i++){
         //printf("\ni = % d",i );
         for (uint32_t r = 1; r <= params->numRounds; r++) {
-            a = clock();
+            //a = clock();
             mpc_matrix_mul(roundKey, keyShares, KMatrix(r, params), params, 3);         // on jasmin
             mpc_substitution(state, tapes, views, params);                              // on jasmin
             mpc_matrix_mul(state, state, LMatrix(r - 1, params), params, 3);            // on jasmin
-            b = clock() - a;
-            total += b;
+            //b = clock() - a;
+            //total += b;
             mpc_xor_constant(state, RConstant(r - 1, params), params->stateSizeWords);  // on jasmin
             mpc_xor(state, roundKey, params->stateSizeWords, 3);                        // on jasmin
         }
-    }
-    printf("\nSecond : %d\n\n\n",total/1000 );
-    exit(1);
+    //}
+    //printf("\nSecond : %d\n\n\n",total/1000 );
+    //exit(1);
 
 
     for (int i = 0; i < 3; i++) {

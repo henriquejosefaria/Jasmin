@@ -418,6 +418,7 @@ fn inline_setBit(reg u64 array, reg u64 bitNumber, reg u8 val){
 	i -= byte; 
 	byte = i;
 
+
 	t = 1;
 	while(i > 0){
 		t <<= 1;
@@ -426,6 +427,7 @@ fn inline_setBit(reg u64 array, reg u64 bitNumber, reg u8 val){
 
 	t ^= 0xff;
 	chosenBit &= t;
+
 
 	t = val;
 
@@ -597,6 +599,276 @@ fn jazz_substitution(reg u64 state, reg u64 boxes){
 #################################################################################################*/
 
 
+
+
+
+/*###############################################################
+#                                                               #
+#                      MPC_AND_GET_BIT                          # 
+#                                                               #
+###############################################################*/
+
+
+export
+fn jazz_and_getBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos, reg u64 out){
+
+	reg u64 bitNumber;
+	reg u8 a, b, c;
+
+	bitNumber = [randPos + 0];
+
+	a = global_getBit(rand0, bitNumber);
+	b = global_getBit(rand1, bitNumber);
+	c = global_getBit(rand2, bitNumber);
+
+	(u8)[out + 0] = a;
+	(u8)[out + 1] = b;
+	(u8)[out + 2] = c;	
+}
+
+
+/*
+export
+fn jazz_and_getBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos, reg u64 out){
+
+	reg u64 bitNumber, byte, rest, tmp;
+	reg u8 bit0, bit1, bit2;
+
+	bitNumber = [randPos + 0];
+
+	byte = bitNumber;
+	byte >>= 3;
+	bit0 = (u8)[rand0 + (int)byte];
+
+	rest = bitNumber;
+	rest &= 7;
+	tmp = 7;
+	tmp -= rest;
+
+	rest = tmp;
+
+	while(tmp > 0){
+		bit0 >>= 1;
+		tmp -= 1;
+	}
+
+	bit0 &= 1;
+
+	bit1 = (u8)[rand1 + (int)byte];
+
+	tmp = rest;
+	while(tmp > 0){
+		bit1 >>= 1;
+		tmp -= 1;
+	}
+
+	bit2 = (u8)[rand2 + (int)byte];
+
+	while(rest > 0){
+		bit2 >>= 1;
+		rest -= 1;
+	}
+
+	(u8)[out + 0] = bit0;
+	(u8)[out + 1] = bit1;
+	(u8)[out + 2] = bit2;	
+}
+
+*/
+
+/*###############################################################
+#                                                               #
+#                          MPC_AND                              # 
+#                                                               #
+###############################################################*/
+
+/*
+export
+fn jazz_mpc_AND(reg u64 in1, reg u64 in2, reg u64 out, reg u64 r){
+
+	reg u8 t, t0, t1;
+	reg u64 i, j, aux;
+
+	i=0;
+	j = 1;
+	aux = 0;
+	while(i < 3){
+
+		// j = (i + 1) % 3
+		if(i == 2){
+			j = 0;
+		}
+		
+        // in1[i] & in2[(i + 1) % 3]
+
+		t = (u8)[in1 + (int)i];
+		t0 = (u8)[in2 + (int)j];
+		t &= t0;
+
+		
+		// in1[(i + 1) % 3] & in2[i]
+
+		t0 = (u8)[in1 + (int)j];
+		t1 = (u8)[in2 + (int)i];
+		t0 &= t1;
+		t ^= t0;
+
+		// in1[i] & in2[i]
+
+		t0 = (u8)[in1 + (int)i];
+		t1 = (u8)[in2 + (int)i];
+		t0 &= t1;
+		t ^= t0;
+
+
+		// r[i]
+
+		t0 = (u8)[r + (int)i];
+		t ^= t0;
+
+
+		// r[(i + 1) % 3]
+
+		t0 = (u8)[r + (int)j];
+		t ^= t0;
+
+		(u8)[out + (int)i] = t;
+
+		i += 1;
+		j += 1;
+	}	
+}
+*/
+
+export
+fn jazz_mpc_AND(reg u64 in1, reg u64 in2, reg u64 out, reg u64 r){
+
+	reg u8 t, t0, t1;
+
+	// i = 0
+
+	t = (u8)[in1 + 0];
+	t0 = (u8)[in2 + 1];
+	t &= t0;
+
+
+	t0 = (u8)[in1 + 1];
+	t1 = (u8)[in2 + 0];
+	t0 &= t1;
+	t ^= t0;
+
+
+	t0 = (u8)[in1 + 0];
+	t1 = (u8)[in2 + 0];
+	t0 &= t1;
+	t ^= t0;
+
+
+	t0 = (u8)[r + 0];
+	t ^= t0;
+
+
+	t0 = (u8)[r + 1];
+	t ^= t0;
+
+	(u8)[out + 0] = t;
+
+
+
+	// i = 1
+
+	t = (u8)[in1 + 1];
+	t0 = (u8)[in2 + 2];
+	t &= t0;
+
+
+	t0 = (u8)[in1 + 2];
+	t1 = (u8)[in2 + 1];
+	t0 &= t1;
+	t ^= t0;
+
+
+	t0 = (u8)[in1 + 1];
+	t1 = (u8)[in2 + 1];
+	t0 &= t1;
+	t ^= t0;
+
+
+	t0 = (u8)[r + 1];
+	t ^= t0;
+
+
+	t0 = (u8)[r + 2];
+	t ^= t0;
+
+	(u8)[out + 1] = t;
+
+
+
+	// i = 2
+
+	t = (u8)[in1 + 2];
+	t0 = (u8)[in2 + 0];
+	t &= t0;
+
+
+	t0 = (u8)[in1 + 0];
+	t1 = (u8)[in2 + 2];
+	t0 &= t1;
+	t ^= t0;
+
+
+	t0 = (u8)[in1 + 2];
+	t1 = (u8)[in2 + 2];
+	t0 &= t1;
+	t ^= t0;
+
+
+	t0 = (u8)[r + 2];
+	t ^= t0;
+
+
+	t0 = (u8)[r + 0];
+	t ^= t0;
+
+	(u8)[out + 2] = t;	
+}
+
+
+
+
+/*###############################################################
+#                                                               #
+#                      MPC_AND_SET_BIT                          # 
+#                                                               #
+###############################################################*/
+
+export
+fn jazz_and_setBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos, reg u64 r){
+
+	reg u64 bit;
+	reg u8 r0, r1, r2;
+
+	bit = (u64)[randPos + 0];
+
+	/* Bit 0 */
+
+	r0 = (u8)[r + 0];
+	inline_setBit(rand0, bit, r0);
+
+	/* Bit 1 */
+
+	r1 = (u8)[r + 1];
+	inline_setBit(rand1, bit, r1);
+
+	/* Bit 2 */
+
+	r2 = (u8)[r + 2];
+	inline_setBit(rand2, bit, r2);
+
+	//bit += 1;
+	//[randPos + 0] = bit;
+}
 
 
 /*###############################################################
@@ -793,342 +1065,6 @@ fn jazz_mpc_setBit(reg u64 array0, reg u64 array1, reg u64 array2, reg u64 pos, 
 	}
 }
 
-
-
-
-/*###############################################################
-#                                                               #
-#                      MPC_AND_GET_BIT                          # 
-#                                                               #
-###############################################################*/
-
-
-export
-fn jazz_and_getBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos, reg u64 out){
-
-	reg u64 bitNumber;
-	reg u8 a, b, c;
-
-	bitNumber = [randPos + 0];
-
-	a = global_getBit(rand0, bitNumber);
-	b = global_getBit(rand1, bitNumber);
-	c = global_getBit(rand2, bitNumber);
-
-	(u8)[out + 0] = a;
-	(u8)[out + 1] = b;
-	(u8)[out + 2] = c;	
-}
-
-
-/*
-export
-fn jazz_and_getBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos, reg u64 out){
-
-	reg u64 bitNumber, byte, rest, tmp;
-	reg u8 bit0, bit1, bit2;
-
-	bitNumber = [randPos + 0];
-
-	byte = bitNumber;
-	byte >>= 3;
-	bit0 = (u8)[rand0 + (int)byte];
-
-	rest = bitNumber;
-	rest &= 7;
-	tmp = 7;
-	tmp -= rest;
-
-	rest = tmp;
-
-	while(tmp > 0){
-		bit0 >>= 1;
-		tmp -= 1;
-	}
-
-	bit0 &= 1;
-
-	bit1 = (u8)[rand1 + (int)byte];
-
-	tmp = rest;
-	while(tmp > 0){
-		bit1 >>= 1;
-		tmp -= 1;
-	}
-
-	bit2 = (u8)[rand2 + (int)byte];
-
-	while(rest > 0){
-		bit2 >>= 1;
-		rest -= 1;
-	}
-
-	(u8)[out + 0] = bit0;
-	(u8)[out + 1] = bit1;
-	(u8)[out + 2] = bit2;	
-}
-
-*/
-
-/*###############################################################
-#                                                               #
-#                          MPC_AND                              # 
-#                                                               #
-###############################################################*/
-
-/*
-export
-fn jazz_mpc_AND(reg u64 in1, reg u64 in2, reg u64 out, reg u64 r){
-
-	reg u8 t, t0, t1;
-	reg u64 i, j, aux;
-
-	i=0;
-	j = 1;
-	aux = 0;
-	fori = 0 to 3{
-
-		// j = (i + 1) % 3
-		if(i == 2){
-			j = 0;
-		}
-		
-        // in1[i] & in2[(i + 1) % 3]
-
-		t = (u8)[in1 + (int)i];
-		t0 = (u8)[in2 + (int)j];
-		t &= t0;
-
-		
-		// in1[(i + 1) % 3] & in2[i]
-
-		t0 = (u8)[in1 + (int)j];
-		t1 = (u8)[in2 + (int)i];
-		t0 &= t1;
-		t ^= t0;
-
-		// in1[i] & in2[i]
-
-		t0 = (u8)[in1 + (int)i];
-		t1 = (u8)[in2 + (int)i];
-		t0 &= t1;
-		t ^= t0;
-
-
-		// r[i]
-
-		t0 = (u8)[r + (int)i];
-		t ^= t0;
-
-
-		// r[(i + 1) % 3]
-
-		t0 = (u8)[r + (int)j];
-		t ^= t0;
-
-		(u8)[out + (int)i] = t;
-
-		j += 1;
-	}	
-}
-*/
-
-export
-fn jazz_mpc_AND(reg u64 in1, reg u64 in2, reg u64 out, reg u64 r){
-
-	reg u8 t, t0, t1, t2;
-
-	// i = 0
-
-	t0 = (u8)[in1 + 0];
-	t = (u8)[in2 + 1];
-	t &= t0;
-
-
-	t1 = (u8)[in1 + 1];
-	t2 = (u8)[in2 + 0];
-	t1 &= t2;
-	t ^= t1;
-
-
-	t0 &= t2;
-	t ^= t0;
-
-
-	t0 = (u8)[r + 0];
-	t ^= t0;
-
-
-	t0 = (u8)[r + 1];
-	t ^= t0;
-
-	(u8)[out + 0] = t;
-
-
-
-	// i = 1
-
-	t0 = (u8)[in1 + 1];
-	t = (u8)[in2 + 2];
-	t &= t0;
-
-
-	t1 = (u8)[in1 + 2];
-	t2 = (u8)[in2 + 1];
-	t1 &= t2;
-	t ^= t1;
-
-
-	t0 &= t2;
-	t ^= t0;
-
-
-	t0 = (u8)[r + 1];
-	t ^= t0;
-
-
-	t0 = (u8)[r + 2];
-	t ^= t0;
-
-	(u8)[out + 1] = t;
-
-
-
-	// i = 2
-
-	t0 = (u8)[in1 + 2];
-	t = (u8)[in2 + 0];
-	t &= t0;
-
-
-	t1 = (u8)[in1 + 0];
-	t2 = (u8)[in2 + 2];
-	t1 &= t2;
-	t ^= t1;
-
-
-	t0 &= t2;
-	t ^= t0;
-
-
-	t0 = (u8)[r + 2];
-	t ^= t0;
-
-
-	t0 = (u8)[r + 0];
-	t ^= t0;
-
-	(u8)[out + 2] = t;	
-}
-
-
-
-
-/*###############################################################
-#                                                               #
-#                      MPC_AND_SET_BIT                          # 
-#                                                               #
-###############################################################*/
-
-export
-fn jazz_and_setBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos, reg u64 r){
-
-	reg u64 bitNumber, byte, module, i;
-	reg u8 chosenBit, t;
-
-	bitNumber = (u64)[randPos + 0];
-
-	/* Bit 0 */
-
-	
-	byte = bitNumber;
-	byte = byte >> 3;
-	chosenBit = (u8)[rand0 + (int)byte];
-
-	i = 7;
-	module = bitNumber;
-	module &= 7;
-	i -= module; 
-	module = i;
-
-	t = 1;
-	while(i > 0){
-		t <<= 1;
-		i -= 1;
-	}
-	t ^= 0xff;
-	chosenBit &= t;
-
-	t = (u8)[r + 0];
-	i = module;
-	while(i > 0){
-		t <<= 1;
-		i -= 1;
-	} 
-
-	chosenBit |= t;
-
-	(u8)[rand0 + (int) byte] = chosenBit;
-
-
-
-	/* Bit 1 */
-
-	chosenBit = (u8)[rand1 + (int)byte];
-
-	t = 1;
-	i = module;
-	while(i > 0){
-		t <<= 1;
-		i -= 1;
-	} 
-
-	t ^= 0xff;
-	chosenBit &= t;
-
-
-	t = (u8)[r + 1];
-	i = module;
-	while(i > 0){
-		t <<= 1;
-		i -= 1;
-	} 
-
-	chosenBit |= t;
-
-	(u8)[rand1 + (int) byte] = chosenBit;
-
-
-	/* Bit 2 */
-
-	chosenBit = (u8)[rand2 + (int)byte];
-
-	t = 1;
-	i = module;
-	while(i > 0){
-		t <<= 1;
-		i -= 1;
-	} 
-
-	t ^= 0xff;
-	chosenBit &= t;
-
-
-	t = (u8)[r + 2];
-	i = module;
-	while(i > 0){
-		t <<= 1;
-		i -= 1;
-	} 
-
-	chosenBit |= t;
-
-	(u8)[rand2 + (int) byte] = chosenBit;
-
-
-	bitNumber += 1;
-	[randPos + 0] = bitNumber; 
-}
 
 
 
