@@ -142,15 +142,17 @@ int main(int argc, char** argv)
 
     //for (picnic_params_t params = 1; params < PARAMETER_SET_MAX_INDEX; params++) {
     for (picnic_params_t params = 1; params < 7; params++) {
-        for(int i = 0; i<10000; i++){
+        for(int i =0 ; i < 100; i++){
             total = 0;
-        a = clock();
-        picnicExample(params);
-        b = clock();
-        total = b - a;
+            a = clock();
+            picnicExample(params);
+            b = clock();
+            total += b - a;
         }
         
-        printf("\n\n\nClock Ticks (Version %d): %d\n\n\n", params, total);
+        
+        
+        printf("\n\n\nClock Ticks (Version %d): %d\n\n\n", params, total/100);
         exit(1);
     }
 }

@@ -495,7 +495,7 @@ void prove(proof_t* proof, uint8_t challenge, seeds_t* seeds,
 void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
                     randomTape_t* rand, view_t* view1, view_t* view2)
 {
-
+ 
     uint8_t r[2];
     uint64_t bitNumber = (uint64_t)rand->pos;
     
@@ -503,9 +503,10 @@ void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
 
     jazz_mpc_AND_verify((uint64_t*)in1, (uint64_t*) in2, (uint64_t*) out, (uint64_t*) r);
     
-    jazz_and_setBit_verify((uint64_t*)view1->communicatedBits, (uint64_t*)view2->communicatedBits, &bitNumber,(uint64_t*) out);
+    jazz_and_setBit_verify((uint64_t*)view1->communicatedBits, (uint64_t*)view2->communicatedBits, &bitNumber, (uint64_t*) out);
      
-    (rand->pos)++;
+    rand->pos = bitNumber;
+    //(rand->pos)++;
 } 
 
 void mpc_substitution_verify(uint32_t* state[2], randomTape_t* rand, view_t* view1,
@@ -778,15 +779,15 @@ void mpc_AND(uint8_t in1[3], uint8_t in2[3], uint8_t out[3], randomTape_t* rand,
 {
 
     uint8_t r[3];
-    uint64_t randPos = (uint64_t)rand->pos;
+    uint64_t *randPos = (uint64_t*)&rand->pos;
     
-    jazz_and_getBit((uint64_t*) rand->tape[0], (uint64_t*) rand->tape[1], (uint64_t*) rand->tape[2], &randPos, (uint64_t*) r);
+    jazz_and_getBit((uint64_t*) rand->tape[0], (uint64_t*) rand->tape[1], (uint64_t*) rand->tape[2], randPos, (uint64_t*) r);
     
     jazz_mpc_AND((uint64_t*)in1, (uint64_t*) in2, (uint64_t*) out, (uint64_t*) r);
 
-    jazz_and_setBit((uint64_t*) views[0].communicatedBits, (uint64_t*) views[1].communicatedBits, (uint64_t*) views[2].communicatedBits, &randPos, (uint64_t*) out);
-    
-    (rand->pos)++;
+    jazz_and_setBit((uint64_t*) views[0].communicatedBits, (uint64_t*) views[1].communicatedBits, (uint64_t*) views[2].communicatedBits, randPos, (uint64_t*) out);
+    //printf("%d", rand->pos);
+    //(rand->pos)++;
 }
 
 void mpc_substitution(uint32_t* state[3], randomTape_t* rand, view_t views[3],

@@ -866,8 +866,8 @@ fn jazz_and_setBit(reg u64 rand0, reg u64 rand1, reg u64 rand2, reg u64 randPos,
 	r2 = (u8)[r + 2];
 	inline_setBit(rand2, bit, r2);
 
-	//bit += 1;
-	//[randPos + 0] = bit;
+	bit += 1;
+	[randPos + 0] = bit;
 }
 
 
@@ -1244,7 +1244,11 @@ fn jazz_and_setBit_verify(reg u64 array0, reg u64 array1, reg u64 randPos, reg u
 
 	a = global_getBit(array1, bitNumber);
 
-	(u8)[out + 1] = a;	
+	(u8)[out + 1] = a;
+
+	bitNumber += 1;
+	[randPos + 0] = bitNumber;
+
 }
 
 
