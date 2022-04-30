@@ -506,7 +506,6 @@ void mpc_AND_verify(uint8_t in1[2], uint8_t in2[2], uint8_t out[2],
     jazz_and_setBit_verify((uint64_t*)view1->communicatedBits, (uint64_t*)view2->communicatedBits, &bitNumber, (uint64_t*) out);
      
     rand->pos = bitNumber;
-    //(rand->pos)++;
 } 
 
 void mpc_substitution_verify(uint32_t* state[2], randomTape_t* rand, view_t* view1,
